@@ -6,17 +6,44 @@ class Material:
     #_palette
     #_index
     def __init__(self, index,palette = 0):
-        _palette = palette
-        _index = index
+        self._palette = palette
+        self._index = index
+
+    @property
+    def palette(self):
+        return self._palette
+    @property
+    def index(self):
+        return self._index
+    @property
+    def indexX(self):
+        return self._index%16    
+    @property
+    def indexY(self):
+        return self._index//16     
 class Tile:
     #posX
     #posY
     #materials
     #flags
-    def __init__(self, x, y, material):
+    def __init__(self, x, y, material=-1):
         self._x = x
         self._y = y 
-        self._material = material
+        self._materials = []
+        if material!=-1:
+            self._materials.append(Material(material))
+    
+    @property
+    def x(self):
+        return self._x
+    @property
+    def y(self):
+        return self._y
+
+    @property
+    def materials(self):
+        return self._materials
+
 
 class Tilemap:
     resolutionX = 32
@@ -50,14 +77,21 @@ class Tilemap:
             pass
 
     @staticmethod        
-    def ImportCSV(path, sizeX, sizeY):
-        my_data = genfromtxt(path, delimiter=',')
+    def ImportMap(paths, sizeX, sizeY):
         data = []
         for y in range(sizeY):
-            s = ""
             for x in range(sizeX):
-                data.append(Tile(x,y,int(my_data[y,x])))
-                s=s+str(my_data[x,y])+" "
-            print(s+"\n")
+                data.append(Tile(x,y))
+
+        for path in paths:
+            my_data = genfromtxt(path, delimiter=',')
+            for y in range(sizeY):
+                #s = ""
+                for x in range(sizeX):
+                    matIndex = my_data[y,x]
+                    if(matIndex!=-1):
+                        data[x+y*sizeX].materials.append(Material(matIndex))
+                    #s=s+str(my_data[x,y])+" "
+                #print(s+"\n")
         return Tilemap(sizeX, sizeY, data)
         

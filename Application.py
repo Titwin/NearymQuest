@@ -27,8 +27,14 @@ class App:
         self.im.addEvent(Sequence([pyxel.KEY_W, pyxel.KEY_W], 'run'))
         
         ## create the map
-        self.tilePalette = pyxel.image(0).load(0, 0, 'ressources/PathAndObjects.png')
-        self.map = Tilemap.ImportCSV("ressources/map1_path.csv",50,50)
+        self.tilePalette = pyxel.image(0).load(0, 0, 'ressources/PathAndObjects-low.png')
+        self.map = Tilemap.ImportMap(
+            ("ressources/map1_background.csv",
+            "ressources/map1_path.csv",
+            "ressources/map1_objects.csv",
+            "ressources/map1_small objects.csv"
+            ),
+        50,50)
 
         # has to be completely at the end of init
         pyxel.run(self.update, self.draw)
@@ -53,16 +59,12 @@ class App:
         # clear the scene
         pyxel.cls(0)
 
-        TILE_SIZE = 32
+        TILE_SIZE = 16
         # draw map
-        for y in range(self.map.sizeY):
-            for x in range(self.map.sizeX):
-                tile = self.map[(x,y)]
-                if tile._material != -1:
-                    pyxel.blt(x*TILE_SIZE, y*TILE_SIZE, self.tilePalette, tile._material%16*TILE_SIZE, tile._material//16*TILE_SIZE, TILE_SIZE, TILE_SIZE)
-
-        # handle character            
-        pyxel.rect(self.x, self.y, self.x + 16, self.y +32, 9)
+        x = 0
+        y = 0
+        pyxel.blt(0,0,self.tilePalette,0,0,256,256)
+        
 
 # program entry
 App()
