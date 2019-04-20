@@ -3,3 +3,5 @@ __pycache__/
 *.pyc
 *.pyc
 src/__pycache__/InputManagerModule.cpython-37.pyc
+src/__pycache__/InputManagerModule.cpython-37.pyc
+*.pyc
