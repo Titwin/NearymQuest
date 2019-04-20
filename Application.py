@@ -32,14 +32,15 @@ class App:
         self.dashTimer = 0
         
         ## create the map
-        self.tilePalette = pyxel.image(0).load(0, 0, 'ressources/PathAndObjects-low.png')
-        self.map = Tilemap.ImportMap(
-            ("ressources/map1_background.csv",
-            "ressources/map1_path.csv",
-            "ressources/map1_objects.csv",
-            "ressources/map1_small objects.csv"
-            ),
-        50,50)
+        self.tilePalette = pyxel.image(0).load(0, 0, 'ressources/map2tileset.png')
+        #self.map = Tilemap.ImportMap(
+        #    ("ressources/map1_background.csv",
+        #    "ressources/map1_path.csv",
+        #    "ressources/map1_objects.csv",
+        #    "ressources/map1_small objects.csv"
+        #    ),
+        #50,50)
+        self.map = Tilemap.ImportMap(("ressources/map2.csv","ressources/map2.csv"), 50,50)
 
         # has to be completely at the end of init
         pyxel.run(self.update, self.draw)
