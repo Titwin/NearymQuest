@@ -1,0 +1,201 @@
+{ "columns":16,
+ "image":"..\/..\/..\/..\/Downloads\/PathAndObjects.png",
+ "imageheight":512,
+ "imagewidth":512,
+ "margin":0,
+ "name":"map1tileset",
+ "spacing":0,
+ "terrains":[
+        {
+         "name":"rock",
+         "tile":17
+        }, 
+        {
+         "name":"rock2",
+         "tile":20
+        }, 
+        {
+         "name":"rock3",
+         "tile":23
+        }],
+ "tilecount":256,
+ "tiledversion":"1.2.3",
+ "tileheight":32,
+ "tiles":[
+        {
+         "id":0,
+         "terrain":[-1, -1, -1, 0]
+        }, 
+        {
+         "id":1,
+         "terrain":[-1, -1, 0, 0]
+        }, 
+        {
+         "id":2,
+         "terrain":[-1, -1, 0, -1]
+        }, 
+        {
+         "id":3,
+         "terrain":[-1, -1, -1, 1]
+        }, 
+        {
+         "id":4,
+         "terrain":[-1, -1, 1, 1]
+        }, 
+        {
+         "id":5,
+         "terrain":[-1, -1, 1, -1]
+        }, 
+        {
+         "id":6,
+         "terrain":[-1, -1, -1, 2]
+        }, 
+        {
+         "id":7,
+         "terrain":[-1, -1, 2, 2]
+        }, 
+        {
+         "id":8,
+         "terrain":[-1, -1, 2, -1]
+        }, 
+        {
+         "id":16,
+         "terrain":[-1, 0, -1, 0]
+        }, 
+        {
+         "id":17,
+         "terrain":[0, 0, 0, 0]
+        }, 
+        {
+         "id":18,
+         "terrain":[0, -1, 0, -1]
+        }, 
+        {
+         "id":19,
+         "terrain":[-1, 1, -1, 1]
+        }, 
+        {
+         "id":20,
+         "terrain":[1, 1, 1, 1]
+        }, 
+        {
+         "id":21,
+         "terrain":[1, -1, 1, -1]
+        }, 
+        {
+         "id":22,
+         "terrain":[-1, 2, -1, 2]
+        }, 
+        {
+         "id":23,
+         "terrain":[2, 2, 2, 2]
+        }, 
+        {
+         "id":24,
+         "terrain":[2, -1, 2, -1]
+        }, 
+        {
+         "id":32,
+         "terrain":[-1, 0, -1, -1]
+        }, 
+        {
+         "id":33,
+         "terrain":[0, 0, -1, -1]
+        }, 
+        {
+         "id":34,
+         "terrain":[0, -1, -1, -1]
+        }, 
+        {
+         "id":35,
+         "terrain":[-1, 1, -1, -1]
+        }, 
+        {
+         "id":36,
+         "terrain":[1, 1, -1, -1]
+        }, 
+        {
+         "id":37,
+         "terrain":[1, -1, -1, -1]
+        }, 
+        {
+         "id":38,
+         "terrain":[-1, 2, -1, -1]
+        }, 
+        {
+         "id":39,
+         "terrain":[2, 2, -1, -1]
+        }, 
+        {
+         "id":40,
+         "terrain":[2, -1, -1, -1]
+        }, 
+        {
+         "id":48,
+         "terrain":[0, 0, 0, -1]
+        }, 
+        {
+         "id":49,
+         "terrain":[0, 0, -1, 0]
+        }, 
+        {
+         "id":51,
+         "terrain":[1, 1, 1, -1]
+        }, 
+        {
+         "id":52,
+         "terrain":[1, 1, -1, 1]
+        }, 
+        {
+         "id":54,
+         "terrain":[2, 2, 2, -1]
+        }, 
+        {
+         "id":55,
+         "terrain":[2, 2, -1, 2]
+        }, 
+        {
+         "id":56,
+         "terrain":[-1, 2, 2, -1]
+        }, 
+        {
+         "id":64,
+         "terrain":[0, -1, 0, 0]
+        }, 
+        {
+         "id":65,
+         "terrain":[-1, 0, 0, 0]
+        }, 
+        {
+         "id":66,
+         "terrain":[0, -1, -1, 0]
+        }, 
+        {
+         "id":67,
+         "terrain":[1, -1, 1, 1]
+        }, 
+        {
+         "id":68,
+         "terrain":[-1, 1, 1, 1]
+        }, 
+        {
+         "id":69,
+         "terrain":[1, -1, -1, 1]
+        }, 
+        {
+         "id":70,
+         "terrain":[2, -1, 2, 2]
+        }, 
+        {
+         "id":71,
+         "terrain":[-1, 2, 2, 2]
+        }, 
+        {
+         "id":72,
+         "terrain":[2, -1, -1, 2]
+        }],
+ "tilewidth":32,
+ "transparentcolor":"#000000",
+ "type":"tileset",
+ "version":1.2
+}
