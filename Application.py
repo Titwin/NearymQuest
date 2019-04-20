@@ -63,8 +63,26 @@ class App:
         # draw map
         x = 0
         y = 0
-        pyxel.blt(0,0,self.tilePalette,0,0,256,256)
         
+        #pyxel.blt(TILE_SIZE,TILE_SIZE,self.tilePalette,TILE_SIZE*6,0,TILE_SIZE*3,TILE_SIZE*3)
+        
+        for y in range(self.map.sizeY):
+            for x in range(self.map.sizeX):
+                tile = self.map[(x,y)]
+                if(len(tile.materials)>0):
+                    for m in tile.materials:
+                        mat = m.index
+                        indexX = mat %16
+                        indexY = mat//16
+                        if mat != -1:
+                            pyxel.blt(
+                                x*TILE_SIZE, y*TILE_SIZE, 
+                                self.tilePalette, 
+                                (indexX)*TILE_SIZE, (indexY)*TILE_SIZE, 
+                                TILE_SIZE, TILE_SIZE)
+
+        # handle character            
+        pyxel.rect(self.x, self.y, self.x + 8, self.y +16, 9)
 
 # program entry
 App()
