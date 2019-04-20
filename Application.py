@@ -22,9 +22,14 @@ class App:
         self.im.addEvent(Event(EventType.BUTTON, EventNotify.NONE, [pyxel.KEY_A], 'left'))
         self.im.addEvent(Event(EventType.BUTTON, EventNotify.NONE, [pyxel.KEY_D], 'right'))
 
-        self.im.addEvent(Event(EventType.CHORD, EventNotify.ALL, [pyxel.KEY_Q, pyxel.KEY_E], 'action1'))
+        self.im.addEvent(Sequence([pyxel.KEY_W, pyxel.KEY_W], 'dash forward'))
+        self.im.addEvent(Sequence([pyxel.KEY_S, pyxel.KEY_S], 'dash backward'))
+        self.im.addEvent(Sequence([pyxel.KEY_A, pyxel.KEY_A], 'dash left'))
+        self.im.addEvent(Sequence([pyxel.KEY_D, pyxel.KEY_D], 'dash right'))
 
-        self.im.addEvent(Sequence([pyxel.KEY_W, pyxel.KEY_W], 'run'))
+        self.im.addEvent(Event(EventType.BUTTON, EventNotify.NONE, [pyxel.KEY_SHIFT], 'run'))
+
+        self.dashTimer = 0
         
         ## create the map
         self.tilePalette = pyxel.image(0).load(0, 0, 'ressources/PathAndObjects-low.png')
@@ -40,10 +45,20 @@ class App:
         pyxel.run(self.update, self.draw)
 
     def update(self):
+        self.im.update()
+
         speedX = 3
         speedY = 3
-        # handle character controller
-        self.im.update()
+        if self.im.CheckEvent('dash forward') or self.im.CheckEvent('dash backward') or self.im.CheckEvent('dash left') or self.im.CheckEvent('dash right'):
+            self.dashTimer = 10
+        if self.dashTimer > 0:
+            speedX *= 5
+            speedY *= 5
+            self.dashTimer -= 1
+        elif self.im.CheckEvent('run'):
+            speedX *= 2
+            speedY *= 2
+
         if self.im.CheckEvent('forward'):
             self.y = (self.y - 1*speedY) % pyxel.height
         elif self.im.CheckEvent('backward'):
