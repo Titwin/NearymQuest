@@ -1,22 +1,11 @@
 import math
   
 class Vector2f:
-# constructors 
-    def __init__(self): 
-        self._x = float(0) 
-        self._y = float(0) 
 
-    def __init__(self, x, y): 
+# constructor
+    def __init__(self, x=0, y=0): 
         self._x = float(x) 
         self._y = float(y)
-
-    def __init__(self, other): 
-        if isinstance(other, (Vector2f,Vector3f)):
-            self._x = other.x 
-            self._y = other.y 
-        elif isinstance(other, (int,float)):
-            self._x = float(other)
-            self._y = float(other)
 
 # getters and setters 
     @property
@@ -36,7 +25,7 @@ class Vector2f:
         self._y = float(new_y)
 
     def __str__(self):
-    	return '('+x+','+y+')'
+    	return "("+str(self._x)+","+str(self._y)+")"
 
 # Binary Operators
     ### +
@@ -72,7 +61,7 @@ class Vector2f:
             return Vector2f(self.x/other.x,self.y/other.y)
         elif isinstance(other, (int,float)):
             return Vector2f(self.x/other,self.y/other)
-    def __rdiv__(self, other):
+    def __rtruediv__(self, other):
         if isinstance(other, Vector2f):
             return Vector2f(other.x/self.x,other.y/self.y)
         elif isinstance(other, (int,float)):
@@ -96,9 +85,13 @@ class Vector2f:
         elif isinstance(other, (int,float)):
             return Vector2f(self.x**other,self.y**other)
 
+    ### ==
+    def __eq__(self, other):
+        return isinstance(other, Vector2f) and self.x == other.x and self.y == other.y
+
     def dot(self, other):
         if isinstance(other, Vector2f):
-            return Vector2f(self.x*other.x+self.y*other.y)
+            return self.x*other.x+self.y*other.y
 
 # Unary Operators    
     def __neg__(self):
@@ -139,30 +132,12 @@ class Vector2f:
         
 
 class Vector3f:
-# constructors 
-    def __init__(self): 
-        self._x = float(0) 
-        self._y = float(0) 
-        self._z = float(0) 
 
-    def __init__(self, x, y, z): 
+# constructor
+    def __init__(self, x=0, y=0, z=0): 
         self._x = float(x) 
         self._y = float(y) 
         self._z = float(z) 
-
-    def __init__(self, other): 
-        if isinstance(other, Vector2f):
-            self._x = other.x 
-            self._y = other.y 
-            self._z = float(0)
-        elif isinstance(other, Vector3f):
-            self._x = other.x 
-            self._y = other.y 
-            self._z = other.z
-        elif isinstance(other, (int,float)):
-            self._x = float(other)
-            self._y = float(other)
-            self._z = float(other)
 
 # getters and setters 
     @property
@@ -185,12 +160,12 @@ class Vector3f:
     def z(self):
         return self._z
 
-    @y.setter
+    @z.setter
     def z(self, new_z):
         self._z = float(new_z)
 
     def __str__(self):
-    	return '('+x+','+y+','+z+')'
+    	return "("+str(self._x)+","+str(self._y)+","+str(self._z)+")"
 
 # Binary Operators
     ### +
@@ -213,7 +188,12 @@ class Vector3f:
         elif isinstance(other, Vector2f):
             return Vector3f(self.x-other.x,self.y-other.y,self.z)
     def __rsub__(self, other): 
-       return Vector3f.__add__(-self,other)
+       if isinstance(other, Vector3f):
+           return Vector3f(-self.x+other.x,-self.y+other.y,-self.z+other.z)
+       elif isinstance(other, (int,float)):
+           return Vector3f(-self.x+other,-self.y+other,-self.z+other)
+       elif isinstance(other, Vector2f):
+            return Vector3f(-self.x+other.x,-self.y+other.y,-self.z)
        
     ### *
     def __mul__(self, other):
@@ -232,7 +212,7 @@ class Vector3f:
             return Vector3f(self.x/other.x,self.y/other.y,self.z/other.z)
         elif isinstance(other, (int,float)):
             return Vector3f(self.x/other,self.y/other,self.z/other)
-    def __rdiv__(self, other):
+    def __rtruediv__(self, other):
         if isinstance(other, Vector3f):
             return Vector3f(other.x/self.x,other.y/self.y,other.z/self.z)
         elif isinstance(other, (int,float)):
@@ -256,13 +236,17 @@ class Vector3f:
         elif isinstance(other, (int,float)):
             return Vector3f(self.x**other,self.y**other,self.z**other)
 
+    ### ==
+    def __eq__(self, other):
+        return isinstance(other, Vector3f) and self.x == other.x and self.y == other.y and self.z == other.z
+
     def dot(self, other):
         if isinstance(other, Vector3f):
-            return Vector3f(self.x*other.x+self.y*other.y+self.z*other.z)
+            return self.x*other.x+self.y*other.y+self.z*other.z
     
     def cross(self, other):
         if isinstance(other, Vector3f):
-            return Vector2f(self.y*other.z - self.z*other.y,
+            return Vector3f(self.y*other.z - self.z*other.y,
                             self.z*other.x - self.x*other.z,
                             self.x*other.y - self.y*other.x)
 
