@@ -2,7 +2,10 @@
 import numpy as np #for matrices
 from numpy import genfromtxt #for csv import
 
+import pyxel
+
 class Material:
+    MATERIAL_TRANSAPARENT = -1
     #_palette
     #_index
     def __init__(self, index,palette = 0):
@@ -95,3 +98,30 @@ class Tilemap:
                 #print(s+"\n")
         return Tilemap(sizeX, sizeY, data)
         
+class TilemapRenderer:
+    def __init__(self, tilemap, palette):
+        self.map = tilemap
+        self.palette = palette
+        self.posX = 0
+        self.posY = 0
+        self.TILE_SIZE = 16
+
+    def update(self):
+        print("UpdateMap: nothing to do")
+
+    def draw(self):
+         for y in range(self.map.sizeY):
+            for x in range(self.map.sizeX):
+                tile = self.map[(x,y)]
+                if(len(tile.materials)>0):
+                    for m in tile.materials:
+                        mat = m.index
+                        if m.index != Material.MATERIAL_TRANSAPARENT:
+                            pyxel.blt(
+                                x*self.TILE_SIZE, y*self.TILE_SIZE, 
+                                self.palette, 
+                                (m.indexX)*self.TILE_SIZE, (m.indexY)*self.TILE_SIZE, 
+                                self.TILE_SIZE, self.TILE_SIZE)
+
+
+

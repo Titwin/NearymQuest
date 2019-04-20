@@ -1,7 +1,10 @@
 import pyxel
 
 class InputManager:
+    inputManager = None
+    
     def __init__(self):
+        inputManager = self
         self.EventList = []
 
     def addEvent(self, event):
