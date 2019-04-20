@@ -53,14 +53,18 @@ class App:
         ## create the map
         ## load the tile palette
         self.tilePalette = pyxel.image(0).load(0, 0, 'ressources/PathAndObjects-low.png')
+        self.tilePalette = pyxel.image(0).load(0, 0, 'ressources/map2tileset.png')
+        
         ## load the map layers, in order
-        self.map = Tilemap.ImportMap(
-            ("ressources/map1_background.csv",
-            "ressources/map1_path.csv",
-            "ressources/map1_objects.csv",
-            "ressources/map1_small objects.csv"
-            ),
-        50,50)
+        #self.map = Tilemap.ImportMap(
+        #    ("ressources/map1_background.csv",
+        #    "ressources/map1_path.csv",
+        #    "ressources/map1_objects.csv",
+        #    "ressources/map1_small objects.csv"
+        #    ),
+        #50,50)
+        self.map = Tilemap.ImportMap(("ressources/map2.csv","ressources/map2.csv"), 50,50)
+        
          ## set the map renderer
         self.mapRenderer = TilemapRenderer(self.map,self.tilePalette)
 
