@@ -101,6 +101,16 @@
  <tile id="132" terrain="1,1,,1"/>
  <tile id="134" terrain="6,6,6,"/>
  <tile id="135" terrain="6,6,,6"/>
+ <tile id="137">
+  <objectgroup draworder="index">
+   <object id="1" x="30.25" y="28.875" height="0.125"/>
+  </objectgroup>
+ </tile>
+ <tile id="139">
+  <objectgroup draworder="index">
+   <object id="1" x="1.27273" y="3.09091" width="30.5455" height="28.7273"/>
+  </objectgroup>
+ </tile>
  <tile id="144" terrain="2,,2,2"/>
  <tile id="145" terrain=",2,2,2"/>
  <tile id="146" terrain="2,,,2"/>
