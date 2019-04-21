@@ -8,8 +8,12 @@ class Character:
         self._w = 8
         self._h = 16
         self.dashTimer = 0
-        self.speedX = 3
-        self.speedY = 3
+        self.speedX = 1
+        self.speedY = 1
+        self.dx = 0
+        self.dy = 0
+        self.orientationX = 1
+        self.orientationY = 1
 
     @property
     def x(self):
@@ -67,6 +71,8 @@ class Player(Character):
     def UpdateControls(self, maxX, maxY):
         speedX = self.speedX
         speedY = self.speedY
+        self.dx = 0
+        self.dy = 0
 
         if self.inputManager.CheckEvent('dash forward') or self.inputManager.CheckEvent('dash backward') or self.inputManager.CheckEvent('dash left') or self.inputManager.CheckEvent('dash right'):
             self.dashTimer = 10
@@ -80,12 +86,31 @@ class Player(Character):
 
         if self.inputManager.CheckEvent('forward'):
             self.y = (self.y - 1*speedY)
+            self.dy =  -1*speedY
         elif self.inputManager.CheckEvent('backward'):
             self.y = (self.y + 1*speedY)
+            self.dy =  1*speedY
         if self.inputManager.CheckEvent('left'):
             self.x = (self.x - 1*speedX)
+            self.dx =  -1*speedX
         elif self.inputManager.CheckEvent('right'):
             self.x = (self.x + 1*speedX)
+            self.dx =  1*speedX
 
         self.x = max(min(self.x, maxX - self.w), 0)
         self.y = max(min(self.y, maxY - self.h), 0)
+
+        if self.dx > 0:
+            self.orientationX = 1
+        elif self.dx < 0:
+            self.orientationX = -1
+
+        if self.dy > 0:
+            self.orientationY = 1
+        elif self.dy < 0:
+            self.orientationY = -1
+
+
+
+
+

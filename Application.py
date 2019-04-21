@@ -9,6 +9,8 @@ import InputManagerModule # as IMmodule
 from Events import *
 from TilemapModule import *
 from PlayerModule import *
+from QuadTree import *
+from Entity import *
 
 pyxel.DEFAULT_PALETTE[11] = 0x00BC2C
 
@@ -19,7 +21,7 @@ class App:
         application = self
 
         #global initialization
-        pyxel.init(255, 255)
+        pyxel.init(255,255, caption="Nearym Quest", scale=3)
         random.seed(0)
 
         # Event Manager
@@ -27,11 +29,25 @@ class App:
         #map
         self.LoadMap()
 
+        # QuadTree structure init
+        self.quadtree = TreeNode()
+        self.quadtree.split()
+        self.quadtree.split()
+        self.quadtree.setTransform(0,0, 50*16, 50*16)
+
+        e = Entity()
+        e.x, e.y = 5, 5
+        self.quadtree.addEntity(e)
+
+        self.quadtree.print()
+
+
         #player
         self.player = Player()
         self.player.RegisterEvents(self.inputManager)
         self.player.x = 256
         self.player.y = 256
+        self.draw_count = 0
 
         # has to be completely at the end of init
         pyxel.run(self.update, self.draw)
@@ -44,6 +60,7 @@ class App:
     def draw(self):
         # clear the scene
         pyxel.cls(0)
+        self.draw_count += 1
 
         # draw map
         camX = max(self.player.x-128, 0)
@@ -51,10 +68,9 @@ class App:
         self.mapRenderer.draw(self.map, camX, camY)
 
         # handle character
-        playerX = min(self.player.x, 128)
-        playerY = min(self.player.y, 128)
-        pyxel.blt(playerX, playerY, self.charactersPalette, 0, 0, 16, 16, 0)
-        #pyxel.rect(playerX, playerY, playerX + 8, playerY +16, 9)
+        self.drawPlayer()
+
+
 
         # handle multiple overlay (object height)
         playerExceptionX = math.floor(self.player.x/16)
@@ -84,6 +100,40 @@ class App:
         
          ## set the map renderer
         self.mapRenderer = TilemapRenderer(self.tilePalette)
+
+
+
+
+    def drawPlayer(self):
+        playerX = min(self.player.x, 128)
+        playerY = min(self.player.y, 128)
+
+        flip = self.player.orientationX
+        animStart = 0
+        animLength = 2
+        animSpeed = 20
+        if (self.player.dx == 0 and self.player.dy > 0):
+            animStart = 4
+            animLength = 4
+            animSpeed = 4
+            flip = 1
+        elif(self.player.dx == 0 and self.player.dy < 0):
+            animStart = 3
+            animLength = 4
+            animSpeed = 4
+            flip = 1
+        elif(self.player.dx > 0):
+            animStart = 2
+            flip = 1
+            animLength = 4
+            animSpeed = 4
+        elif(self.player.dx < 0):
+            animStart = 2
+            flip = -1
+            animLength = 4
+            animSpeed = 4
+
+        pyxel.blt(playerX, playerY, self.charactersPalette, 16*(math.floor(self.draw_count/animSpeed)%animLength), animStart*16, flip*16, 16, 0)
 
 # program entry
 App()
