@@ -98,10 +98,10 @@ class Tilemap:
         data = []
         for y in range(sizeY):
             for x in range(sizeX):
-                index = random.choice([50,50,50,50,50,50,50,50,50,50,66,66,82])
+                index = random.choice([50,50,50,50,50,50, 20,20,20,20,20,20, 66,66, 82])
                 data.append(Tile(x,y, Material(index, 0, random.choice([1,-1]), random.choice([1,-1]) if index==50 else 1)))
                 if(index == 50 and random.randint(0, 20) == 0):
-                    data[x+y*sizeX].materials.append(Material(51, 0, random.choice([1,-1]), 1, 0))
+                    data[x+y*sizeX].materials.append(Material(random.choice([80,80,80,81]), 0, random.choice([1,-1]), 1, 0))
 
         for path in paths:
             my_data = genfromtxt(path, delimiter=',')

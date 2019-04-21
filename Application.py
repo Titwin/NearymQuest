@@ -16,11 +16,11 @@ pyxel.DEFAULT_PALETTE[11] = 0x00BC2C
 class App:
     application = None
     def __init__(self):
-
         application = self
 
         #global initialization
         pyxel.init(255, 255)
+        random.seed(0)
 
         # Event Manager
         self.inputManager = InputManagerModule.InputManager()
