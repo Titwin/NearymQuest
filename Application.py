@@ -10,6 +10,8 @@ from Events import *
 from TilemapModule import *
 from PlayerModule import *
 
+pyxel.DEFAULT_PALETTE[11] = 0x00BC2C
+
 # application class
 class App:
     application = None
@@ -35,7 +37,7 @@ class App:
     def update(self):
         self.inputManager.update()
         self.mapRenderer.update()
-        self.player.UpdateControls()
+        self.player.UpdateControls(self.map.sizeX*16, self.map.sizeY*16)
 
     def draw(self):
         # clear the scene
@@ -43,10 +45,12 @@ class App:
 
         # draw map      
         #pyxel.blt(TILE_SIZE,TILE_SIZE,self.tilePalette,TILE_SIZE*6,0,TILE_SIZE*3,TILE_SIZE*3)
-        self.mapRenderer.draw()
+        camX = max(self.player.x-128, 0)
+        camY = max(self.player.y-128, 0)
+        self.mapRenderer.draw(camX, camY)
 
-        # handle character            
-        pyxel.rect(self.player.x, self.player.y, self.player.x + 8, self.player.y +16, 9)
+        # handle character
+        pyxel.rect(min(self.player.x, 128), min(self.player.y, 128), min(self.player.x, 128) + 8, min(self.player.y, 128) +16, 9)
 
 
     def LoadMap(self):

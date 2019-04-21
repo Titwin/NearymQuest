@@ -1,9 +1,12 @@
 from Events import *
+from TilemapModule import Tilemap
 
 class Character:
     def __init__ (self):
         self._x = 0
         self._y = 0
+        self._w = 8
+        self._h = 16
         self.dashTimer = 0
         self.speedX = 3
         self.speedY = 3
@@ -23,6 +26,22 @@ class Character:
     @y.setter
     def y(self, new_y):
         self._y = float(new_y)
+
+    @property
+    def w(self):
+        return self._w
+
+    @w.setter
+    def w(self, new_w):
+        self._w = float(new_w)
+
+    @property
+    def h(self):
+        return self._h
+
+    @h.setter
+    def h(self, new_h):
+        self._h = float(new_h)
 
 
 class Player(Character):
@@ -45,7 +64,7 @@ class Player(Character):
 
         inputManager.addEvent(Event(EventType.BUTTON, EventNotify.NONE, [pyxel.KEY_SHIFT], 'run'))
 
-    def UpdateControls(self):
+    def UpdateControls(self, maxX, maxY):
         speedX = self.speedX
         speedY = self.speedY
 
@@ -60,10 +79,13 @@ class Player(Character):
             speedY *= 2
 
         if self.inputManager.CheckEvent('forward'):
-            self.y = (self.y - 1*speedY) % pyxel.height
+            self.y = (self.y - 1*speedY)
         elif self.inputManager.CheckEvent('backward'):
-            self.y = (self.y + 1*speedY) % pyxel.height
+            self.y = (self.y + 1*speedY)
         if self.inputManager.CheckEvent('left'):
-            self.x = (self.x - 1*speedX) % pyxel.width    
+            self.x = (self.x - 1*speedX)
         elif self.inputManager.CheckEvent('right'):
-            self.x = (self.x + 1*speedX) % pyxel.width
+            self.x = (self.x + 1*speedX)
+
+        self.x = max(min(self.x, maxX - self.w), 0)
+        self.y = max(min(self.y, maxY - self.h), 0)
