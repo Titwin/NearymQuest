@@ -39,14 +39,14 @@ class App:
         e.x, e.y = 5, 5
         self.quadtree.addEntity(e)
 
-        self.quadtree.print()
+        #self.quadtree.print()
 
 
         #player
         self.player = Player()
         self.player.RegisterEvents(self.inputManager)
         self.player.x = 256
-        self.player.y = 256
+        self.player.y = 128
         self.draw_count = 0
 
         # has to be completely at the end of init
@@ -75,10 +75,16 @@ class App:
         # handle multiple overlay (object height)
         playerExceptionX = math.floor(self.player.x/16)
         playerExceptionY = math.floor(self.player.y/16)
+        #print(str(playerExceptionX) + ' ' + str(playerExceptionY))
 
         self.mapRenderer.draw(self.overlay1, camX, camY, playerExceptionX, playerExceptionY)
         self.mapRenderer.draw(self.overlay2, camX, camY, playerExceptionX, playerExceptionY)
         self.mapRenderer.draw(self.overlay3, camX, camY, playerExceptionX, playerExceptionY)
+
+        self.mapRenderer.dithering(self.overlay1, camX, camY, playerExceptionX, playerExceptionY)
+        self.mapRenderer.dithering(self.overlay2, camX, camY, playerExceptionX, playerExceptionY)
+        self.mapRenderer.dithering(self.overlay3, camX, camY, playerExceptionX, playerExceptionY)
+
 
         #creepy face
         pyxel.blt(0,14*16, self.charactersPalette, 4*16, 1*16, 32,32, 11)

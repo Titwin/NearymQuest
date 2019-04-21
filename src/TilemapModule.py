@@ -93,6 +93,9 @@ class Tilemap:
         else:
             pass
 
+    def searchTile(self, x, y):
+        pass
+
     @staticmethod
     def ImportMap(paths, sizeX, sizeY):
         data = []
@@ -140,7 +143,7 @@ class TilemapRenderer:
     def update(self):
         pass
 
-    def draw(self, tilemap, a, b, exceptx = -10, excepty = -10, exceptw = 1, excepth = 1):
+    def draw(self, tilemap, a, b, exceptx = -10, excepty = -10):
         da = a - math.floor(a/16)*16
         db = b - math.floor(b/16)*16
 
@@ -151,7 +154,7 @@ class TilemapRenderer:
                     x = math.floor((a-da)/16) + dx
                     if x < tilemap.sizeX and x >= 0:
 
-                        if x<exceptx or x>exceptx+exceptw or y<excepty or y>excepty+excepth:
+                        if x<exceptx or x>exceptx+1 or y<excepty or y>excepty+1:
                             tile = tilemap[(x, y)]
                             if(len(tile.materials)>0):
                                 for m in tile.materials:
@@ -163,12 +166,35 @@ class TilemapRenderer:
                                             (m.indexX)*self.TILE_SIZE, (m.indexY)*self.TILE_SIZE, 
                                             self.TILE_SIZE*m.flipX, self.TILE_SIZE*m.flipY,
                                             m.transparency)
-                        else:
-                            self.dithering(tilemap[(x, y)], dx*self.TILE_SIZE - da,dy*self.TILE_SIZE - db)
+                        #else:
+                            #print(str(dx) + ' ' + str(dy))
+                            #self.dithering2(tilemap[(x, y)], dx*self.TILE_SIZE - da,dy*self.TILE_SIZE - db)
+
+    def dithering(self, tilemap, camX, camY, px, py):
+        da = camX - math.floor(camX/self.TILE_SIZE)*self.TILE_SIZE
+        db = camY - math.floor(camY/self.TILE_SIZE)*self.TILE_SIZE
+
+        ox = px - math.floor((camX-da)/self.TILE_SIZE)
+        oy = py - math.floor((camY-db)/self.TILE_SIZE)
+
+        #print(str(px) + '  ' + str(py))
+
+        for x in range(0, 32):
+            for y in range(0, 32):
+                convx, convy = 3*self.TILE_SIZE + x, 6*self.TILE_SIZE + y
+                #print(int(pyxel.image(self.palette).get(convx, convy)))
+
+                if pyxel.image(self.palette).get(convx, convy) != 0:
+                    tile = tilemap[(px + math.floor(x/self.TILE_SIZE), py + math.floor(y/self.TILE_SIZE))]
+                    if(len(tile.materials) > 0):
+                        for m in tile.materials:
+                            #pyxel.pix(self.TILE_SIZE*ox+x - da, self.TILE_SIZE*oy+y - db, 0)
+                            pyxel.blt(self.TILE_SIZE*ox+x - da, self.TILE_SIZE*oy+y - db, 
+                                      self.palette, m.indexX*self.TILE_SIZE + (x%self.TILE_SIZE), m.indexY*self.TILE_SIZE + (y%self.TILE_SIZE), 
+                                      m.flipX, m.flipY, m.transparency)
 
 
-
-    def dithering(self, tile, x, y):
+    def dithering2(self, tile, x, y):
         patern = [(0,0), (4,0), (8,0), (12,0),
                   (2,1), (6,1), (10,1), (14,1), 
                   (0,2), (4,2), (8,2), (12,2),
