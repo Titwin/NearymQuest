@@ -30,6 +30,8 @@ class App:
         #player
         self.player = Player()
         self.player.RegisterEvents(self.inputManager)
+        self.player.x = 256
+        self.player.y = 256
 
         # has to be completely at the end of init
         pyxel.run(self.update, self.draw)
@@ -43,34 +45,37 @@ class App:
         # clear the scene
         pyxel.cls(0)
 
-        # draw map      
-        #pyxel.blt(TILE_SIZE,TILE_SIZE,self.tilePalette,TILE_SIZE*6,0,TILE_SIZE*3,TILE_SIZE*3)
+        # draw map
         camX = max(self.player.x-128, 0)
         camY = max(self.player.y-128, 0)
-        self.mapRenderer.draw(camX, camY)
+        self.mapRenderer.draw(self.map, camX, camY)
 
         # handle character
-        pyxel.rect(min(self.player.x, 128), min(self.player.y, 128), min(self.player.x, 128) + 8, min(self.player.y, 128) +16, 9)
+        playerX = min(self.player.x, 128)
+        playerY = min(self.player.y, 128)
+        pyxel.rect(playerX, playerY, playerX + 8, playerY +16, 9)
 
+        # handle multiple overlay (object height)
+        playerExceptionX = math.floor(self.player.x/16)
+        playerExceptionY = math.floor(self.player.y/16)
+
+        self.mapRenderer.draw(self.overlay1, camX, camY, playerExceptionX, playerExceptionY)
+        self.mapRenderer.draw(self.overlay2, camX, camY, playerExceptionX, playerExceptionY)
+        self.mapRenderer.draw(self.overlay3, camX, camY, playerExceptionX, playerExceptionY)
 
     def LoadMap(self):
         ## create the map
         ## load the tile palette
-        self.tilePalette = pyxel.image(0).load(0, 0, 'ressources/PathAndObjects-low.png')
         self.tilePalette = pyxel.image(0).load(0, 0, 'ressources/map2tileset.png')
         
-        ## load the map layers, in order
-        #self.map = Tilemap.ImportMap(
-        #    ("ressources/map1_background.csv",
-        #    "ressources/map1_path.csv",
-        #    "ressources/map1_objects.csv",
-        #    "ressources/map1_small objects.csv"
-        #    ),
-        #50,50)
-        self.map = Tilemap.ImportMap(("ressources/map2.csv","ressources/map2.csv"), 50,50)
+        self.map = Tilemap.ImportMap(["ressources/map2_background.csv", "ressources/map2_objects1.csv"], 50,50)
+
+        self.overlay1 = Tilemap.ImportLayer(["ressources/map2_overlay1.csv"], 50,50, 0)
+        self.overlay2 = Tilemap.ImportLayer(["ressources/map2_overlay2.csv"], 50,50, 0)
+        self.overlay3 = Tilemap.ImportLayer(["ressources/map2_overlay3.csv"], 50,50, 0)
         
          ## set the map renderer
-        self.mapRenderer = TilemapRenderer(self.map,self.tilePalette)
+        self.mapRenderer = TilemapRenderer(self.tilePalette)
 
 # program entry
 App()
