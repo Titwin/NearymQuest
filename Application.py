@@ -70,7 +70,7 @@ class App:
     def LoadMap(self):
         ## create the map
         ## load the tile palette
-        pyxel.image(0).load(0, 0, 'ressources/map2tileset.png')
+        pyxel.image(0).load(0, 0, 'ressources/map3tileset.png')
         self.tilePalette = 0
 
         pyxel.image(1).load(0, 0, 'ressources/characters.png')
