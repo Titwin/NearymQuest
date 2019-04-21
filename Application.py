@@ -53,7 +53,8 @@ class App:
         # handle character
         playerX = min(self.player.x, 128)
         playerY = min(self.player.y, 128)
-        pyxel.rect(playerX, playerY, playerX + 8, playerY +16, 9)
+        pyxel.blt(playerX, playerY, self.charactersPalette, 0, 0, 16, 16, 0)
+        #pyxel.rect(playerX, playerY, playerX + 8, playerY +16, 9)
 
         # handle multiple overlay (object height)
         playerExceptionX = math.floor(self.player.x/16)
@@ -63,10 +64,17 @@ class App:
         self.mapRenderer.draw(self.overlay2, camX, camY, playerExceptionX, playerExceptionY)
         self.mapRenderer.draw(self.overlay3, camX, camY, playerExceptionX, playerExceptionY)
 
+        #creepy face
+        pyxel.blt(0,14*16, self.charactersPalette, 4*16, 1*16, 32,32, 11)
+
     def LoadMap(self):
         ## create the map
         ## load the tile palette
-        self.tilePalette = pyxel.image(0).load(0, 0, 'ressources/map2tileset.png')
+        pyxel.image(0).load(0, 0, 'ressources/map2tileset.png')
+        self.tilePalette = 0
+
+        pyxel.image(1).load(0, 0, 'ressources/characters.png')
+        self.charactersPalette = 1
         
         self.map = Tilemap.ImportMap(["ressources/map2_background.csv", "ressources/map2_objects1.csv"], 50,50)
 
