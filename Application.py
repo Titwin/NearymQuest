@@ -35,13 +35,6 @@ class App:
         self.quadtree.split()
         self.quadtree.setTransform(0,0, 50*16, 50*16)
 
-        e = Entity()
-        e.x, e.y = 5, 5
-        self.quadtree.addEntity(e)
-
-        #self.quadtree.print()
-
-
         #player
         self.player = Player()
         self.player.RegisterEvents(self.inputManager)
@@ -70,21 +63,19 @@ class App:
         # handle character
         self.drawPlayer()
 
-
-
         # handle multiple overlay (object height)
         playerExceptionX = math.floor(self.player.x/16)
         playerExceptionY = math.floor(self.player.y/16)
-        #print(str(playerExceptionX) + ' ' + str(playerExceptionY))
 
+        # overlay pass
         self.mapRenderer.draw(self.overlay1, camX, camY, playerExceptionX, playerExceptionY)
         self.mapRenderer.draw(self.overlay2, camX, camY, playerExceptionX, playerExceptionY)
         self.mapRenderer.draw(self.overlay3, camX, camY, playerExceptionX, playerExceptionY)
 
+        # shader pass
         self.mapRenderer.dithering(self.overlay1, camX, camY, playerExceptionX, playerExceptionY)
         self.mapRenderer.dithering(self.overlay2, camX, camY, playerExceptionX, playerExceptionY)
         self.mapRenderer.dithering(self.overlay3, camX, camY, playerExceptionX, playerExceptionY)
-
 
         #creepy face
         pyxel.blt(0,14*16, self.charactersPalette, 4*16, 1*16, 32,32, 11)
@@ -104,7 +95,7 @@ class App:
         self.overlay2 = Tilemap.ImportLayer(["ressources/map2_overlay2.csv"], 50,50, 0)
         self.overlay3 = Tilemap.ImportLayer(["ressources/map2_overlay3.csv"], 50,50, 0)
         
-         ## set the map renderer
+        ## set the map renderer
         self.mapRenderer = TilemapRenderer(self.tilePalette)
 
 
