@@ -69,6 +69,12 @@ class Tile:
     def flags(self):
         return self._flags
 
+    def getFlag(self, flag):
+        if flag in flags: 
+            return self._flags[flag]   
+        else:
+            return False
+
     def setFlag(self, flag, value):
         self._flags[flag] = value   
 
@@ -112,6 +118,7 @@ class Tilemap:
 
     @staticmethod
     def presentInTileList(element, array):
+        ## you can use "if element in array:"
         for e in array:
             if e == element:
                 return True
