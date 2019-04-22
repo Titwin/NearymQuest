@@ -5,12 +5,15 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src')
 
 # import modules
 import pyxel
-import InputManagerModule # as IMmodule
+import InputManagerModule
 from Events import *
+
 from TilemapModule import *
+
 from PlayerModule import *
-from QuadTree import *
+
 from Entity import *
+from RegionModule import *
 
 pyxel.DEFAULT_PALETTE[11] = 0x00BC2C
 
@@ -30,11 +33,13 @@ class App:
         self.LoadMap()
 
         # QuadTree structure init
-        self.quadtree = TreeNode()
-        self.quadtree.split()
-        self.quadtree.split()
-        self.quadtree.setTransform(0,0, 50*16, 50*16)
-        self.quadtree.print()
+        self.region = Region(0, 0, 50*16, 50*16)
+        self.region.load([ "ressources/map2tileset.json",
+                          ["ressources/map2_background.csv", "ressources/map2_objects1.csv"], 
+                          ["ressources/map2_overlay1.csv", "ressources/map2_overlay2.csv", "ressources/map2_overlay3.csv"]],
+                          0)
+        self.region.setDepth(3)
+        print(self.region)
 
         #player
         self.player = Player()
@@ -49,7 +54,7 @@ class App:
     def update(self):
         self.inputManager.update()
         self.mapRenderer.update()
-        self.player.UpdateControls(self.map.sizeX*16 - 8, self.map.sizeY*16 - 8)
+        self.player.UpdateControls(self.region.w - 8, self.region.w - 8)
 
     def draw(self):
         # clear the scene
@@ -59,15 +64,16 @@ class App:
         # draw map
         camX = max(self.player.x-128, 0)
         camY = max(self.player.y-128, 0)
-        self.mapRenderer.draw(self.map, camX, camY)
+        self.mapRenderer.draw(self.region.tilemapBase, camX, camY)
 
         # handle character
         self.drawPlayer()
 
         # overlay pass
-        exception = self.overlay.queryTiles(self.player.x -8, self.player.y -8, self.player.x + 24, self.player.y + 24)
-        self.mapRenderer.draw(self.overlay, camX, camY, exception)
-        self.mapRenderer.dithering(self.overlay, camX, camY, self.player.x+8, self.player.y+8, exception)
+        overlay = self.region.tilemapOverlay
+        exception = overlay.queryTiles(self.player.x -8, self.player.y -8, self.player.x + 24, self.player.y + 24)
+        self.mapRenderer.draw(overlay, camX, camY, exception)
+        self.mapRenderer.dithering(overlay, camX, camY, self.player.x+8, self.player.y+8, exception)
 
         #creepy face
         pyxel.blt(0,14*16, self.charactersPalette, 4*16, 1*16, 32,32, 11)
@@ -81,8 +87,8 @@ class App:
         pyxel.image(1).load(0, 0, 'ressources/characters.png')
         self.charactersPalette = 1
         
-        self.map = Tilemap.ImportMap(["ressources/map2_background.csv", "ressources/map2_objects1.csv"], 50,50)
-        self.overlay = Tilemap.ImportLayer(["ressources/map2_overlay1.csv", "ressources/map2_overlay2.csv", "ressources/map2_overlay3.csv"], 50,50, 0)
+        #self.map = Tilemap.ImportMap(["ressources/map2_background.csv", "ressources/map2_objects1.csv"], 50,50)
+        #self.overlay = Tilemap.ImportLayer(["ressources/map2_overlay1.csv", "ressources/map2_overlay2.csv", "ressources/map2_overlay3.csv"], 50,50, 0)
         
         ## set the map renderer
         self.mapRenderer = TilemapRenderer(self.tilePalette)
