@@ -81,8 +81,7 @@ class Tile:
         self._flags[flag] = value   
 
 class Tilemap:
-    resolutionX = 32
-    resolutionY = 32
+
     def __init__(self, sizeX, sizeY, data = []):
         self._sizeX = sizeX
         self._sizeY = sizeY
