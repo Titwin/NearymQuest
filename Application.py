@@ -36,6 +36,7 @@ class App:
         self.quadtree.split()
         self.quadtree.split()
         self.quadtree.setTransform(0,0, 50*16, 50*16)
+        self.quadtree.print()
 
         #player
         self.InitPlayer()

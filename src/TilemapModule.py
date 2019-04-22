@@ -4,18 +4,21 @@ from numpy import genfromtxt #for csv import
 import math
 import pyxel
 import random
+
+import json
 from RenderModule import *
 
 class Material:
     MATERIAL_TRANSAPARENT = -1
     #_palette
     #_index
-    def __init__(self, index,palette = 0, flipX = 1, flipY = 1, transparency = None):
+    def __init__(self, index,palette = 0, flipX = 1, flipY = 1, transparency = None, flag = 0x0000):
         self._palette = palette
         self._index = index
         self._flipX = flipX
         self._flipY = flipY
         self._transparency = transparency
+        self.flags = flag
 
     @property
     def palette(self):
@@ -51,7 +54,6 @@ class Tile:
     def __init__(self, x, y, material=None):
         self._x = x
         self._y = y
-        self._flags = dict()
         self._materials = []
         if material!=None:
             self._materials.append(material)
@@ -66,19 +68,34 @@ class Tile:
     @property
     def materials(self):
         return self._materials
-## flags    
-    @property
-    def flags(self):
-        return self._flags
 
-    def getFlag(self, flag):
-        if flag in flags: 
-            return self._flags[flag]   
-        else:
-            return False
 
-    def setFlag(self, flag, value):
-        self._flags[flag] = value   
+class FlagMap:
+    solid = 0x0001
+    destructible = 0x0002
+    inflamable = 0x0004
+    water = 0x0008
+
+    def __init__(self, filename):
+        self.map = []
+        for i in range(0, 256):
+            self.map.append(0x0000)
+
+        with open(filename) as json_file:
+            data = json.load(json_file)
+            for t in data['tiles']:
+                flag = 0x0000
+                if 'properties' in t.keys():
+                    for p in t['properties']:
+                        if p['name'] == 'solid' and p['value'] == True:
+                            flag += FlagMap.solid
+                        if p['name'] == 'destructible' and p['value'] == True:
+                            flag += FlagMap.destructible
+                        if p['name'] == 'inflamable' and p['value'] == True:
+                            flag += FlagMap.inflamable
+                        if p['name'] == 'water' and p['value'] == True:
+                            flag += FlagMap.water
+                self.map[t['id']] = flag
 
 class Tilemap:
 
@@ -127,26 +144,27 @@ class Tilemap:
 
 
     @staticmethod
-    def ImportMap(paths, sizeX, sizeY):
+    def ImportMap(paths, sizeX, sizeY, flagmap):
         data = []
         for y in range(sizeY):
             for x in range(sizeX):
                 index = random.choice([50,50,50,50,50,50, 20,20,20,20,20,20, 66,66, 82])
-                data.append(Tile(x,y, Material(index, 0, random.choice([1,-1]), random.choice([1,-1]) if index==50 else 1)))
+                data.append(Tile(x,y, Material(index, 0, random.choice([1,-1]), random.choice([1,-1]) if index==50 else 1, None, flagmap.map[index])))
                 if(index == 50 and random.randint(0, 20) == 0):
-                    data[x+y*sizeX].materials.append(Material(random.choice([80,80,80,81]), 0, random.choice([1,-1]), 1, 0))
+                    index = random.choice([80,80,80,81])
+                    data[x+y*sizeX].materials.append(Material(index, 0, random.choice([1,-1]), 1, 0, flagmap.map[index]))
 
         for path in paths:
             my_data = genfromtxt(path, delimiter=',')
             for y in range(sizeY):
                 for x in range(sizeX):
-                    matIndex = my_data[y,x]
+                    matIndex = int(my_data[y,x])
                     if(matIndex!=-1):
-                        data[x+y*sizeX].materials.append(Material(matIndex, 0, 1,1, 0))
+                        data[x+y*sizeX].materials.append(Material(matIndex, 0, 1,1, 0, flagmap.map[matIndex]))
         return Tilemap(sizeX, sizeY, data)
 
-    @staticmethod        
-    def ImportLayer(paths, sizeX, sizeY, transparency):
+    @staticmethod
+    def ImportLayer(paths, sizeX, sizeY, flagmap, transparency):
         data = []
         for y in range(sizeY):
             for x in range(sizeX):
@@ -156,9 +174,9 @@ class Tilemap:
             my_data = genfromtxt(path, delimiter=',')
             for y in range(sizeY):
                 for x in range(sizeX):
-                    matIndex = my_data[y,x]
+                    matIndex = int(my_data[y,x])
                     if(matIndex!=-1):
-                        data[x+y*sizeX].materials.append(Material(matIndex, 0, 1, 1, transparency))
+                        data[x+y*sizeX].materials.append(Material(matIndex, 0, 1, 1, transparency, flagmap.map[matIndex]))
         return Tilemap(sizeX, sizeY, data)
 
         
@@ -185,6 +203,7 @@ class TilemapRenderer:
                             if(tile and len(tile.materials)>0):
                                 for m in tile.materials:
                                     if m.index != Material.MATERIAL_TRANSAPARENT:
+
                                         Renderer.DrawSpriteTransparent(self.palette, m,
                                             dx*self.TILE_SIZE - da, dy*self.TILE_SIZE - db, 
                                             self.TILE_SIZE, self.TILE_SIZE)

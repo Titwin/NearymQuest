@@ -80,6 +80,17 @@ class TreeNode:
                 if c.overlap(entity):
                     c.addEntity(entity)
 
+    def removeEntity(self, entity):
+        if self.isLeaf():
+            try:
+                self.entities.remove(entity)
+            except Exception as e:
+                pass
+        else:
+            for c in self.child:
+                if c.overlap(entity):
+                    c.addEntity(entity)
+
 
     # DEBUG
     def print(self):
