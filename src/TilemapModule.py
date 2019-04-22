@@ -42,10 +42,15 @@ class Tile:
     #posX
     #posY
     #materials
-    #flags
+    #flags -- to implement
+    class Flags:
+        SOLID = 0
+        DAMAGING = 2
+
     def __init__(self, x, y, material=None):
         self._x = x
         self._y = y
+        self._flags = dict()
         self._materials = []
         if material!=None:
             self._materials.append(material)
@@ -60,7 +65,12 @@ class Tile:
     @property
     def materials(self):
         return self._materials
+    @property
+    def flags(self):
+        return self._flags
 
+    def setFlag(self, flag, value):
+        self._flags[flag] = value   
 
 class Tilemap:
     resolutionX = 32
