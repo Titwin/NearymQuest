@@ -38,3 +38,15 @@ class Entity:
     def GetComponent(self, component):
         if components in self.__components:
             return self.__components[component]
+
+
+class Component:
+    #@abstractmethod
+    #def start(self):
+    #    print("start here")
+    #@abstractmethod
+    #def update(self):
+    #    print("update here")
+    #@abstractmethod    
+    #def draw(self):
+    #    print("draw here")    

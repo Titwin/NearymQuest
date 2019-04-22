@@ -1,6 +1,7 @@
 
 import pyxel 
 import math
+from EntityComponentModule import *
 
 class Animation:
     class Frame:
@@ -58,8 +59,7 @@ class Animation:
     def length(self):
         return len(self.__frames)
 
-class Animator:
-
+class Animator (Component):
     # Dictionary(string,Animation) animations
     # string currentAnimation
     # int time
@@ -78,7 +78,7 @@ class Animator:
         self.__time = 0
         self.__flip = 1
 
-    def Play(self, animation, flip, restart = False):
+    def play(self, animation, flip, restart = False):
         if(restart or self.__currentAnimation.interruptable and (self.__animations[animation] != self.__currentAnimation or self.__flip != flip) ):
             self.__currentFrame = -1
             self.__currentAnimation = self.__animations[animation]
@@ -87,7 +87,7 @@ class Animator:
             self.__time = 0
         self.Tick()
 
-    def Tick(self):
+    def tick(self):
         self.__time += 1
         self.__frame = math.floor(self.__time/self.__currentAnimation.speed)
         if self.__frame>= self.__currentAnimation.length:
@@ -95,9 +95,9 @@ class Animator:
                 self.__frame = 0
                 self.__time = 0
             else:
-                self.Play(self.__defaultAnimation,self.__flip, True)
+                self.play(self.__defaultAnimation,self.__flip, True)
 
-    def Draw(self, x, y):
+    def draw(self, x, y):
         offset = 0
         if(self.__flip == -1
             and self.__currentAnimation.frames[0].width == 1 

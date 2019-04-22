@@ -1,7 +1,7 @@
 from Events import *
 from TilemapModule import Tilemap
 from AnimationModule import *
-from Entity import *
+from EntityComponentModule import *
 
 class Character(Entity):
     def __init__ (self):
@@ -103,24 +103,24 @@ class Player(Character):
         flip = self.orientationX
         #### Animations
         if(self.__attackTrigger==True):
-            self.animator.Play("attack",flip)
+            self.animator.play("attack",flip)
         # up
         elif (self.dx == 0 and self.dy > 0):
-            self.animator.Play("walk_down",flip)
+            self.animator.play("walk_down",flip)
         # down
         elif(self.dx == 0 and self.dy < 0):
-            self.animator.Play("walk_up",flip)
+            self.animator.play("walk_up",flip)
          # right
         elif(self.dx > 0):
-            self.animator.Play("walk_right",flip)
+            self.animator.play("walk_right",flip)
         # left
         elif(self.dx < 0):
-            self.animator.Play("walk_left",flip)
+            self.animator.play("walk_left",flip)
         else:
-            self.animator.Play("idle",flip)
+            self.animator.play("idle",flip)
 
         #pyxel.blt(playerX, playerY, self.charactersPalette, 16*(math.floor(self.draw_count/animSpeed)%animLength), animStart*16, flip*16, 16, 0)
-        self.animator.Draw(playerX, playerY)
+        self.animator.draw(playerX, playerY)
 
 
 
