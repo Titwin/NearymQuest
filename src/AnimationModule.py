@@ -98,6 +98,11 @@ class Animator:
                 self.Play(self.__defaultAnimation,self.__flip, True)
 
     def Draw(self, x, y):
-        pyxel.blt(x, y, self.__palette, 16*self.__frame, self.__currentAnimation.frames[0].idx*16, self.__flip*16, 16, 0)
+        offset = 0
+        if(self.__flip == -1
+            and self.__currentAnimation.frames[0].width == 1 
+            and self.__currentAnimation.frames[self.__frame].width == 2):
+            offset = -16
+        pyxel.blt(x+offset, y, self.__palette, 16*self.__frame, self.__currentAnimation.frames[0].idx*16, self.__flip*16* self.__currentAnimation.frames[self.__frame].width, 16, 0)
 
 

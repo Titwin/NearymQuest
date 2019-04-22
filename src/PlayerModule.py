@@ -29,7 +29,7 @@ class Player(Character):
             Animation("walk_right",Animation.Frame.CreateFrames(2,4),True,4,True,1),
             Animation("walk_up",Animation.Frame.CreateFrames(3,4),True,4,True,1),
             Animation("walk_down",Animation.Frame.CreateFrames(4,4),True,4,True,1),
-            Animation("attack",Animation.Frame.CreateFrames(1,3),False,4,False,1)),
+            Animation("attack",(Animation.Frame(1,1,1), Animation.Frame(2,1,1),Animation.Frame(3,2,1)),False,4,False,1)),
             "idle")
 
     def RegisterEvents(self, inputManager):
@@ -106,38 +106,17 @@ class Player(Character):
             self.animator.Play("attack",flip)
         # up
         elif (self.dx == 0 and self.dy > 0):
-            #animStart = 4
-            #animLength = 4
-            #animSpeed = 4
-            #flip = 1
             self.animator.Play("walk_down",flip)
         # down
         elif(self.dx == 0 and self.dy < 0):
-            #animStart = 3
-            #animLength = 4
-            #animSpeed = 4
-            #flip = 1
             self.animator.Play("walk_up",flip)
          # right
         elif(self.dx > 0):
-            #animStart = 2
-            flip = 1
-            #animLength = 4
-            #animSpeed = 4
             self.animator.Play("walk_right",flip)
         # left
         elif(self.dx < 0):
-            #animStart = 2
-            #flip = -1
-            #animLength = 4
-            #animSpeed = 4
             self.animator.Play("walk_left",flip)
         else:
-            #idle
-            #animStart = 0
-            #animLength = 2
-            #animSpeed = 20
-            #flip = self.orientationX
             self.animator.Play("idle",flip)
 
         #pyxel.blt(playerX, playerY, self.charactersPalette, 16*(math.floor(self.draw_count/animSpeed)%animLength), animStart*16, flip*16, 16, 0)
