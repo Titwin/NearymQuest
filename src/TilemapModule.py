@@ -98,7 +98,6 @@ class FlagMap:
                 self.map[t['id']] = flag
 
 class Tilemap:
-
     def __init__(self, sizeX, sizeY, data = []):
         self._sizeX = sizeX
         self._sizeY = sizeY
