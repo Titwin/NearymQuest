@@ -128,6 +128,5 @@ class Test:
 
         print("dot("+str(a)+","+str(a2)+") = "+ str(a.dot(a2)))
         print("cross("+str(a)+","+str(a2)+") = "+ str(a.cross(a2)))
-        
-        
+               
 Test()

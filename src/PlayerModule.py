@@ -1,6 +1,6 @@
 from Events import *
 from TilemapModule import Tilemap
-
+from AnimationModule import *
 class Character:
     def __init__ (self):
         self._x = 0
@@ -51,6 +51,18 @@ class Character:
 class Player(Character):
     def __init__ (self):
         Character.__init__(self)
+        self.CreateAnimator()
+
+    def CreateAnimator(self):
+        self.charactersPalette = 1
+        self.animator = Animator(
+            self.charactersPalette,
+            (Animation("idle",Animation.Frame.CreateFrames(0,2),20,True,1),
+            Animation("walk_left",Animation.Frame.CreateFrames(2,4),4,True,-1),
+            Animation("walk_right",Animation.Frame.CreateFrames(2,4),4,True,1),
+            Animation("walk_up",Animation.Frame.CreateFrames(3,4),4,True,1),
+            Animation("walk_down",Animation.Frame.CreateFrames(4,4),4,True,1)),
+            "idle")
 
     def RegisterEvents(self, inputManager):
 
@@ -110,6 +122,50 @@ class Player(Character):
         elif self.dy < 0:
             self.orientationY = -1
 
+
+    def draw(self):
+        playerX = min(self.x, 128)
+        playerY = min(self.y, 128)
+
+        #### Animations
+        # up
+        if (self.dx == 0 and self.dy > 0):
+            #animStart = 4
+            #animLength = 4
+            #animSpeed = 4
+            flip = 1
+            self.animator.Play("walk_down",flip)
+        # down
+        elif(self.dx == 0 and self.dy < 0):
+            #animStart = 3
+            #animLength = 4
+            #animSpeed = 4
+            flip = 1
+            self.animator.Play("walk_up",flip)
+         # right
+        elif(self.dx > 0):
+            #animStart = 2
+            flip = 1
+            #animLength = 4
+            #animSpeed = 4
+            self.animator.Play("walk_right",flip)
+        # left
+        elif(self.dx < 0):
+            #animStart = 2
+            flip = -1
+            #animLength = 4
+            #animSpeed = 4
+            self.animator.Play("walk_left",flip)
+        else:
+            #idle
+            #animStart = 0
+            #animLength = 2
+            #animSpeed = 20
+            flip = self.orientationX
+            self.animator.Play("idle",flip)
+
+        #pyxel.blt(playerX, playerY, self.charactersPalette, 16*(math.floor(self.draw_count/animSpeed)%animLength), animStart*16, flip*16, 16, 0)
+        self.animator.Draw(playerX, playerY)
 
 
 
