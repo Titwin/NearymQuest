@@ -29,7 +29,7 @@ class Player(Character):
             Animation("walk_right",Animation.Frame.CreateFrames(2,4),True,4,True,1),
             Animation("walk_up",Animation.Frame.CreateFrames(3,4),True,4,True,1),
             Animation("walk_down",Animation.Frame.CreateFrames(4,4),True,4,True,1),
-            Animation("attack",(Animation.Frame(1,1,1), Animation.Frame(2,1,1),Animation.Frame(3,2,1)),False,4,False,1)),
+            Animation("attack",(Animation.Frame(1,1,1), Animation.Frame(2,1,1),Animation.Frame(3,2,1)),False,2,False,1)),
             "idle")
 
     def RegisterEvents(self, inputManager):

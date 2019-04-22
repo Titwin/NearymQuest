@@ -9,6 +9,7 @@ class Region():
         self.w = w
         self.h = h
         self.quadtree = None
+        self.dynamicEntities = []
         self.flagmap = None
         self.tilemapBase = None
         self.tilemapOverlay = None
@@ -24,13 +25,19 @@ class Region():
         self.h = h
         self.adjustChild()
 
-    def addEntity(self, entity):
+    def addEntity(self, entity, dynamic = False):
         if self.quadtree and self.quadtree.overlap(entity):
             self.quadtree.addEntity(entity)
+        if dynamic:
+            self.dynamicEntities.append(entity)
 
     def removeEntity(self, entity):
         if self.quadtree and self.quadtree.overlap(entity):
-            self.quadtree.removeEntity(entity)
+            try:
+                self.quadtree.removeEntity(entity)
+                self.dynamicEntities.removeEntity(entity)
+            except Exception as e:
+                pass
 
     def load(self, files, transparency = 0):
         w = self.w//16

@@ -7,5 +7,7 @@ class PhysicsEngine():
         pass
 
 
-    def update(self):
-        pass
+    def update(self, world):
+        for r in world.regions:
+        	pass
+        	#afor e in 

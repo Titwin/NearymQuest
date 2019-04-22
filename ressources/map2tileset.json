@@ -36,36 +36,40 @@
         }, 
         {
          "id":3,
-         "properties":[
-                {
-                 "name":"water",
-                 "type":"bool",
-                 "value":false
-                }],
          "terrain":[1, 1, 1, -1]
         }, 
         {
          "id":4,
-         "properties":[
-                {
-                 "name":"water",
-                 "type":"bool",
-                 "value":false
-                }],
          "terrain":[1, 1, -1, -1]
         }, 
         {
          "id":5,
-         "properties":[
-                {
-                 "name":"water",
-                 "type":"bool",
-                 "value":false
-                }],
          "terrain":[1, 1, -1, 1]
         }, 
         {
          "id":6,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":6,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"hitbox",
+                     "visible":true,
+                     "width":4,
+                     "x":12,
+                     "y":10
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
          "properties":[
                 {
                  "name":"destructible",
@@ -81,6 +85,28 @@
         }, 
         {
          "id":7,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":7,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"hitbox",
+                     "visible":true,
+                     "width":16,
+                     "x":0,
+                     "y":9
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
          "properties":[
                 {
                  "name":"destructible",
@@ -96,6 +122,28 @@
         }, 
         {
          "id":8,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":5,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"hitbox",
+                     "visible":true,
+                     "width":5,
+                     "x":0,
+                     "y":11
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
          "properties":[
                 {
                  "name":"destructible",
@@ -111,6 +159,28 @@
         }, 
         {
          "id":9,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":16,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"",
+                     "visible":true,
+                     "width":16,
+                     "x":0,
+                     "y":0
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
          "properties":[
                 {
                  "name":"solid",
@@ -120,6 +190,28 @@
         }, 
         {
          "id":10,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":16,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"",
+                     "visible":true,
+                     "width":14,
+                     "x":0,
+                     "y":0
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
          "properties":[
                 {
                  "name":"solid",
@@ -129,6 +221,28 @@
         }, 
         {
          "id":11,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":16,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"collider",
+                     "visible":true,
+                     "width":16,
+                     "x":0,
+                     "y":0
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
          "properties":[
                 {
                  "name":"solid",
@@ -138,6 +252,28 @@
         }, 
         {
          "id":12,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":16,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"",
+                     "visible":true,
+                     "width":16,
+                     "x":0,
+                     "y":0
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
          "properties":[
                 {
                  "name":"solid",
@@ -186,35 +322,36 @@
         }, 
         {
          "id":19,
-         "properties":[
-                {
-                 "name":"water",
-                 "type":"bool",
-                 "value":false
-                }],
          "terrain":[1, -1, 1, -1]
         }, 
         {
-         "id":20,
-         "properties":[
-                {
-                 "name":"water",
-                 "type":"bool",
-                 "value":false
-                }]
-        }, 
-        {
          "id":21,
-         "properties":[
-                {
-                 "name":"water",
-                 "type":"bool",
-                 "value":false
-                }],
          "terrain":[-1, 1, -1, 1]
         }, 
         {
          "id":22,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":16,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"hitbox",
+                     "visible":true,
+                     "width":5,
+                     "x":11,
+                     "y":0
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
          "properties":[
                 {
                  "name":"destructible",
@@ -230,6 +367,28 @@
         }, 
         {
          "id":23,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":16,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"hitbox",
+                     "visible":true,
+                     "width":16,
+                     "x":0,
+                     "y":0
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
          "properties":[
                 {
                  "name":"destructible",
@@ -245,6 +404,28 @@
         }, 
         {
          "id":24,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":16,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"hitbox",
+                     "visible":true,
+                     "width":5,
+                     "x":0,
+                     "y":0
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
          "properties":[
                 {
                  "name":"destructible",
@@ -259,24 +440,6 @@
          "terrain":[2, -1, 2, -1]
         }, 
         {
-         "id":25,
-         "properties":[
-                {
-                 "name":"solid",
-                 "type":"bool",
-                 "value":true
-                }]
-        }, 
-        {
-         "id":26,
-         "properties":[
-                {
-                 "name":"solid",
-                 "type":"bool",
-                 "value":true
-                }]
-        }, 
-        {
          "id":27,
          "properties":[
                 {
@@ -287,6 +450,28 @@
         }, 
         {
          "id":28,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":16,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"",
+                     "visible":true,
+                     "width":14,
+                     "x":2,
+                     "y":0
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
          "properties":[
                 {
                  "name":"solid",
@@ -305,6 +490,28 @@
         }, 
         {
          "id":30,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":16,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"",
+                     "visible":true,
+                     "width":16,
+                     "x":0,
+                     "y":0
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
          "properties":[
                 {
                  "name":"solid",
@@ -314,6 +521,28 @@
         }, 
         {
          "id":31,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":16,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"",
+                     "visible":true,
+                     "width":16,
+                     "x":0,
+                     "y":0
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
          "properties":[
                 {
                  "name":"solid",
@@ -335,36 +564,40 @@
         }, 
         {
          "id":35,
-         "properties":[
-                {
-                 "name":"water",
-                 "type":"bool",
-                 "value":false
-                }],
          "terrain":[1, -1, 1, 1]
         }, 
         {
          "id":36,
-         "properties":[
-                {
-                 "name":"water",
-                 "type":"bool",
-                 "value":false
-                }],
          "terrain":[-1, -1, 1, 1]
         }, 
         {
          "id":37,
-         "properties":[
-                {
-                 "name":"water",
-                 "type":"bool",
-                 "value":false
-                }],
          "terrain":[-1, 1, 1, 1]
         }, 
         {
          "id":38,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":11,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"hitbox",
+                     "visible":true,
+                     "width":5,
+                     "x":11,
+                     "y":0
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
          "properties":[
                 {
                  "name":"destructible",
@@ -380,6 +613,28 @@
         }, 
         {
          "id":39,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":11,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"hitbox",
+                     "visible":true,
+                     "width":16,
+                     "x":0,
+                     "y":0
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
          "properties":[
                 {
                  "name":"destructible",
@@ -395,6 +650,28 @@
         }, 
         {
          "id":40,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":10,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"hitbox",
+                     "visible":true,
+                     "width":6,
+                     "x":0,
+                     "y":0
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
          "properties":[
                 {
                  "name":"destructible",
@@ -418,22 +695,10 @@
         }, 
         {
          "id":51,
-         "properties":[
-                {
-                 "name":"water",
-                 "type":"bool",
-                 "value":false
-                }],
          "terrain":[-1, -1, -1, 1]
         }, 
         {
          "id":52,
-         "properties":[
-                {
-                 "name":"water",
-                 "type":"bool",
-                 "value":false
-                }],
          "terrain":[-1, -1, 1, -1]
         }, 
         {
@@ -448,6 +713,39 @@
         }, 
         {
          "id":54,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":11,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"hitbox",
+                     "visible":true,
+                     "width":16,
+                     "x":0,
+                     "y":0
+                    }, 
+                    {
+                     "height":5,
+                     "id":2,
+                     "name":"",
+                     "rotation":0,
+                     "type":"hitbox",
+                     "visible":true,
+                     "width":7,
+                     "x":0,
+                     "y":11
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
          "properties":[
                 {
                  "name":"destructible",
@@ -463,6 +761,39 @@
         }, 
         {
          "id":55,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":10,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"hitbox",
+                     "visible":true,
+                     "width":16,
+                     "x":0,
+                     "y":0
+                    }, 
+                    {
+                     "height":6,
+                     "id":2,
+                     "name":"",
+                     "rotation":0,
+                     "type":"",
+                     "visible":true,
+                     "width":8,
+                     "x":8,
+                     "y":10
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
          "properties":[
                 {
                  "name":"destructible",
@@ -477,15 +808,6 @@
          "terrain":[2, 2, -1, 2]
         }, 
         {
-         "id":56,
-         "properties":[
-                {
-                 "name":"destructible",
-                 "type":"bool",
-                 "value":true
-                }]
-        }, 
-        {
          "id":64,
          "terrain":[0, -1, 0, 0]
         }, 
@@ -495,22 +817,10 @@
         }, 
         {
          "id":67,
-         "properties":[
-                {
-                 "name":"water",
-                 "type":"bool",
-                 "value":false
-                }],
          "terrain":[-1, 1, -1, -1]
         }, 
         {
          "id":68,
-         "properties":[
-                {
-                 "name":"water",
-                 "type":"bool",
-                 "value":false
-                }],
          "terrain":[1, -1, -1, -1]
         }, 
         {
@@ -524,6 +834,39 @@
         }, 
         {
          "id":70,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":8,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"hitbox",
+                     "visible":true,
+                     "width":6,
+                     "x":0,
+                     "y":0
+                    }, 
+                    {
+                     "height":8,
+                     "id":2,
+                     "name":"",
+                     "rotation":0,
+                     "type":"hitbox",
+                     "visible":true,
+                     "width":16,
+                     "x":0,
+                     "y":8
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
          "properties":[
                 {
                  "name":"destructible",
@@ -539,6 +882,39 @@
         }, 
         {
          "id":71,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":8,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"hitbox",
+                     "visible":true,
+                     "width":16,
+                     "x":0,
+                     "y":8
+                    }, 
+                    {
+                     "height":8,
+                     "id":2,
+                     "name":"",
+                     "rotation":0,
+                     "type":"",
+                     "visible":true,
+                     "width":5,
+                     "x":11,
+                     "y":0
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
          "properties":[
                 {
                  "name":"destructible",
@@ -553,16 +929,29 @@
          "terrain":[-1, 2, 2, 2]
         }, 
         {
-         "id":72,
-         "properties":[
-                {
-                 "name":"destructible",
-                 "type":"bool",
-                 "value":true
-                }]
-        }, 
-        {
          "id":80,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":5,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"hitbox",
+                     "visible":true,
+                     "width":9,
+                     "x":3,
+                     "y":6
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
          "properties":[
                 {
                  "name":"destructible",
@@ -572,6 +961,28 @@
         }, 
         {
          "id":81,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":13,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"collider",
+                     "visible":true,
+                     "width":12,
+                     "x":3,
+                     "y":1
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
          "properties":[
                 {
                  "name":"destructible",
@@ -649,6 +1060,28 @@
         }, 
         {
          "id":145,
+         "objectgroup":
+            {
+             "draworder":"index",
+             "name":"",
+             "objects":[
+                    {
+                     "height":8,
+                     "id":1,
+                     "name":"",
+                     "rotation":0,
+                     "type":"collider",
+                     "visible":true,
+                     "width":8,
+                     "x":4,
+                     "y":8
+                    }],
+             "opacity":1,
+             "type":"objectgroup",
+             "visible":true,
+             "x":0,
+             "y":0
+            },
          "properties":[
                 {
                  "name":"destructible",

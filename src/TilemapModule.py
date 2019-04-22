@@ -97,6 +97,13 @@ class FlagMap:
                             flag += FlagMap.water
                 self.map[t['id']] = flag
 
+class ColliderMap:
+    def __init__(self):
+        self.map = []
+        for i in range(0, 256):
+            self.map.append([])
+
+
 class Tilemap:
     def __init__(self, sizeX, sizeY, data = []):
         self._sizeX = sizeX
