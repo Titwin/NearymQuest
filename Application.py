@@ -63,19 +63,10 @@ class App:
         # handle character
         self.drawPlayer()
 
-        # handle multiple overlay (object height)
-        playerExceptionX = math.floor(self.player.x/16)
-        playerExceptionY = math.floor(self.player.y/16)
-
         # overlay pass
-        self.mapRenderer.draw(self.overlay1, camX, camY, playerExceptionX, playerExceptionY)
-        self.mapRenderer.draw(self.overlay2, camX, camY, playerExceptionX, playerExceptionY)
-        self.mapRenderer.draw(self.overlay3, camX, camY, playerExceptionX, playerExceptionY)
-
-        # shader pass
-        self.mapRenderer.dithering(self.overlay1, camX, camY, playerExceptionX, playerExceptionY)
-        self.mapRenderer.dithering(self.overlay2, camX, camY, playerExceptionX, playerExceptionY)
-        self.mapRenderer.dithering(self.overlay3, camX, camY, playerExceptionX, playerExceptionY)
+        exception = self.overlay.queryTiles(self.player.x -8, self.player.y -8, self.player.x + 24, self.player.y + 24)
+        self.mapRenderer.draw(self.overlay, camX, camY, exception)
+        self.mapRenderer.dithering(self.overlay, camX, camY, self.player.x+8, self.player.y+8, exception)
 
         #creepy face
         pyxel.blt(0,14*16, self.charactersPalette, 4*16, 1*16, 32,32, 11)
@@ -90,10 +81,7 @@ class App:
         self.charactersPalette = 1
         
         self.map = Tilemap.ImportMap(["ressources/map2_background.csv", "ressources/map2_objects1.csv"], 50,50)
-
-        self.overlay1 = Tilemap.ImportLayer(["ressources/map2_overlay1.csv"], 50,50, 0)
-        self.overlay2 = Tilemap.ImportLayer(["ressources/map2_overlay2.csv"], 50,50, 0)
-        self.overlay3 = Tilemap.ImportLayer(["ressources/map2_overlay3.csv"], 50,50, 0)
+        self.overlay = Tilemap.ImportLayer(["ressources/map2_overlay1.csv", "ressources/map2_overlay2.csv", "ressources/map2_overlay3.csv"], 50,50, 0)
         
         ## set the map renderer
         self.mapRenderer = TilemapRenderer(self.tilePalette)

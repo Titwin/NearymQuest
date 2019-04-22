@@ -91,8 +91,22 @@ class Tilemap:
         else:
             pass
 
-    def searchTile(self, x, y):
-        pass
+    def queryTiles(self, x1, y1, x2, y2):
+        overlaping = []
+        tilex = math.floor(x1/16)
+        tiley = math.floor(y1/16)
+        for i in range(0, math.floor(x2/16)+1 - tilex):
+            for j in range(0, math.floor(y2/16)+1 - tiley):
+                overlaping.append((tilex + i, tiley + j))
+        return overlaping
+
+    @staticmethod
+    def presentInTileList(element, array):
+        for e in array:
+            if e == element:
+                return True
+        return False
+
 
     @staticmethod
     def ImportMap(paths, sizeX, sizeY):
@@ -138,18 +152,17 @@ class TilemapRenderer:
     def update(self):
         pass
 
-    def draw(self, tilemap, a, b, exceptx = -10, excepty = -10):
-        da = a - math.floor(a/16)*16
-        db = b - math.floor(b/16)*16
+    def draw(self, tilemap, camX, camY, exception = []):
+        da = camX - math.floor(camX/self.TILE_SIZE)*self.TILE_SIZE
+        db = camY - math.floor(camY/self.TILE_SIZE)*self.TILE_SIZE
 
         for dy in range(0, 17):
-            y = math.floor((b-db)/16) + dy
+            y = math.floor((camY - db)/self.TILE_SIZE) + dy
             if y < tilemap.sizeY and y >= 0:
                 for dx in range(0, 17):
-                    x = math.floor((a-da)/16) + dx
+                    x = math.floor((camX - da)/self.TILE_SIZE) + dx
                     if x < tilemap.sizeX and x >= 0:
-
-                        if x<exceptx or x>exceptx+1 or y<excepty or y>excepty+1:
+                        if not Tilemap.presentInTileList((x, y), exception):
                             tile = tilemap[(x, y)]
                             if(len(tile.materials)>0):
                                 for m in tile.materials:
@@ -162,19 +175,34 @@ class TilemapRenderer:
                                             self.TILE_SIZE*m.flipX, self.TILE_SIZE*m.flipY,
                                             m.transparency)
 
-    def dithering(self, tilemap, camX, camY, px, py, transparentColor = 0):
-        da = camX - math.floor(camX/self.TILE_SIZE)*self.TILE_SIZE
-        db = camY - math.floor(camY/self.TILE_SIZE)*self.TILE_SIZE
-        ox = px - math.floor((camX-da)/self.TILE_SIZE)
-        oy = py - math.floor((camY-db)/self.TILE_SIZE)
+    def dithering(self, tilemap, camX, camY, centerX, centerY, exception, transparentColor = 0):
+        da = camX - math.floor(camX/self.TILE_SIZE)*self.TILE_SIZE      # camera corner position x - (camera corner tile x) *16 -> residual x
+        db = camY - math.floor(camY/self.TILE_SIZE)*self.TILE_SIZE      # camera corner position x - (camera corner tile x) *16 -> residual y
 
-        for x in range(0, 32):
-            for y in range(0, 32):
-                convx, convy = 3*self.TILE_SIZE + x, 6*self.TILE_SIZE + y
-                if pyxel.image(self.palette).get(convx, convy) != transparentColor:
-                    tile = tilemap[(px + math.floor(x/self.TILE_SIZE), py + math.floor(y/self.TILE_SIZE))]
-                    if(len(tile.materials) > 0):
+        camTileX = math.floor((camX-da)/self.TILE_SIZE)
+        camTileY = math.floor((camY-db)/self.TILE_SIZE)
+
+        ox = centerX - camX             # dithering center tile x - camera corner tile x
+        oy = centerY - camY             # dithering center tile y - camera corner tile y
+
+        for t in exception:
+            dx = t[0] - camTileX
+            dy = t[1] - camTileY
+            tile = tilemap[t]
+
+            if(len(tile.materials) > 0):
+                for i in range(0, 16):
+                    for j in range(0, 16):
+                        x, y = self.TILE_SIZE*dx + i - da, self.TILE_SIZE*dy + j - db                   # current pixel position on screen
+                        convx, convy = 4*self.TILE_SIZE + int(x - ox), 7*self.TILE_SIZE + int(y - oy)   # convolution coordinates
+
                         for m in tile.materials:
-                            pyxel.blt(self.TILE_SIZE*ox+x - da, self.TILE_SIZE*oy+y - db, 
-                                      self.palette, m.indexX*self.TILE_SIZE + (x%self.TILE_SIZE), m.indexY*self.TILE_SIZE + (y%self.TILE_SIZE), 
-                                      m.flipX, m.flipY, m.transparency)
+                            if x < ox - 16 or x > ox + 15 or y < oy - 16 or y > oy + 15: # out of dithering patern
+                                pyxel.blt(self.TILE_SIZE*dx+i - da, self.TILE_SIZE*dy+j - db, 
+                                          self.palette, m.indexX*self.TILE_SIZE + i, m.indexY*self.TILE_SIZE + j, 
+                                          m.flipX, m.flipY, m.transparency)
+
+                            elif pyxel.image(self.palette).get(convx, convy) != transparentColor:
+                                pyxel.blt(self.TILE_SIZE*dx+i - da, self.TILE_SIZE*dy+j - db, 
+                                          self.palette, m.indexX*self.TILE_SIZE + i, m.indexY*self.TILE_SIZE + j, 
+                                          m.flipX, m.flipY, m.transparency)
