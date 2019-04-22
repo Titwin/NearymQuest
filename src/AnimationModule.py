@@ -15,23 +15,21 @@ class Animation:
         @staticmethod
         def CreateFrames(first,duration,width=1,height=1):
             frames = []
-            print("creating set of frames:("+str(first)+","+str(duration)+")=")
             for idx in range(first,first+duration):
-                print(idx)
                 frames.append(Animation.Frame(idx,width,height))
-            print("created set of frames:("+str(first)+","+str(duration)+")="+str(len(frames)))
             return frames
 
     # string name
     # Frame[] frames
     # float speed
     # bool loop
-    def __init__(self,name,frames,speed = 20,loop = False, flip = 1):
+    def __init__(self,name,frames,interruptable = True,speed = 20,loop = False, flip = 1):
         self.__name = name
         self.__frames = frames
         self.__speed = speed
         self.__loop = loop
         self.__flip = flip
+        self.__interruptable = interruptable
 
     @property
     def name(self):
@@ -53,6 +51,10 @@ class Animation:
         return self.__flip
 
     @property
+    def interruptable(self):
+        return self.__interruptable
+
+    @property
     def length(self):
         return len(self.__frames)
 
@@ -69,7 +71,7 @@ class Animator:
         self.__animations = {}
         for animation in animations:
             self.__animations[animation.name] = animation
-            print(animation.name +"::"+ str(animation.length))
+           
         self.__defaultAnimation = default_animation
         self.__currentAnimation = self.__animations[default_animation]
         self.__currentFrame = 0
@@ -77,19 +79,30 @@ class Animator:
         self.__flip = 1
 
     def Play(self, animation, flip, restart = False):
-        if(restart or animation != self.__currentAnimation or self.__flip != flip ):
+        #print("current: "+self.__currentAnimation.name+" ,play:" +animation +", flip: "+str(flip)+", restart"+str(restart))
+        if(restart or self.__currentAnimation.interruptable and (self.__animations[animation] != self.__currentAnimation or self.__flip != flip) ):
             self.__currentFrame = -1
             self.__currentAnimation = self.__animations[animation]
             self.__flip = flip
+            self.__frame = 0
+            self.__time = 0
+            print("reset")
         self.Tick()
 
     def Tick(self):
+        print("tick:" +str(self.__time))
         self.__time += 1
+        self.__frame = math.floor(self.__time/self.__currentAnimation.speed)
+        if self.__frame>= self.__currentAnimation.length:
+            if self.__currentAnimation.loop:
+                self.__frame = 0
+                self.__time = 0
+            else:
+                Play(self.__animations[default_animation],self.__flip, True)
 
     def Draw(self, x, y):
-        frame = 16*(math.floor(self.__time/self.__currentAnimation.speed)%self.__currentAnimation.length)
-        print(self.__currentAnimation.name+" "+str(frame)+" "+ str(self.__currentAnimation.length))
-        #pyxel.blt(playerX, playerY, self.charactersPalette, 16*(math.floor(self.draw_count/animSpeed)%animLength), animStart*16, flip*16, 16, 0)
+        frame = 16*self.__frame
         pyxel.blt(x, y, self.__palette, frame, self.__currentAnimation.frames[0].idx*16, self.__flip*16, 16, 0)
+        print(self.__currentAnimation.name +":"+str(self.__frame)+"/"+str(self.__currentAnimation.length))
 
 
