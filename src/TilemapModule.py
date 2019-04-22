@@ -89,7 +89,7 @@ class Tilemap:
         if self.ValidTile(xy[0],xy[1]):
             return self.map[xy[0]+xy[1]*self.sizeX]
         else:
-            pass
+            return None
 
     def queryTiles(self, x1, y1, x2, y2):
         overlaping = []
@@ -164,7 +164,7 @@ class TilemapRenderer:
                     if x < tilemap.sizeX and x >= 0:
                         if not Tilemap.presentInTileList((x, y), exception):
                             tile = tilemap[(x, y)]
-                            if(len(tile.materials)>0):
+                            if(tile and len(tile.materials)>0):
                                 for m in tile.materials:
                                     if m.index != Material.MATERIAL_TRANSAPARENT:
                                         pyxel.blt(
@@ -176,6 +176,9 @@ class TilemapRenderer:
                                             m.transparency)
 
     def dithering(self, tilemap, camX, camY, centerX, centerY, exception, transparentColor = 0):
+        if(len(exception) <= 0):
+            return 
+
         da = camX - math.floor(camX/self.TILE_SIZE)*self.TILE_SIZE      # camera corner position x - (camera corner tile x) *16 -> residual x
         db = camY - math.floor(camY/self.TILE_SIZE)*self.TILE_SIZE      # camera corner position x - (camera corner tile x) *16 -> residual y
 
@@ -190,7 +193,7 @@ class TilemapRenderer:
             dy = t[1] - camTileY
             tile = tilemap[t]
 
-            if(len(tile.materials) > 0):
+            if(tile and len(tile.materials) > 0):
                 for i in range(0, 16):
                     for j in range(0, 16):
                         x, y = self.TILE_SIZE*dx + i - da, self.TILE_SIZE*dy + j - db                   # current pixel position on screen

@@ -48,7 +48,7 @@ class App:
     def update(self):
         self.inputManager.update()
         self.mapRenderer.update()
-        self.player.UpdateControls(self.map.sizeX*16, self.map.sizeY*16)
+        self.player.UpdateControls(self.map.sizeX*16 - 8, self.map.sizeY*16 - 8)
 
     def draw(self):
         # clear the scene
