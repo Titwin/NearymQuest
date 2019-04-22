@@ -4,6 +4,7 @@ from numpy import genfromtxt #for csv import
 import math
 import pyxel
 import random
+from RenderModule import *
 
 class Material:
     MATERIAL_TRANSAPARENT = -1
@@ -42,7 +43,7 @@ class Tile:
     #posX
     #posY
     #materials
-    #flags -- to implement
+    #flags
     class Flags:
         SOLID = 0
         DAMAGING = 2
@@ -65,6 +66,7 @@ class Tile:
     @property
     def materials(self):
         return self._materials
+## flags    
     @property
     def flags(self):
         return self._flags
@@ -184,14 +186,10 @@ class TilemapRenderer:
                             if(tile and len(tile.materials)>0):
                                 for m in tile.materials:
                                     if m.index != Material.MATERIAL_TRANSAPARENT:
-                                        pyxel.blt(
-                                            dx*self.TILE_SIZE - da, 
-                                            dy*self.TILE_SIZE - db, 
-                                            self.palette, 
-                                            (m.indexX)*self.TILE_SIZE, (m.indexY)*self.TILE_SIZE, 
-                                            self.TILE_SIZE*m.flipX, self.TILE_SIZE*m.flipY,
-                                            m.transparency)
-
+                                        Renderer.DrawSpriteTransparent(self.palette, m,
+                                            dx*self.TILE_SIZE - da, dy*self.TILE_SIZE - db, 
+                                            self.TILE_SIZE, self.TILE_SIZE)
+                                        
     def dithering(self, tilemap, camX, camY, centerX, centerY, exception, transparentColor = 0):
         if(len(exception) <= 0):
             return 
@@ -224,6 +222,7 @@ class TilemapRenderer:
                                           m.flipX, m.flipY, m.transparency)
 
                             elif pyxel.image(self.palette).get(convx, convy) != transparentColor:
+                                
                                 pyxel.blt(s*dx+i - da, s*dy+j - db, 
                                           self.palette, m.indexX*s + i, m.indexY*s + j, 
                                           m.flipX, m.flipY, m.transparency)
