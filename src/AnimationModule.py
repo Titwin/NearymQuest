@@ -85,7 +85,7 @@ class Animator (Component):
             self.__flip = flip
             self.__frame = 0
             self.__time = 0
-        self.Tick()
+        self.tick()
 
     def tick(self):
         self.__time += 1

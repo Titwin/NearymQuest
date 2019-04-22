@@ -102,6 +102,7 @@ class ColliderMap:
         self.map = []
         for i in range(0, 256):
             self.map.append([])
+            #need collider class
 
 
 class Tilemap:

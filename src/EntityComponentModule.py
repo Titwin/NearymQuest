@@ -41,6 +41,7 @@ class Entity:
 
 
 class Component:
+    pass
     #@abstractmethod
     #def start(self):
     #    print("start here")

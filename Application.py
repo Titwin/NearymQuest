@@ -12,7 +12,7 @@ from TilemapModule import *
 
 from PlayerModule import *
 
-from Entity import *
+from EntityComponentModule import *
 from WorldModule import *
 
 pyxel.DEFAULT_PALETTE[11] = 0x00BC2C

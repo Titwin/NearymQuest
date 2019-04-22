@@ -1,4 +1,4 @@
-from Entity import *
+from EntityComponentModule import *
 
 
 class TreeNode:
