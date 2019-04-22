@@ -79,18 +79,15 @@ class Animator:
         self.__flip = 1
 
     def Play(self, animation, flip, restart = False):
-        #print("current: "+self.__currentAnimation.name+" ,play:" +animation +", flip: "+str(flip)+", restart"+str(restart))
         if(restart or self.__currentAnimation.interruptable and (self.__animations[animation] != self.__currentAnimation or self.__flip != flip) ):
             self.__currentFrame = -1
             self.__currentAnimation = self.__animations[animation]
             self.__flip = flip
             self.__frame = 0
             self.__time = 0
-            print("reset")
         self.Tick()
 
     def Tick(self):
-        print("tick:" +str(self.__time))
         self.__time += 1
         self.__frame = math.floor(self.__time/self.__currentAnimation.speed)
         if self.__frame>= self.__currentAnimation.length:
@@ -98,11 +95,9 @@ class Animator:
                 self.__frame = 0
                 self.__time = 0
             else:
-                Play(self.__animations[default_animation],self.__flip, True)
+                self.Play(self.__defaultAnimation,self.__flip, True)
 
     def Draw(self, x, y):
-        frame = 16*self.__frame
-        pyxel.blt(x, y, self.__palette, frame, self.__currentAnimation.frames[0].idx*16, self.__flip*16, 16, 0)
-        print(self.__currentAnimation.name +":"+str(self.__frame)+"/"+str(self.__currentAnimation.length))
+        pyxel.blt(x, y, self.__palette, 16*self.__frame, self.__currentAnimation.frames[0].idx*16, self.__flip*16, 16, 0)
 
 

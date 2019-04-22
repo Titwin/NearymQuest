@@ -55,8 +55,9 @@ class Player(Character):
         self.dx = 0
         self.dy = 0
 
+        self.__attackTrigger = False
         if self.inputManager.CheckEvent('attack'):
-            print("attack!!")
+            self.__attackTrigger = True
         else:
             if self.inputManager.CheckEvent('dash forward') or self.inputManager.CheckEvent('dash backward') or self.inputManager.CheckEvent('dash left') or self.inputManager.CheckEvent('dash right'):
                 self.dashTimer = 10
@@ -99,21 +100,23 @@ class Player(Character):
         playerX = min(self.x, 128)
         playerY = min(self.y, 128)
 
-
+        flip = self.orientationX
         #### Animations
+        if(self.__attackTrigger==True):
+            self.animator.Play("attack",flip)
         # up
-        if (self.dx == 0 and self.dy > 0):
+        elif (self.dx == 0 and self.dy > 0):
             #animStart = 4
             #animLength = 4
             #animSpeed = 4
-            flip = 1
+            #flip = 1
             self.animator.Play("walk_down",flip)
         # down
         elif(self.dx == 0 and self.dy < 0):
             #animStart = 3
             #animLength = 4
             #animSpeed = 4
-            flip = 1
+            #flip = 1
             self.animator.Play("walk_up",flip)
          # right
         elif(self.dx > 0):
@@ -125,7 +128,7 @@ class Player(Character):
         # left
         elif(self.dx < 0):
             #animStart = 2
-            flip = -1
+            #flip = -1
             #animLength = 4
             #animSpeed = 4
             self.animator.Play("walk_left",flip)
@@ -134,7 +137,7 @@ class Player(Character):
             #animStart = 0
             #animLength = 2
             #animSpeed = 20
-            flip = self.orientationX
+            #flip = self.orientationX
             self.animator.Play("idle",flip)
 
         #pyxel.blt(playerX, playerY, self.charactersPalette, 16*(math.floor(self.draw_count/animSpeed)%animLength), animStart*16, flip*16, 16, 0)

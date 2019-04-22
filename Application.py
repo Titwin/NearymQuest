@@ -67,7 +67,7 @@ class App:
         self.mapRenderer.draw(self.world.regions[0].tilemapBase, camX, camY)
 
         # handle character
-        self.drawPlayer()
+        self.player.draw()
 
         # overlay pass
         overlay = self.world.regions[0].tilemapOverlay
@@ -97,38 +97,6 @@ class App:
         
         ## set the map renderer
         self.mapRenderer = TilemapRenderer(self.tilePalette)
-
-
-    def drawPlayer(self):
-        playerX = min(self.player.x, 128)
-        playerY = min(self.player.y, 128)
-
-        flip = self.player.orientationX
-        animStart = 0
-        animLength = 2
-        animSpeed = 20
-        if (self.player.dx == 0 and self.player.dy > 0):
-            animStart = 4
-            animLength = 4
-            animSpeed = 4
-            flip = 1
-        elif(self.player.dx == 0 and self.player.dy < 0):
-            animStart = 3
-            animLength = 4
-            animSpeed = 4
-            flip = 1
-        elif(self.player.dx > 0):
-            animStart = 2
-            flip = 1
-            animLength = 4
-            animSpeed = 4
-        elif(self.player.dx < 0):
-            animStart = 2
-            flip = -1
-            animLength = 4
-            animSpeed = 4
-
-        pyxel.blt(playerX, playerY, self.charactersPalette, 16*(math.floor(self.draw_count/animSpeed)%animLength), animStart*16, flip*16, 16, 0)
 
 # program entry
 App()

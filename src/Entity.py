@@ -5,6 +5,7 @@ class Entity:
         self._y = 0
         self._w = 16
         self._h = 16
+        self.__components = {}
 
     @property
     def x(self):
@@ -33,3 +34,7 @@ class Entity:
     @h.setter
     def h(self, new_h):
         self._h = float(new_h)
+
+    def GetComponent(self, component):
+        if components in self.__components:
+            return self.__components[component]
