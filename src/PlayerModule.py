@@ -1,7 +1,7 @@
 from Events import *
 from TilemapModule import Tilemap
 from AnimationModule import *
-
+from Entity import *
 
 class Character(Entity):
     def __init__ (self):
