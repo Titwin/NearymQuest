@@ -6,17 +6,17 @@ class TreeNode(Box):
     DIVISION = 2
 
     def __init__ (self):
-        self.child = []
+        self.children = []
         self.entities = []
         self.parent = None
 
     def setTransform(self, x, y, w, h):
-        Box.position = Vector2f(x, y)
-        Box.size = Vector2f(w, h)
+        self.position = Vector2f(x, y)
+        self.size = Vector2f(w, h)
         self.adjustChild()
 
     def isLeaf(self):
-        return len(self.child) == 0
+        return len(self.children) == 0
 
     def getLevel(self):
         if(self.parent):
@@ -26,40 +26,40 @@ class TreeNode(Box):
 
     def getDepth(self):
         if not self.isLeaf():
-            return self.child[0].getDepth() + 1
+            return self.children[0].getDepth() + 1
         else:
             return 1
 
     def adjustChild(self):
         if(not self.isLeaf()):
-            s = Vector2f(Box.size.x / TreeNode.DIVISION, Box.size.y / TreeNode.DIVISION)
+            s = Vector2f(self.size.x / TreeNode.DIVISION, self.size.y / TreeNode.DIVISION)
             for i in range(0, TreeNode.DIVISION):
                 for j in range(0, TreeNode.DIVISION):
-                    self.child[i*TreeNode.DIVISION + j].position = Box.position - 0.5 * Box.size + 0.5 * s + Vector2f(i*s.x, j*s.y)
-                    self.child[i*TreeNode.DIVISION + j].size = s
-                    self.child[i*TreeNode.DIVISION + j].adjustChild()
+                    self.children[i*TreeNode.DIVISION + j].position = self.position - 0.5 * self.size + 0.5 * s + Vector2f(i*s.x, j*s.y)
+                    self.children[i*TreeNode.DIVISION + j].size = s
+                    self.children[i*TreeNode.DIVISION + j].adjustChild()
 
     def split(self):
         if(self.isLeaf()):
             for i in range(0, TreeNode.DIVISION):
                 for j in range(0, TreeNode.DIVISION):
-                    self.child.append(TreeNode())
-                    self.child[i*TreeNode.DIVISION + j].parent = self
+                    self.children.append(TreeNode())
+                    self.children[i*TreeNode.DIVISION + j].parent = self
             self.adjustChild()
         else:
-            for c in self.child:
+            for c in self.children:
                 c.split()
 
     def merge(self):
-        if(not self.isLeaf() and self.child[0].isLeaf()):
-            self.child.clear()
+        if(not self.isLeaf() and self.children[0].isLeaf()):
+            self.children.clear()
         elif(not self.isLeaf()):
-            for c in self.child:
+            for c in self.children:
                 c.merge()
 
     def overlap(self, entity):
-        if (Box.position.x < entity.position.x + entity.size.x and Box.position.x + Box.size.x > entity.position.x and 
-            Box.position.y < entity.position.y + entity.size.y and Box.position.y + Box.size.y > entity.size.y):
+        if (self.position.x < entity.position.x + entity.size.x and self.position.x + self.size.x > entity.position.x and 
+            self.position.y < entity.position.y + entity.size.y and self.position.y + self.size.y > entity.size.y):
             return True
         return False
 
@@ -67,7 +67,7 @@ class TreeNode(Box):
         if self.isLeaf():
             self.entities.append(entity)
         else:
-            for c in self.child:
+            for c in self.children:
                 if c.overlap(entity):
                     c.addEntity(entity)
 
@@ -78,7 +78,7 @@ class TreeNode(Box):
             except Exception as e:
                 pass
         else:
-            for c in self.child:
+            for c in self.children:
                 if c.overlap(entity):
                     c.addEntity(entity)
 
@@ -86,7 +86,7 @@ class TreeNode(Box):
     # DEBUG
     def print(self):
         print(self)
-        for c in self.child:
+        for c in self.children:
             c.print()
 
     def __str__(self):

@@ -8,7 +8,7 @@ class Character(Entity):
         Entity.__init__(self)
         self.dashTimer = 0
         self.atackTimer = 0
-        self.speedMagnitude = Vector2f(1,1)
+        self.walkingSpeed = Vector2f(1,1)
         self.speed = Vector2f(0,0)
         self.orientationX = 1
         self.orientationY = 1
@@ -49,14 +49,15 @@ class Player(Character):
         inputManager.addEvent(Input(InputType.BUTTON, InputNotify.NONE, [pyxel.KEY_SHIFT], 'run'))
 
     def UpdateControls(self, maxX, maxY):
-        self.speed = self.speedMagnitude
-
         if self.inputManager.CheckEventTrigger('attack') and self.atackTimer == 0:
             self.atackTimer = 2
+            
         if self.atackTimer > 0:
             self.atackTimer -= 1
             self.speed = Vector2f(0,0)
         else:
+            self.speed = self.walkingSpeed
+
             if (self.inputManager.CheckEvent('dash forward') or 
                 self.inputManager.CheckEvent('dash backward') or 
                 self.inputManager.CheckEvent('dash left') or 

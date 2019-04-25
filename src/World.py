@@ -1,4 +1,4 @@
-from RegionModule import *
+from Region import *
 
 
 class World():

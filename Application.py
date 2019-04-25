@@ -12,7 +12,7 @@ from TilemapModule import *
 from PlayerModule import *
 
 from Entity import *
-from WorldModule import *
+from World import *
 
 pyxel.DEFAULT_PALETTE[11] = 0x00BC2C
 
@@ -53,7 +53,7 @@ class App:
     def update(self):
         self.inputManager.update()
         self.mapRenderer.update()
-        self.player.UpdateControls(self.world.regions[0].w - 8, self.world.regions[0].w - 8)
+        self.player.UpdateControls(self.world.regions[0].size.x - 8, self.world.regions[0].size.y - 8)
 
     def draw(self):
         # clear the scene

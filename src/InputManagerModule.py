@@ -6,7 +6,7 @@ class InputManager:
     def __init__(self):
         inputManager = self
         self.InputList = []
-        self.frameInput = []
+        self.frameInputs = []
 
     def addEvent(self, event):
         self.InputList.append(event)
@@ -18,13 +18,13 @@ class InputManager:
             print("InputManager : fail removing event")
 
     def update(self):
-        self.frameInput = []
+        self.frameInputs = []
         for e in self.InputList:
             if(e.update()):
-                self.frameInput.append((e.name, e.activated))
+                self.frameInputs.append((e.name, e.activated))
 
     def CheckEventTrigger(self, eventName):
-        for e in self.frameInput:
+        for e in self.frameInputs:
             if(e[0] == eventName):
                 return e[1]
         return False
