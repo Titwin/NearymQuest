@@ -1,13 +1,13 @@
 import pyxel
 import time
 
-class EventType:
+class InputType:
     NONE = 0
     BUTTON = 1
     CHORD = 2
     SEQUENCE = 3
 
-class EventNotify:
+class InputNotify:
     NONE = 0
     PRESSED = 1
     RELEASED = 2
@@ -15,12 +15,12 @@ class EventNotify:
 
 
 
-class Event:
-    def __init__(self, type, notify, inputList, notification):
+class Input:
+    def __init__(self, type, notify, inputList, name):
         self.type = type
         self.notify = notify
         self.inputList = inputList
-        self.notification = notification
+        self.name = name
         self.activated = False
 
     def update(self):
@@ -30,10 +30,10 @@ class Event:
             if(not pyxel.btn(input)):
                 activated = False
                 break
-        if(self.notify == EventNotify.RELEASED or self.notify == EventNotify.ALL):
+        if(self.notify == InputNotify.RELEASED or self.notify == InputNotify.ALL):
             if(self.activated and not activated):
                 haveToNotify = True
-        if(self.notify == EventNotify.PRESSED or self.notify == EventNotify.ALL):
+        if(self.notify == InputNotify.PRESSED or self.notify == InputNotify.ALL):
             if(not self.activated and activated):
                 haveToNotify = True
 
@@ -41,22 +41,22 @@ class Event:
         return haveToNotify
 
     def __str__(self):
-        msg = self.notification + ' '
+        msg = self.name + ' '
 
-        if(self.type == EventType.BUTTON):
+        if(self.type == InputType.BUTTON):
             msg += "BUTTON "
-        elif(self.type == EventType.CHORD):
+        elif(self.type == InputType.CHORD):
             msg += "CHORD "
-        elif(self.type == EventType.SEQUENCE):
+        elif(self.type == InputType.SEQUENCE):
             msg += "SEQUENCE "
         else:
             msg += "NONE "
 
-        if(self.notify == EventNotify.PRESSED):
+        if(self.notify == InputNotify.PRESSED):
             msg += "PRESSED "
-        elif(self.notify == EventNotify.RELEASED):
+        elif(self.notify == InputNotify.RELEASED):
             msg += "RELEASED "
-        elif(self.notify == EventNotify.ALL):
+        elif(self.notify == InputNotify.ALL):
             msg += "ALL "
         else:
             msg += "NONE "
@@ -72,9 +72,9 @@ class Event:
         return msg
 
 
-class Sequence(Event):
-    def __init__(self, inputList, notification, resetTime = 0.3):
-        super().__init__(EventType.SEQUENCE, EventNotify.PRESSED, inputList, notification)
+class Sequence(Input):
+    def __init__(self, inputList, name, resetTime = 0.3):
+        super().__init__(InputType.SEQUENCE, InputNotify.PRESSED, inputList, name)
         self.state = 0
         self.lastTime = time.time()
         self.resetTime = resetTime

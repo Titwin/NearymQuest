@@ -6,13 +6,12 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src')
 # import modules
 import pyxel
 import InputManagerModule
-from Events import *
+from Inputs import *
 
 from TilemapModule import *
-
 from PlayerModule import *
 
-from EntityComponentModule import *
+from Entity import *
 from WorldModule import *
 
 pyxel.DEFAULT_PALETTE[11] = 0x00BC2C
@@ -44,8 +43,8 @@ class App:
         #player
         self.player = Player()
         self.player.RegisterEvents(self.inputManager)
-        self.player.x = 256
-        self.player.y = 128
+        self.player.position.x = 256
+        self.player.position.y = 128
         self.draw_count = 0
 
         # has to be completely at the end of init
@@ -62,8 +61,8 @@ class App:
         self.draw_count += 1
 
         # draw map
-        camX = max(self.player.x-128, 0)
-        camY = max(self.player.y-128, 0)
+        camX = max(self.player.position.x-128, 0)
+        camY = max(self.player.position.y-128, 0)
         self.mapRenderer.draw(self.world.regions[0].tilemapBase, camX, camY)
 
         # handle character
@@ -71,9 +70,9 @@ class App:
 
         # overlay pass
         overlay = self.world.regions[0].tilemapOverlay
-        exception = overlay.queryTiles(self.player.x -8, self.player.y -8, self.player.x + 24, self.player.y + 24)
+        exception = overlay.queryTiles(self.player.position.x -8, self.player.position.y -8, self.player.position.x + 24, self.player.position.y + 24)
         self.mapRenderer.draw(overlay, camX, camY, exception)
-        self.mapRenderer.dithering(overlay, camX, camY, self.player.x+8, self.player.y+8, exception)
+        self.mapRenderer.dithering(overlay, camX, camY, self.player.position.x+8, self.player.position.y+8, exception)
 
         #creepy face
         pyxel.blt(0,14*16, self.charactersPalette, 4*16, 1*16, 32,32, 11)

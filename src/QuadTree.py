@@ -1,23 +1,18 @@
-from EntityComponentModule import *
+from Entity import *
+from Box import *
 
 
-class TreeNode:
+class TreeNode(Box):
     DIVISION = 2
 
     def __init__ (self):
-        self.x = 0
-        self.y = 0
-        self.w = 1
-        self.h = 1
         self.child = []
         self.entities = []
         self.parent = None
 
     def setTransform(self, x, y, w, h):
-        self.x = x
-        self.y = y
-        self.w = w
-        self.h = h
+        Box.position = Vector2f(x, y)
+        Box.size = Vector2f(w, h)
         self.adjustChild()
 
     def isLeaf(self):
@@ -37,20 +32,15 @@ class TreeNode:
 
     def adjustChild(self):
         if(not self.isLeaf()):
-            sx = self.w / TreeNode.DIVISION
-            sy = self.h / TreeNode.DIVISION
+            s = Vector2f(Box.size.x / TreeNode.DIVISION, Box.size.y / TreeNode.DIVISION)
             for i in range(0, TreeNode.DIVISION):
                 for j in range(0, TreeNode.DIVISION):
-                    self.child[i*TreeNode.DIVISION + j].x = self.x - self.w/2 + sx/2 + i*sx
-                    self.child[i*TreeNode.DIVISION + j].y = self.y - self.h/2 + sy/2 + j*sy
-                    self.child[i*TreeNode.DIVISION + j].w = sx
-                    self.child[i*TreeNode.DIVISION + j].h = sy
+                    self.child[i*TreeNode.DIVISION + j].position = Box.position - 0.5 * Box.size + 0.5 * s + Vector2f(i*s.x, j*s.y)
+                    self.child[i*TreeNode.DIVISION + j].size = s
                     self.child[i*TreeNode.DIVISION + j].adjustChild()
 
     def split(self):
         if(self.isLeaf()):
-            sx = self.w / TreeNode.DIVISION
-            sy = self.h / TreeNode.DIVISION
             for i in range(0, TreeNode.DIVISION):
                 for j in range(0, TreeNode.DIVISION):
                     self.child.append(TreeNode())
@@ -68,7 +58,8 @@ class TreeNode:
                 c.merge()
 
     def overlap(self, entity):
-        if  self.x < entity.x + entity.w and self.x + self.w > entity.x and self.y < entity.y + entity.h and self.y + self.h > entity.h:
+        if (Box.position.x < entity.position.x + entity.size.x and Box.position.x + Box.size.x > entity.position.x and 
+            Box.position.y < entity.position.y + entity.size.y and Box.position.y + Box.size.y > entity.size.y):
             return True
         return False
 
@@ -102,7 +93,7 @@ class TreeNode:
         msg = ''
         for i in range(0, self.getLevel()):
             msg += '   '
-        return msg + 'p: ' + str(self.x) + ' ' + str(self.y) + ' , s: ' + str(self.w) + ' ' + str(self.h) + ' , obj: ' + str(len(self.entities))
+        return msg + 'p: ' + str(self.position) + ' ,s: ' + str(self.size) + ' , obj: ' + str(len(self.entities))
 
 
 

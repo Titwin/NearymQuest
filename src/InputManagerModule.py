@@ -5,38 +5,33 @@ class InputManager:
     
     def __init__(self):
         inputManager = self
-        self.EventList = []
+        self.InputList = []
+        self.frameInput = []
 
     def addEvent(self, event):
-        self.EventList.append(event)
+        self.InputList.append(event)
 
     def removeEvent(self, event):
         try:
-            self.EventList.remove(event)
+            self.InputList.remove(event)
         except Exception as e:
             print("InputManager : fail removing event")
 
     def update(self):
-        self.frameEvent = []
-        for e in self.EventList:
+        self.frameInput = []
+        for e in self.InputList:
             if(e.update()):
-                self.frameEvent.append((e.notification, e.activated))
+                self.frameInput.append((e.name, e.activated))
 
-    def CheckEventTriggerDown(self, eventName):
-        for e in self.frameEvent:
-            if(e[0].notification == eventName):
+    def CheckEventTrigger(self, eventName):
+        for e in self.frameInput:
+            if(e[0] == eventName):
                 return e[1]
         return False
 
-    def CheckEventTriggerUp(self, eventName):
-        for e in self.frameEvent:
-            if(e[0].notification == eventName):
-                return not e[1]
-        return False  
-
     def CheckEvent(self, eventName):
-        for e in self.EventList:
-            if(e.notification == eventName):
+        for e in self.InputList:
+            if(e.name == eventName):
                 return e.activated
         return False
 

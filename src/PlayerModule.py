@@ -1,16 +1,15 @@
-from Events import *
+from Inputs import *
 from TilemapModule import Tilemap
 from AnimationModule import *
-from EntityComponentModule import *
+from Entity import *
 
 class Character(Entity):
     def __init__ (self):
         Entity.__init__(self)
         self.dashTimer = 0
-        self.speedX = 1
-        self.speedY = 1
-        self.dx = 0
-        self.dy = 0
+        self.atackTimer = 0
+        self.speedMagnitude = Vector2f(1,1)
+        self.speed = Vector2f(0,0)
         self.orientationX = 1
         self.orientationY = 1
 
@@ -36,85 +35,87 @@ class Player(Character):
 
         self.inputManager = inputManager #perhaps use static propery
 
-        inputManager.addEvent(Event(EventType.BUTTON, EventNotify.NONE, [pyxel.KEY_W], 'forward'))
-        inputManager.addEvent(Event(EventType.BUTTON, EventNotify.NONE, [pyxel.KEY_S], 'backward'))
-        inputManager.addEvent(Event(EventType.BUTTON, EventNotify.NONE, [pyxel.KEY_A], 'left'))
-        inputManager.addEvent(Event(EventType.BUTTON, EventNotify.NONE, [pyxel.KEY_D], 'right'))
-        inputManager.addEvent(Event(EventType.BUTTON, EventNotify.NONE, [pyxel.KEY_SPACE], 'attack'))
+        inputManager.addEvent(Input(InputType.BUTTON, InputNotify.NONE, [pyxel.KEY_W], 'forward'))
+        inputManager.addEvent(Input(InputType.BUTTON, InputNotify.NONE, [pyxel.KEY_S], 'backward'))
+        inputManager.addEvent(Input(InputType.BUTTON, InputNotify.NONE, [pyxel.KEY_A], 'left'))
+        inputManager.addEvent(Input(InputType.BUTTON, InputNotify.NONE, [pyxel.KEY_D], 'right'))
+        inputManager.addEvent(Input(InputType.BUTTON, InputNotify.PRESSED, [pyxel.KEY_SPACE], 'attack'))
 
         inputManager.addEvent(Sequence([pyxel.KEY_W, pyxel.KEY_W], 'dash forward'))
         inputManager.addEvent(Sequence([pyxel.KEY_S, pyxel.KEY_S], 'dash backward'))
         inputManager.addEvent(Sequence([pyxel.KEY_A, pyxel.KEY_A], 'dash left'))
         inputManager.addEvent(Sequence([pyxel.KEY_D, pyxel.KEY_D], 'dash right'))
 
-        inputManager.addEvent(Event(EventType.BUTTON, EventNotify.NONE, [pyxel.KEY_SHIFT], 'run'))
+        inputManager.addEvent(Input(InputType.BUTTON, InputNotify.NONE, [pyxel.KEY_SHIFT], 'run'))
 
     def UpdateControls(self, maxX, maxY):
-        speedX = self.speedX
-        speedY = self.speedY
-        self.dx = 0
-        self.dy = 0
+        self.speed = self.speedMagnitude
 
-        self.__attackTrigger = False
-        if self.inputManager.CheckEvent('attack'):
-            self.__attackTrigger = True
+        if self.inputManager.CheckEventTrigger('attack') and self.atackTimer == 0:
+            self.atackTimer = 2
+        if self.atackTimer > 0:
+            self.atackTimer -= 1
+            self.speed = Vector2f(0,0)
         else:
-            if self.inputManager.CheckEvent('dash forward') or self.inputManager.CheckEvent('dash backward') or self.inputManager.CheckEvent('dash left') or self.inputManager.CheckEvent('dash right'):
+            if (self.inputManager.CheckEvent('dash forward') or 
+                self.inputManager.CheckEvent('dash backward') or 
+                self.inputManager.CheckEvent('dash left') or 
+                self.inputManager.CheckEvent('dash right')):
                 self.dashTimer = 10
+
             if self.dashTimer > 0:
-                speedX *= 5
-                speedY *= 5
+                self.speed *= 5
                 self.dashTimer -= 1
             elif self.inputManager.CheckEvent('run'):
-                speedX *= 2
-                speedY *= 2
+                self.speed *= 2
 
+            direction = Vector2f(0,0)
             if self.inputManager.CheckEvent('forward'):
-                self.y = (self.y - 1*speedY)
-                self.dy =  -1*speedY
+                direction.y = -1
             elif self.inputManager.CheckEvent('backward'):
-                self.y = (self.y + 1*speedY)
-                self.dy =  1*speedY
+                direction.y = 1
             if self.inputManager.CheckEvent('left'):
-                self.x = (self.x - 1*speedX)
-                self.dx =  -1*speedX
+                direction.x = -1
             elif self.inputManager.CheckEvent('right'):
-                self.x = (self.x + 1*speedX)
-                self.dx =  1*speedX
+                direction.x = 1
+            if direction != Vector2f(0,0):
+                direction.normalized
 
-            self.x = max(min(self.x, maxX - self.w), 0)
-            self.y = max(min(self.y, maxY - self.h), 0)
+            self.speed = Vector2f(self.speed.x * direction.x, self.speed.y * direction.y)
+            self.position += self.speed
+            self.position.x = max(min(self.position.x, maxX - self.size.x), 0)
+            self.position.y = max(min(self.position.y, maxY - self.size.y), 0)
 
-            if self.dx > 0:
+            if self.speed.x > 0:
                 self.orientationX = 1
-            elif self.dx < 0:
+            elif self.speed.x < 0:
                 self.orientationX = -1
 
-            if self.dy > 0:
+            if self.speed.y > 0:
                 self.orientationY = 1
-            elif self.dy < 0:
+            elif self.speed.y < 0:
                 self.orientationY = -1
 
 
     def draw(self):
-        playerX = min(self.x, 128)
-        playerY = min(self.y, 128)
+        playerX = min(self.position.x, 128)
+        playerY = min(self.position.y, 128)
 
         flip = self.orientationX
         #### Animations
-        if(self.__attackTrigger==True):
+        if(self.atackTimer > 0):
             self.animator.play("attack",flip)
         # up
-        elif (self.dx == 0 and self.dy > 0):
+        elif (self.speed.x == 0 and self.speed.y > 0):
             self.animator.play("walk_down",flip)
         # down
-        elif(self.dx == 0 and self.dy < 0):
+        elif(self.speed.x == 0 and self.speed.y < 0):
             self.animator.play("walk_up",flip)
          # right
-        elif(self.dx > 0):
+        elif(self.speed.x > 0):
             self.animator.play("walk_right",flip)
         # left
-        elif(self.dx < 0):
+        elif(self.speed.x < 0):
             self.animator.play("walk_left",flip)
         else:
             self.animator.play("idle",flip)

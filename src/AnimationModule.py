@@ -1,7 +1,6 @@
-
 import pyxel 
 import math
-from EntityComponentModule import *
+from Component import *
 
 class Animation:
     class Frame:
