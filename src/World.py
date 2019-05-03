@@ -9,7 +9,7 @@ class World(Box):
         super(World, self).__init__()
         self.regionsArray = regionsArray
         self.position = Vector2f(0,0)
-        self.size = 16 * 50 * regionsArray
+        self.size = 16 * 50 * Vector2f(regionsArray.x, regionsArray.y)
         self.regionSize = 16 * Vector2f(50, 50)
         self.regions = []
 

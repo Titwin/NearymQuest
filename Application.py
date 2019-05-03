@@ -52,15 +52,19 @@ class App:
         self.player.RegisterEvents(self.inputManager)
         self.player.position.x = 256
         self.player.position.y = 128
+
         self.draw_count = 0
 
         # has to be completely at the end of init
         pyxel.run(self.update, self.draw)
 
+
     def update(self):
         self.inputManager.update()
         #self.mapRenderer.update()
-        #self.player.UpdateControls(self.world.regions[0].size.x - 8, self.world.regions[0].size.y - 8)
+        self.player.UpdateControls(self.world.position + 0.5*self.world.size, self.world.position - 0.5*self.world.size)
+        self.camera.position = self.player.position
+
 
     def draw(self):
         # clear the scene
@@ -103,7 +107,7 @@ class App:
         
         self.world = World(Vector2i(3,3))
         self.world.loadRegions(self.camera)
-        self.world.loadBanks("ressources/map2tileset.json")
+        self.world.loadBanks("ressources/map2tileset.json", self.tilePalette, 0)
 
         #self.tilemap = TileMap(Vector2i(50,50))
         #self.tilemap.randomBackground([50,50,50,50,50,50, 20,20,20,20,20,20, 66,66, 82], [80,80,80,81])

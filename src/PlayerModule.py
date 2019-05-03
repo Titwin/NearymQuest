@@ -48,7 +48,7 @@ class Player(Character):
 
         inputManager.addEvent(Input(InputType.BUTTON, InputNotify.NONE, [pyxel.KEY_SHIFT], 'run'))
 
-    def UpdateControls(self, maxX, maxY):
+    def UpdateControls(self, maxBound, minBound):
         if self.inputManager.CheckEventTrigger('attack') and self.atackTimer == 0:
             self.atackTimer = 2
             
@@ -84,8 +84,8 @@ class Player(Character):
 
             self.speed = Vector2f(self.speed.x * direction.x, self.speed.y * direction.y)
             self.position += self.speed
-            self.position.x = max(min(self.position.x, maxX - self.size.x), 0)
-            self.position.y = max(min(self.position.y, maxY - self.size.y), 0)
+            self.position.x = max(min(self.position.x, maxBound.x - self.size.x), minBound.x)
+            self.position.y = max(min(self.position.y, maxBound.y - self.size.y), minBound.y)
 
             if self.speed.x > 0:
                 self.orientationX = 1
