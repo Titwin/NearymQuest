@@ -7,4 +7,5 @@ class Collider(Box):
     HITBOX = 3
 
     def __init__(self, type = UNKNOWN):
+        super(Collider, self).__init__()
         self.type = type

@@ -3,6 +3,7 @@ from Component import *
 
 class Entity(Box):
     def __init__(self):
+        super(Entity, self).__init__()
         self.position = Vector2f(0,0)
         self.size = Vector2f(16,16)
         self.components = {}

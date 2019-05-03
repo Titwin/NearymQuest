@@ -1,7 +1,7 @@
 import json
 
 
-class FlagMap:
+class FlagBank:
     solid = 0x0001
     destructible = 0x0002
     inflamable = 0x0004
@@ -21,13 +21,13 @@ class FlagMap:
                 if 'properties' in t.keys():
                     for p in t['properties']:
                         if p['name'] == 'solid' and p['value'] == True:
-                            flag |= FlagMap.solid
+                            flag |= FlagBank.solid
                         if p['name'] == 'destructible' and p['value'] == True:
-                            flag |= FlagMap.destructible
+                            flag |= FlagBank.destructible
                         if p['name'] == 'inflamable' and p['value'] == True:
-                            flag |= FlagMap.inflamable
+                            flag |= FlagBank.inflamable
                         if p['name'] == 'water' and p['value'] == True:
-                            flag |= FlagMap.water
+                            flag |= FlagBank.water
                 self.map[t['id']] = flag
 
     def __getitem__(self, index):

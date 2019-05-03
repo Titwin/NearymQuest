@@ -10,12 +10,13 @@ import InputManagerModule
 from Inputs import *
 
 #from TilemapModule import *
-#from World import *
+from World import *
 from PlayerModule import *
 from Entity import *
 
 from TileMap import *
 from Renderer import *
+from Camera import *
 
 
 pyxel.DEFAULT_PALETTE[11] = 0x00BC2C
@@ -28,6 +29,8 @@ class App:
 
         #global initialization
         pyxel.init(255,255, caption="Nearym Quest", scale=3)
+        self.camera = Camera()
+        self.camera.position = Vector2f(0,0)
         random.seed(0)
 
         # Event Manager
@@ -98,11 +101,13 @@ class App:
         pyxel.image(1).load(0, 0, 'ressources/characters.png')
         self.charactersPalette = 1
         
+        self.world = World(Vector2i(3,3))
+        self.world.loadRegions(self.camera)
+        self.world.loadBanks("ressources/map2tileset.json")
 
-
-        self.tilemap = TileMap(Vector2i(50,50))
-        self.tilemap.randomBackground([50,50,50,50,50,50, 20,20,20,20,20,20, 66,66, 82], [80,80,80,81])
-        self.tilemap.importFromFile('ressources/map2.json', self.tilePalette)
+        #self.tilemap = TileMap(Vector2i(50,50))
+        #self.tilemap.randomBackground([50,50,50,50,50,50, 20,20,20,20,20,20, 66,66, 82], [80,80,80,81])
+        #self.tilemap.importFromFile('ressources/map2.json', self.tilePalette)
 
         #self.tilemap.print()
 

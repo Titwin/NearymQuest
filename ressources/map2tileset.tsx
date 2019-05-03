@@ -44,7 +44,7 @@
    <property name="solid" type="bool" value="true"/>
   </properties>
   <objectgroup draworder="index">
-   <object id="1" x="0" y="0" width="16" height="16"/>
+   <object id="1" type="collider" x="0" y="0" width="16" height="16"/>
   </objectgroup>
  </tile>
  <tile id="10">
@@ -52,7 +52,7 @@
    <property name="solid" type="bool" value="true"/>
   </properties>
   <objectgroup draworder="index">
-   <object id="1" x="0" y="0" width="14" height="16"/>
+   <object id="1" type="collider" x="0" y="0" width="14" height="16"/>
   </objectgroup>
  </tile>
  <tile id="11">
@@ -68,7 +68,7 @@
    <property name="solid" type="bool" value="true"/>
   </properties>
   <objectgroup draworder="index">
-   <object id="1" x="0" y="0" width="16" height="16"/>
+   <object id="1" type="collider" x="0" y="0" width="16" height="16"/>
   </objectgroup>
  </tile>
  <tile id="13">
@@ -128,7 +128,7 @@
    <property name="solid" type="bool" value="true"/>
   </properties>
   <objectgroup draworder="index">
-   <object id="1" x="2" y="0" width="14" height="16"/>
+   <object id="1" type="collider" x="2" y="0" width="14" height="16"/>
   </objectgroup>
  </tile>
  <tile id="29">
@@ -141,7 +141,7 @@
    <property name="solid" type="bool" value="true"/>
   </properties>
   <objectgroup draworder="index">
-   <object id="1" x="0" y="0" width="16" height="16"/>
+   <object id="1" type="collider" x="0" y="0" width="16" height="16"/>
   </objectgroup>
  </tile>
  <tile id="31">
@@ -149,7 +149,7 @@
    <property name="solid" type="bool" value="true"/>
   </properties>
   <objectgroup draworder="index">
-   <object id="1" x="0" y="0" width="16" height="16"/>
+   <object id="1" type="collider" x="0" y="0" width="16" height="16"/>
   </objectgroup>
  </tile>
  <tile id="32" terrain=",0,,"/>
@@ -211,7 +211,7 @@
   </properties>
   <objectgroup draworder="index">
    <object id="1" type="hitbox" x="0" y="0" width="16" height="10"/>
-   <object id="2" x="8" y="10" width="8" height="6"/>
+   <object id="2" type="hitbox" x="8" y="10" width="8" height="6"/>
   </objectgroup>
  </tile>
  <tile id="64" terrain="0,,0,0"/>
@@ -240,7 +240,7 @@
   </properties>
   <objectgroup draworder="index">
    <object id="1" type="hitbox" x="0" y="8" width="16" height="8"/>
-   <object id="2" x="11" y="0" width="5" height="8"/>
+   <object id="2" type="hitbox" x="11" y="0" width="5" height="8"/>
   </objectgroup>
  </tile>
  <tile id="80">

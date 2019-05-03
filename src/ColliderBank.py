@@ -1,5 +1,5 @@
 from Collider import *
-
+import json
 
 class ColliderBank:
     def __init__(self, filename):
@@ -15,13 +15,13 @@ class ColliderBank:
                 if 'objectgroup' in t.keys():
                     self.map[t['id']] = []
                     for b in t['objectgroup']['objects']:
-                        if 'type' in t.keys():
+                        if 'type' in b.keys():
                             collider = None
                             if b['type'] == 'trigger':
                                 collider = Collider(Collider.TRIGGERBOX)
                             elif b['type'] == 'hitbox':
                                 collider = Collider(Collider.HITBOX)
-                            elif b['type'] == 'boundingbox':
+                            elif b['type'] == 'collider':
                                 collider = Collider(Collider.BOUNDINGBOX)
                             else:
                                 print("Warning : ColliderBank loading : object in tile " + str(t['id']) + " has unknown type")
