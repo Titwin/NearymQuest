@@ -21,8 +21,9 @@ class Box:
     
 
     @staticmethod
-    def origin():
+    def fromPoint(position):
         b = Box()
+        b.position = position
         b.size = Vector2f(0,0)
         return b
 

@@ -72,6 +72,9 @@ class World(Box):
                     regionIndexList.append(index)
         return regionIndexList
 
+    def regionTwoDimensionalIndex(self, index):
+        return Vector2i(math.floor(index/self.regionsArray.y), index%int(self.regionsArray.y))
+
     #DEBUG
     def print(self):
         print('---WORLD---')
