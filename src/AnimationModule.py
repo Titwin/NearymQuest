@@ -96,6 +96,14 @@ class Animator (Component):
             else:
                 self.play(self.__defaultAnimation,self.__flip, True)
 
+    def getSpriteAttributes(self):
+        offset = 0
+        if(self.__flip == -1
+            and self.__currentAnimation.frames[0].width == 1 
+            and self.__currentAnimation.frames[self.__frame].width == 2):
+            offset = -16
+        return (offset, 0, self.__palette, 16*self.__frame, self.__currentAnimation.frames[0].idx*16, self.__flip*16* self.__currentAnimation.frames[self.__frame].width, 16, 0)
+
     def draw(self, x, y):
         offset = 0
         if(self.__flip == -1

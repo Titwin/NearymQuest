@@ -31,31 +31,46 @@ class World(Box):
         self.flagBank = FlagBank(file)
         self.colliderBank = ColliderBank(file)
 
-    def loadRegions(self, box):
+    def updateRegions(self, box):
+        regionIndexList = self.querryRegions(box)
+        for index in range(len(self.regions)):
+            if index in regionIndexList and self.regions[index].tilemap==None:
+                print('loading region ' + str(index))
+                file = None
+                #if self.regions[index].overlap(Box.origin()):
+                #    file = 'ressources/map2.json'
+                self.regions[index].load(file, self.terrainBank, self.terrainTransparency)
+                self.regions[index].setDepth(3)
+            elif not(index in regionIndexList) and self.regions[index].tilemap:
+                print('unload region ' + str(index))
+                del self.regions[index].tilemap
+                del self.regions[index].quadtree
+                self.regions[index].tilemap = None
+                self.regions[index].quadtree = None
+
+    def querryRegions(self, box):
         # compute corners region location
         ox = math.floor((box.position.x + 0.5*self.size.x) / (16*50))
         oy = math.floor((box.position.y + 0.5*self.size.y) / (16*50))
         fx = math.floor((box.position.x + box.size.x + 0.5*self.size.x) / (16*50)) + 1
         fy = math.floor((box.position.y + box.size.y + 0.5*self.size.y) / (16*50)) + 1
 
-        # clamp result
+        # clamp corners
         ox = min(max(ox, 0), self.regionsArray.x)
         oy = min(max(oy, 0), self.regionsArray.y)
-        fx = min(max(fx, 0), self.regionsArray.x) + 1
-        fy = min(max(fy, 0), self.regionsArray.y) + 1
+        fx = min(max(fx, 0), self.regionsArray.x)
+        fy = min(max(fy, 0), self.regionsArray.y)
 
-        # load
+        #print(str(ox) + ' ' + str(oy) + ' ' + str(fx) + ' ' + str(fy))
+
+        # result compute
+        regionIndexList = []
         for i in range(ox, fx):
             for j in range(oy, fy):
                 index = i*self.regionsArray.y + j
-                file = None
-
-                #hack
-                if self.regions[index].overlap(Box.origin()):
-                    file = 'ressources/map2.json'
-
-                self.regions[index].load(file, self.terrainBank, self.terrainTransparency)
-                self.regions[index].setDepth(3)
+                if index < len(self.regions):
+                    regionIndexList.append(index)
+        return regionIndexList
 
     #DEBUG
     def print(self):

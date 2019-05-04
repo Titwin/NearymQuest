@@ -5,7 +5,7 @@ from Entity import *
 
 class Character(Entity):
     def __init__ (self):
-        Entity.__init__(self)
+        super(Character, self).__init__()
         self.dashTimer = 0
         self.atackTimer = 0
         self.walkingSpeed = Vector2f(1,1)
@@ -16,7 +16,7 @@ class Character(Entity):
 
 class Player(Character):
     def __init__ (self):
-        Character.__init__(self)
+        super(Player, self).__init__()
         self.CreateAnimator()
 
     def CreateAnimator(self):
@@ -79,8 +79,8 @@ class Player(Character):
                 direction.x = -1
             elif self.inputManager.CheckEvent('right'):
                 direction.x = 1
-            if direction != Vector2f(0,0):
-                direction.normalized
+            #if direction != Vector2f(0,0):
+            #    direction.normalized
 
             self.speed = Vector2f(self.speed.x * direction.x, self.speed.y * direction.y)
             self.position += self.speed
@@ -98,7 +98,7 @@ class Player(Character):
                 self.orientationY = -1
 
 
-    def draw(self):
+    def updateAnimation(self):
         playerX = min(self.position.x, 128)
         playerY = min(self.position.y, 128)
 
@@ -122,7 +122,7 @@ class Player(Character):
             self.animator.play("idle",flip)
 
         #pyxel.blt(playerX, playerY, self.charactersPalette, 16*(math.floor(self.draw_count/animSpeed)%animLength), animStart*16, flip*16, 16, 0)
-        self.animator.draw(playerX, playerY)
+        #self.animator.draw(playerX, playerY)
 
 
 

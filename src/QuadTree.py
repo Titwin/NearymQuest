@@ -12,6 +12,12 @@ class TreeNode(Box):
         self.entities = []
         self.parent = None
 
+    def __del__(self):
+        for c in self.children:
+            del c
+        for e in self.entities:
+            del e
+
     def setTransform(self, position, size):
         self.position = position
         self.size = size

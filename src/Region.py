@@ -57,6 +57,27 @@ class Region(Box):
             for i in range(1, d - depth):
                 self.quadtree.merge()
 
+    def querryTiles(self, box):
+        # compute corners region location
+        ox = math.floor((box.position.x - self.position.x) / 16)
+        oy = math.floor((box.position.y - self.position.y) / 16)
+        fx = math.floor((box.position.x - self.position.x + box.size.x) / 16) + 1
+        fy = math.floor((box.position.y - self.position.y + box.size.y) / 16) + 1
+
+        # clamp corners
+        ox = min(max(ox, 0), self.tilemap.size.x)
+        oy = min(max(oy, 0), self.tilemap.size.y)
+        fx = min(max(fx, 0), self.tilemap.size.x)
+        fy = min(max(fy, 0), self.tilemap.size.y)
+
+        #print(str(ox) + ' ' + str(oy) + ' ' + str(fx) + ' ' + str(fy))
+
+        result = []
+        for j in range(oy, fy):
+            for i in range(ox, fx):
+                result.append(i + j*self.tilemap.size.x)
+        return result
+
 
     # DEBUG
     def print(self):

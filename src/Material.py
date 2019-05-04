@@ -1,5 +1,5 @@
 from Vector2 import Vector2i
-
+import math
 
 class Material:
     def __init__(self, imageBank = 0, index = 0, flip = Vector2i(1,1), transparency = -1):
@@ -7,6 +7,14 @@ class Material:
         self.index = index
         self.flip = flip
         self.transparency = transparency
+
+    @property
+    def indexx(self):
+        return self.index%16
+
+    @property
+    def indexy(self):
+        return math.floor(self.index/16)
 
     # DEBUG
     def print(self):

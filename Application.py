@@ -30,12 +30,12 @@ class App:
         #global initialization
         pyxel.init(255,255, caption="Nearym Quest", scale=3)
         self.camera = Camera()
-        self.camera.position = Vector2f(0,0)
+        self.renderer = Renderer()
+        #self.camera.position = Vector2f(-128,-128)
         random.seed(0)
 
         # Event Manager
         self.inputManager = InputManagerModule.InputManager()
-        #map
         self.LoadMap()
 
         # QuadTree structure init
@@ -50,8 +50,8 @@ class App:
         #player
         self.player = Player()
         self.player.RegisterEvents(self.inputManager)
-        self.player.position.x = 256
-        self.player.position.y = 128
+        self.player.position.x = 0
+        self.player.position.y = 0
 
         self.draw_count = 0
 
@@ -63,8 +63,8 @@ class App:
         self.inputManager.update()
         #self.mapRenderer.update()
         self.player.UpdateControls(self.world.position + 0.5*self.world.size, self.world.position - 0.5*self.world.size)
-        self.camera.position = self.player.position
-
+        self.camera.center = self.player.center
+        self.world.updateRegions(self.camera)
 
     def draw(self):
         # clear the scene
@@ -72,12 +72,18 @@ class App:
         self.draw_count += 1
 
         # draw map
-        camX = max(self.player.position.x-128, 0)
-        camY = max(self.player.position.y-128, 0)
+        #camX = max(self.player.position.x-128, 0)
+        #camY = max(self.player.position.y-128, 0)
+
+        self.player.updateAnimation()
+        self.renderer.renderTileMap(self.camera, self.world)
+        self.renderer.renderPlayer(self.camera, self.player)
+
         #self.mapRenderer.draw(self.world.regions[0].tilemapBase, camX, camY)
 
         # handle character
-        self.player.draw()
+        #self.player.draw()
+
 
         # overlay pass
         #overlay = self.world.regions[0].tilemapOverlay
@@ -106,8 +112,8 @@ class App:
         self.charactersPalette = 1
         
         self.world = World(Vector2i(3,3))
-        self.world.loadRegions(self.camera)
         self.world.loadBanks("ressources/map2tileset.json", self.tilePalette, 0)
+        self.world.updateRegions(self.camera)
 
         #self.tilemap = TileMap(Vector2i(50,50))
         #self.tilemap.randomBackground([50,50,50,50,50,50, 20,20,20,20,20,20, 66,66, 82], [80,80,80,81])

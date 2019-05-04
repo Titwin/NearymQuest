@@ -12,6 +12,10 @@ class TileMap:
                 self.tiles.append(Tile(Vector2i(x, y)))
         self.layersName = {}
 
+    def __del__(self):
+        self.tiles.clear()
+        self.layersName.clear()
+
     def importFromFile(self, file, imageBank = 0, transparency = -1):
         offset = self.getLayerCount()
         with open(file) as json_file:

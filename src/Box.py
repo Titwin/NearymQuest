@@ -11,6 +11,15 @@ class Box:
             return True
         return False
 
+
+    @property
+    def center(self):
+        return self.position + 0.5*self.size
+    @center.setter
+    def center(self, new_center):
+        self.position = new_center - 0.5*self.size
+    
+
     @staticmethod
     def origin():
     	b = Box()
