@@ -22,6 +22,15 @@ class Box:
 
     @staticmethod
     def origin():
-    	b = Box()
-    	b.size = Vector2f(0,0)
-    	return b
+        b = Box()
+        b.size = Vector2f(0,0)
+        return b
+
+
+
+    #DEBUG
+    def print(self):
+        print('box, position : ' + str(self.position) + ', size : ' + str(self.size))
+
+    def __str__(self):
+        return 'box, position : ' + str(self.position) + ', size : ' + str(self.size)
