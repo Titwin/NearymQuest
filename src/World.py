@@ -37,8 +37,8 @@ class World(Box):
             if index in regionIndexList and self.regions[index].tilemap==None:
                 print('loading region ' + str(index))
                 file = None
-                #if self.regions[index].overlap(Box.origin()):
-                #    file = 'ressources/map2.json'
+                if self.regions[index].overlap(Box.origin()):
+                    file = 'ressources/map2.json'
                 self.regions[index].load(file, self.terrainBank, self.terrainTransparency)
                 self.regions[index].setDepth(3)
             elif not(index in regionIndexList) and self.regions[index].tilemap:
