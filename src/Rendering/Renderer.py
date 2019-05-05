@@ -44,13 +44,13 @@ class Renderer:
                                 p2 = tilePosFromCam + c.position + c.size
 
                                 if material.flip.x == -1:
-                                    p1.x = tilePosFromCam.x + 16 - c.position.x
-                                    p2.x = tilePosFromCam.x + 16 - c.position.x - c.size.x
-                                if material.flip.x == -1:
+                                    p1.x = tilePosFromCam.x + 15 - c.position.x
+                                    p2.x = tilePosFromCam.x + 15 - c.position.x - c.size.x
+                                if material.flip.y == -1:
                                     p1.y = tilePosFromCam.y + 16 - c.position.y
                                     p2.y = tilePosFromCam.y + 16 - c.position.y - c.size.y
 
-                                pyxel.rectb(p1.x, p1.y, p2.x, p2.y, c.type)
+                                pyxel.rectb(p1.x, p1.y, p2.x, p2.y, 0)
 
 
     def renderFlagOverlay(self, camera, world):

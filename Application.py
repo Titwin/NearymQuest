@@ -123,7 +123,7 @@ class App:
         
         # load world
         self.world = World(Vector2i(257,257))
-        self.world.loadBanks("ressources/map2tileset.json", self.tilePalette, 0)
+        self.world.loadBanks("ressources/map3tileset.json", self.tilePalette, 0)
 
 # program entry
 App()

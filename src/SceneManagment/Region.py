@@ -38,7 +38,7 @@ class Region(Box):
         w = math.floor(self.size.x/16)
         h = math.floor(self.size.y/16)
         self.tilemap = TileMap(Vector2i(w, h))
-        self.tilemap.randomBackground([50,50,50,50,50,50, 20,20,20,20,20,20, 66,66, 82], [80,80,80,81], imageBank, transparency)
+        self.tilemap.randomBackground([50,50,50,50,50,50, 20,20,20,20,20,20, 66,66, 82], None, imageBank, transparency)
         if file:
             self.tilemap.importFromFile(file, imageBank, transparency)
 

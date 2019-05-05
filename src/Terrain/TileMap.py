@@ -32,7 +32,7 @@ class TileMap:
                             flipy = 1 if ((i & 0x40000000)==0) else -1   # y fliped
                             self.tiles[y*self.size.x + x].add(layerIndex, Material(imageBank, index-1, Vector2i(flipx,flipy), transparency))
 
-    def randomBackground(self, choice1, choice2, imageBank = 0, transparency = -1):
+    def randomBackground(self, choice1 = [17], choice2 = None, imageBank = 0, transparency = -1):
         self.layersName[0] = 'randomBackground0'
         self.layersName[1] = 'randomBackground1'
         for y in range(self.size.y):
@@ -40,7 +40,7 @@ class TileMap:
                 index = random.choice(choice1)
                 flip = Vector2i(random.choice([1,-1]), random.choice([1,-1]) if index==choice1[0] else 1)
                 self.tiles[y*self.size.x + x].add(0, Material(imageBank, index, flip, transparency))
-                if(index == choice1[0] and random.randint(0, 20) == 0):
+                if(choice2 != None and index == choice1[0] and random.randint(0, 20) == 0):
                     index = random.choice(choice2)
                     flip = Vector2i(random.choice([1,-1]), 1)
                     self.tiles[y*self.size.x + x].add(1, Material(imageBank, index, flip, transparency))
