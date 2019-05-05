@@ -1,17 +1,24 @@
 from Vector2 import *
 
+# Usefull class for a axis aligned rectangle. contain:
+#   . a Vector2f position : generaly the top left corner position
+#   . a Vector2f size : the size of the rectangle : (width, height)
+# all of these values are in pixels
 class Box:
     def __init__(self):
         self.position = Vector2f(0,0)   # top left corner position in pixel
         self.size = Vector2f(16,16)     # size in pixel
 
+    # test if an other box is overlation the actual box
+    # parameter : b : the box to check overlapping with
+    # return True if the two box overlap, False otherwise
     def overlap(self, b):
         if (self.position.x < b.position.x + b.size.x and self.position.x + self.size.x > b.position.x and 
             self.position.y < b.position.y + b.size.y and self.position.y + self.size.y > b.size.y):
             return True
         return False
 
-
+    # return the box center position, or ajust the box position for a desired box center position
     @property
     def center(self):
         return self.position + 0.5*self.size
@@ -20,6 +27,7 @@ class Box:
         self.position = new_center - 0.5*self.size
     
 
+    # return a box of size (0,0) at desired position (aka a simple point packed into a Box structure)
     @staticmethod
     def fromPoint(position):
         b = Box()

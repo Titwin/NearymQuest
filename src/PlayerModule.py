@@ -39,21 +39,21 @@ class Player(Character):
 
         self.inputManager = inputManager #perhaps use static propery
 
-        inputManager.addEvent(Input(InputType.BUTTON, InputNotify.NONE, [pyxel.KEY_W], 'forward'))
-        inputManager.addEvent(Input(InputType.BUTTON, InputNotify.NONE, [pyxel.KEY_S], 'backward'))
-        inputManager.addEvent(Input(InputType.BUTTON, InputNotify.NONE, [pyxel.KEY_A], 'left'))
-        inputManager.addEvent(Input(InputType.BUTTON, InputNotify.NONE, [pyxel.KEY_D], 'right'))
-        inputManager.addEvent(Input(InputType.BUTTON, InputNotify.PRESSED, [pyxel.KEY_SPACE], 'attack'))
+        inputManager.addInput(Input(InputType.BUTTON, InputNotify.NONE, [pyxel.KEY_W], 'forward'))
+        inputManager.addInput(Input(InputType.BUTTON, InputNotify.NONE, [pyxel.KEY_S], 'backward'))
+        inputManager.addInput(Input(InputType.BUTTON, InputNotify.NONE, [pyxel.KEY_A], 'left'))
+        inputManager.addInput(Input(InputType.BUTTON, InputNotify.NONE, [pyxel.KEY_D], 'right'))
+        inputManager.addInput(Input(InputType.BUTTON, InputNotify.PRESSED, [pyxel.KEY_SPACE], 'attack'))
 
-        inputManager.addEvent(Sequence([pyxel.KEY_W, pyxel.KEY_W], 'dash forward'))
-        inputManager.addEvent(Sequence([pyxel.KEY_S, pyxel.KEY_S], 'dash backward'))
-        inputManager.addEvent(Sequence([pyxel.KEY_A, pyxel.KEY_A], 'dash left'))
-        inputManager.addEvent(Sequence([pyxel.KEY_D, pyxel.KEY_D], 'dash right'))
+        inputManager.addInput(Sequence([pyxel.KEY_W, pyxel.KEY_W], 'dash forward'))
+        inputManager.addInput(Sequence([pyxel.KEY_S, pyxel.KEY_S], 'dash backward'))
+        inputManager.addInput(Sequence([pyxel.KEY_A, pyxel.KEY_A], 'dash left'))
+        inputManager.addInput(Sequence([pyxel.KEY_D, pyxel.KEY_D], 'dash right'))
 
-        inputManager.addEvent(Input(InputType.BUTTON, InputNotify.NONE, [pyxel.KEY_SHIFT], 'run'))
+        inputManager.addInput(Input(InputType.BUTTON, InputNotify.NONE, [pyxel.KEY_SHIFT], 'run'))
 
     def UpdateControls(self, maxBound, minBound):
-        if self.inputManager.CheckEventTrigger('attack') and self.atackTimer == 0:
+        if self.inputManager.CheckInputTrigger('attack') and self.atackTimer == 0:
             self.atackTimer = 2
             
         if self.atackTimer > 0:
@@ -62,29 +62,29 @@ class Player(Character):
         else:
             self.speed = self.walkingSpeed
 
-            if (self.inputManager.CheckEvent('dash forward') or 
-                self.inputManager.CheckEvent('dash backward') or 
-                self.inputManager.CheckEvent('dash left') or 
-                self.inputManager.CheckEvent('dash right')):
+            if (self.inputManager.CheckInput('dash forward') or 
+                self.inputManager.CheckInput('dash backward') or 
+                self.inputManager.CheckInput('dash left') or 
+                self.inputManager.CheckInput('dash right')):
                 self.dashTimer = 10
 
             if self.dashTimer > 0:
                 self.speed *= 5
                 self.dashTimer -= 1
-            elif self.inputManager.CheckEvent('run'):
+            elif self.inputManager.CheckInput('run'):
                 self.speed *= 2
 
             direction = Vector2f(0,0)
-            if self.inputManager.CheckEvent('forward'):
+            if self.inputManager.CheckInput('forward'):
                 direction.y = -1
-            elif self.inputManager.CheckEvent('backward'):
+            elif self.inputManager.CheckInput('backward'):
                 direction.y = 1
-            if self.inputManager.CheckEvent('left'):
+            if self.inputManager.CheckInput('left'):
                 direction.x = -1
-            elif self.inputManager.CheckEvent('right'):
+            elif self.inputManager.CheckInput('right'):
                 direction.x = 1
-            #if direction != Vector2f(0,0):
-            #    direction.normalized
+            if direction != Vector2f(0,0):
+                direction.normalized
 
             self.speed = Vector2f(self.speed.x * direction.x, self.speed.y * direction.y)
             self.position += self.speed

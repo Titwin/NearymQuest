@@ -33,7 +33,7 @@ class Vector2f:
 # Binary Operators
     ### +
     def __add__(self, other): 
-        if isinstance(other, Vector2f):
+        if isinstance(other, (Vector2f,Vector2i)):
             return Vector2f(self.x+other.x,self.y+other.y)
         elif isinstance(other, (int,float)):
             return Vector2f(self.x+other,self.y+other)
@@ -42,7 +42,7 @@ class Vector2f:
 
     ### -
     def __sub__(self, other):
-        if isinstance(other, Vector2f):
+        if isinstance(other, (Vector2f,Vector2i)):
             return Vector2f(self.x-other.x,self.y-other.y)
         elif isinstance(other, (int,float)):
             return Vector2f(self.x-other,self.y-other)
@@ -51,7 +51,7 @@ class Vector2f:
        
     ### *
     def __mul__(self, other):
-        if isinstance(other, Vector2f):
+        if isinstance(other, (Vector2f,Vector2i)):
             return Vector2f(self.x*other.x,self.y*other.y)
         elif isinstance(other, (int,float)):
             return Vector2f(self.x*other,self.y*other)
@@ -60,40 +60,40 @@ class Vector2f:
 
     ### /
     def __truediv__(self, other):
-        if isinstance(other, Vector2f):
+        if isinstance(other, (Vector2f,Vector2i)):
             return Vector2f(self.x/other.x,self.y/other.y)
         elif isinstance(other, (int,float)):
             return Vector2f(self.x/other,self.y/other)
     def __rtruediv__(self, other):
-        if isinstance(other, Vector2f):
+        if isinstance(other, (Vector2f,Vector2i)):
             return Vector2f(other.x/self.x,other.y/self.y)
         elif isinstance(other, (int,float)):
             return Vector2f(other/self.x,other/self.y)
     ### //
     def __floordiv__(self, other):
-        if isinstance(other, Vector2f):
+        if isinstance(other, (Vector2f,Vector2i)):
             return Vector2f(self.x//other.x,self.y//other.y)
         elif isinstance(other, (int,float)):
             return Vector2f(self.x//other,self.y//other)
     ### %
     def __mod__(self, other):
-        if isinstance(other, Vector2f):
+        if isinstance(other, (Vector2f,Vector2i)):
             return Vector2f(self.x/other.x,self.y/other.y)
         elif isinstance(other, (int,float)):
             return Vector2f(self.x/other,self.y/other)
     ### **
     def __pow__(self, other):
-        if isinstance(other, Vector2f):
+        if isinstance(other, (Vector2f,Vector2i)):
             return Vector2f(self.x**other.x,self.y**other.y)
         elif isinstance(other, (int,float)):
             return Vector2f(self.x**other,self.y**other)
 
     ### ==
     def __eq__(self, other):
-        return isinstance(other, Vector2f) and self.x == other.x and self.y == other.y
+        return isinstance(other, (Vector2f,Vector2i)) and self.x == other.x and self.y == other.y
 
     def dot(self, other):
-        if isinstance(other, Vector2f):
+        if isinstance(other, (Vector2f,Vector2i)):
             return self.x*other.x+self.y*other.y
 
 # Unary Operators    
@@ -168,7 +168,7 @@ class Vector2i:
 # Binary Operators
     ### +
     def __add__(self, other): 
-        if isinstance(other, Vector2i):
+        if isinstance(other, (Vector2f,Vector2i)):
             return Vector2i(self.x+other.x,self.y+other.y)
         elif isinstance(other, (int,float)):
             return Vector2i(self.x+other,self.y+other)
@@ -177,7 +177,7 @@ class Vector2i:
 
     ### -
     def __sub__(self, other):
-        if isinstance(other, Vector2i):
+        if isinstance(other, (Vector2f,Vector2i)):
             return Vector2i(self.x-other.x,self.y-other.y)
         elif isinstance(other, (int,float)):
             return Vector2i(self.x-other,self.y-other)
@@ -186,7 +186,7 @@ class Vector2i:
        
     ### *
     def __mul__(self, other):
-        if isinstance(other, Vector2i):
+        if isinstance(other, (Vector2f,Vector2i)):
             return Vector2i(self.x*other.x,self.y*other.y)
         elif isinstance(other, (int,float)):
             return Vector2i(self.x*other,self.y*other)
@@ -195,40 +195,40 @@ class Vector2i:
 
     ### /
     def __truediv__(self, other):
-        if isinstance(other, Vector2i):
+        if isinstance(other, (Vector2f,Vector2i)):
             return Vector2i(self.x/other.x,self.y/other.y)
         elif isinstance(other, (int,float)):
             return Vector2i(self.x/other,self.y/other)
     def __rtruediv__(self, other):
-        if isinstance(other, Vector2i):
+        if isinstance(other, (Vector2f,Vector2i)):
             return Vector2i(other.x/self.x,other.y/self.y)
         elif isinstance(other, (int,float)):
             return Vector2i(other/self.x,other/self.y)
     ### //
     def __floordiv__(self, other):
-        if isinstance(other, Vector2i):
+        if isinstance(other, (Vector2f,Vector2i)):
             return Vector2i(self.x//other.x,self.y//other.y)
         elif isinstance(other, (int,float)):
             return Vector2i(self.x//other,self.y//other)
     ### %
     def __mod__(self, other):
-        if isinstance(other, Vector2i):
+        if isinstance(other, (Vector2f,Vector2i)):
             return Vector2i(self.x/other.x,self.y/other.y)
         elif isinstance(other, (int,float)):
             return Vector2i(self.x/other,self.y/other)
     ### **
     def __pow__(self, other):
-        if isinstance(other, Vector2i):
+        if isinstance(other, (Vector2f,Vector2i)):
             return Vector2i(self.x**other.x,self.y**other.y)
         elif isinstance(other, (int,float)):
             return Vector2i(self.x**other,self.y**other)
 
     ### ==
     def __eq__(self, other):
-        return isinstance(other, Vector2i) and self.x == other.x and self.y == other.y
+        return isinstance(other, (Vector2f,Vector2i)) and self.x == other.x and self.y == other.y
 
     def dot(self, other):
-        if isinstance(other, Vector2i):
+        if isinstance(other, (Vector2f,Vector2i)):
             return self.x*other.x+self.y*other.y
 
 # Unary Operators    

@@ -46,7 +46,7 @@ class App:
 
         # Event Manager
         self.inputManager = InputManager()
-        self.inputManager.addEvent(Input(InputType.BUTTON, InputNotify.PRESSED, [pyxel.KEY_F1], 'debug'))
+        self.inputManager.addInput(Input(InputType.BUTTON, InputNotify.PRESSED, [pyxel.KEY_F1], 'debug'))
         self.LoadMap()
 
         #player
@@ -69,7 +69,7 @@ class App:
         self.streamingArea.center = self.player.center
         self.world.updateRegions(self.streamingArea)
 
-        if self.inputManager.CheckEventTrigger('debug'):
+        if self.inputManager.CheckInputTrigger('debug'):
             self.debugOverlay = not self.debugOverlay
 
 
