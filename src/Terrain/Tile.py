@@ -1,3 +1,7 @@
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/Mathematic')
+
 from Vector2 import Vector2i
 from Material import *
 
