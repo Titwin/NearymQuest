@@ -46,12 +46,22 @@ class Region(Box):
         if file:
             self.tilemap.importFromFile(file, imageBank, transparency)
 
+    def randomPopulate(self, factory):
         for t in self.tilemap.tiles:
-            if t.materials[0].index == 50 and random.randrange(10) == 2:
-                self.rock = Entity()
-                self.rock.addComponent('sprite', Sprite(0, Vector2f(16,80), Vector2f(16,16), 0))
-                self.rock.position = 16*t.position
-                self.addEntity(self.rock)
+            if (t.materials[0].index in (50,20)):
+                dice = random.randrange(30)
+                if dice < 3:
+                    tree = factory.instanciate('smallTree')
+                    tree.position = self.position + 16*t.position
+                    self.addEntity(tree)
+                elif dice < 6:
+                    rock = factory.instanciate('bigRock')
+                    rock.position = self.position + 16*t.position
+                    self.addEntity(rock)
+                elif dice < 9:
+                    rock = factory.instanciate('smallRock')
+                    rock.position = self.position + 16*t.position
+                    self.addEntity(rock)
 
 
     def setDepth(self, depth):

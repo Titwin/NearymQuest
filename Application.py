@@ -91,9 +91,11 @@ class App:
         else:
             self.renderer.renderTileMap(self.camera, self.world)
 
+        # same for entities
         self.renderer.renderEntities(self.camera, self.world)
+        if self.debugOverlay:
+            self.renderer.renderEntitiesColliders(self.camera, self.world)
 
-        #self.renderer.renderPlayer(self.camera, self.player)
 
         #creepy hud face
         pyxel.blt(0,14*16, self.charactersPalette, 4*16, 1*16, 32,32, 11)

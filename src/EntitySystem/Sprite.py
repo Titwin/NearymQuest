@@ -13,3 +13,7 @@ class Sprite(Component, Box):
         self.position = position
         self.size = size
         self.transparency = transparency
+
+    @property
+    def tileIndex(self):
+        return 16*math.floor(self.position.y/16) + math.floor(self.position.x/16)

@@ -10,6 +10,7 @@ class Entity(Box):
         super(Entity, self).__init__()
         self.position = Vector2f(0,0)
         self.size = Vector2f(16,16)
+        self.pivot = Vector2f(8,16)
         self.components = {}
 
     def getComponent(self, componentType):

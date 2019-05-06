@@ -27,7 +27,7 @@ class Renderer:
 
 
     def renderEntities(self, camera, world):
-        entities = world.querryEntities(camera)
+        entities = world.querryEntities(camera.inflate(Vector2f(48,64)))
         if entities != None:
             entities.sort(key=Renderer.entityKey)
             for entity in entities:
@@ -90,6 +90,29 @@ class Renderer:
                             pyxel.text(tilePosFromCam.x + 4, tilePosFromCam.y + 4, str(flag), 0)
 
 
+
+    def renderEntitiesColliders(self, camera, world):
+        entities = world.querryEntities(camera)
+        if entities != None:
+            entities.sort(key=Renderer.entityKey)
+            for entity in entities:
+                sprite = entity.getComponent('sprite')
+                entityPosFromCam = entity.position - camera.position
+                if sprite:
+                    colliderList = world.colliderBank.map[sprite.tileIndex]
+                    if colliderList:
+                        for c in colliderList:
+                            p1 = entityPosFromCam + c.position
+                            p2 = entityPosFromCam + c.position + c.size
+                            if sprite.size.x == -1:
+                                p1.x = entityPosFromCam.x + 15 - c.position.x
+                                p2.x = entityPosFromCam.x + 15 - c.position.x - c.size.x
+                            if sprite.size.y == -1:
+                                p1.y = entityPosFromCam.y + 16 - c.position.y
+                                p2.y = entityPosFromCam.y + 16 - c.position.y - c.size.y
+                            pyxel.rectb(p1.x, p1.y, p2.x, p2.y, 0)
+
+
     #USEFULL
     @staticmethod
     def entityCmp(a,b):
@@ -99,7 +122,7 @@ class Renderer:
             return a.position.y < b.position.y
     @staticmethod
     def entityKey(a):
-        return (a.position.y+a.size.y)*16 + a.position.x
+        return (a.position.y + a.pivot.y)*16 + a.position.x + a.pivot.x
 
     #def renderPlayer(self, camera, player):
     #    a = player.animator.getSpriteAttributes()

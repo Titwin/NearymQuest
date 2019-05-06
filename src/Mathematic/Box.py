@@ -26,7 +26,6 @@ class Box:
     def center(self, new_center):
         self.position = new_center - 0.5*self.size
     
-
     # return a box of size (0,0) at desired position (aka a simple point packed into a Box structure)
     @staticmethod
     def fromPoint(position):
@@ -35,6 +34,12 @@ class Box:
         b.size = Vector2f(0,0)
         return b
 
+    # return a box inflated by a vector s in any direction
+    def inflate(self, s):
+        b = Box()
+        b.size = self.size + 2*s
+        b.center = self.center
+        return b
 
 
     #DEBUG

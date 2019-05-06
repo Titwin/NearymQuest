@@ -1,6 +1,7 @@
 from Region import *
 from FlagBank import *
 from ColliderBank import *
+from EntityFactory import *
 
 import math
 
@@ -23,6 +24,7 @@ class World(Box):
         self.bankFileName = None
         self.terrainBank = 0
         self.terrainTransparency = -1
+        self.factory = EntityFactory()
 
     def loadBanks(self, file, terrainImageBank = 0, terrainImageTransparency = -1):
         self.bankFileName = file
@@ -42,6 +44,8 @@ class World(Box):
                 #    file = 'ressources/map2.json'
                 self.regions[index].load(file, self.terrainBank, self.terrainTransparency)
                 self.regions[index].setDepth(3)
+                self.regions[index].randomPopulate(self.factory)
+
             elif not(index in regionIndexList) and self.regions[index].tilemap:
                 print('unload region ' + str(index))
                 del self.regions[index].tilemap
