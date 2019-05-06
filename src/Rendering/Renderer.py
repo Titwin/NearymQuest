@@ -6,7 +6,21 @@ import pyxel
 from TileMap import *
 from Vector2 import Vector2f
 
+
+
 class Renderer:
+    def __init__(self):
+        self.spriteDrawn = 0
+        self.tileDrawn = 0
+        self.primitiveDrawn = 0
+
+    def resetStat(self):
+        self.spriteDrawn = 0
+        self.tileDrawn = 0
+        self.primitiveDrawn = 0 
+
+
+    # STANDARD DRAW PASS
     def renderTileMap(self, camera, world, tileRenderSize = 16):
         regionIndexList = world.querryRegions(camera)
 
@@ -24,6 +38,8 @@ class Renderer:
                                   16*material.indexx, 16*material.indexy,
                                   tileRenderSize*material.flip.x, tileRenderSize*material.flip.y,
                                   material.transparency)
+                    self.tileDrawn += len(tile.materials)
+        self.primitiveDrawn += self.tileDrawn
 
 
     def renderEntities(self, camera, world):
@@ -31,19 +47,22 @@ class Renderer:
         if entities != None:
             entities.sort(key=Renderer.entityKey)
             for entity in entities:
-                sprite = entity.getComponent('sprite')
+                sprites = entity.getComponent('spriteList')
                 animator = entity.getComponent('animator')
                 entityPosFromCam = entity.position - camera.position
 
                 if animator:
                     a = animator.getSpriteAttributes()
                     pyxel.blt(entityPosFromCam.x + a[0], entityPosFromCam.y + a[1], a[2], a[3], a[4], a[5], a[6], a[7])
-                elif sprite:
-                    pyxel.blt(entityPosFromCam.x, entityPosFromCam.y,
-                              sprite.imageBank,
-                              sprite.position.x, sprite.position.y,
-                              sprite.size.x, sprite.size.y,
-                              sprite.transparency)
+                elif sprites:
+                    for sprite in sprites:
+                        pyxel.blt(entityPosFromCam.x - sprite.offset.x, entityPosFromCam.y - sprite.offset.y,
+                                  sprite.imageBank,
+                                  sprite.position.x, sprite.position.y,
+                                  sprite.size.x, sprite.size.y,
+                                  sprite.transparency)
+                    self.spriteDrawn += len(sprites)
+        self.primitiveDrawn += self.spriteDrawn
 
 
     # DEBUG
@@ -72,6 +91,7 @@ class Renderer:
                                     p2.y = tilePosFromCam.y + 16 - c.position.y - c.size.y
 
                                 pyxel.rectb(p1.x, p1.y, p2.x, p2.y, 0)
+                            self.primitiveDrawn += len(colliderList)
 
 
     def renderFlagOverlay(self, camera, world):
@@ -88,10 +108,22 @@ class Renderer:
                         flag = world.flagBank.map[material.index]
                         if flag != 0:
                             pyxel.text(tilePosFromCam.x + 4, tilePosFromCam.y + 4, str(flag), 0)
+                            self.primitiveDrawn += 1
 
 
+    def renderEntitiesPivot(self, camera, world):
+        if (math.floor(pyxel.frame_count / 5)%2) == 0:
+            entities = world.querryEntities(camera.inflate(Vector2f(48,64)))
+            if entities != None:
+                entities.sort(key=Renderer.entityKey)
+                for entity in entities:
+                    sprite = entity.getComponent('sprite')
+                    entityPosFromCam = entity.position - camera.position
+                    pyxel.pix(entityPosFromCam.x, entityPosFromCam.y, 0)
+                self.primitiveDrawn += len(entities)
 
-    def renderEntitiesColliders(self, camera, world):
+
+    def renderEntitiesColliders2(self, camera, world):
         entities = world.querryEntities(camera)
         if entities != None:
             entities.sort(key=Renderer.entityKey)
@@ -99,18 +131,20 @@ class Renderer:
                 sprite = entity.getComponent('sprite')
                 entityPosFromCam = entity.position - camera.position
                 if sprite:
-                    colliderList = world.colliderBank.map[sprite.tileIndex]
-                    if colliderList:
-                        for c in colliderList:
-                            p1 = entityPosFromCam + c.position
-                            p2 = entityPosFromCam + c.position + c.size
-                            if sprite.size.x == -1:
-                                p1.x = entityPosFromCam.x + 15 - c.position.x
-                                p2.x = entityPosFromCam.x + 15 - c.position.x - c.size.x
-                            if sprite.size.y == -1:
-                                p1.y = entityPosFromCam.y + 16 - c.position.y
-                                p2.y = entityPosFromCam.y + 16 - c.position.y - c.size.y
-                            pyxel.rectb(p1.x, p1.y, p2.x, p2.y, 0)
+                    for index in sprite.tileIndex:
+                        colliderList = world.colliderBank.map[index]
+                        if colliderList:
+                            for c in colliderList:
+                                p1 = entityPosFromCam + c.position
+                                p2 = entityPosFromCam + c.position + c.size
+                                if sprite.size.x == -1:
+                                    p1.x = entityPosFromCam.x + 15 - c.position.x
+                                    p2.x = entityPosFromCam.x + 15 - c.position.x - c.size.x
+                                if sprite.size.y == -1:
+                                    p1.y = entityPosFromCam.y + 16 - c.position.y
+                                    p2.y = entityPosFromCam.y + 16 - c.position.y - c.size.y
+                                pyxel.rectb(p1.x, p1.y, p2.x, p2.y, 0)
+                            self.primitiveDrawn += len(colliderList)
 
 
     #USEFULL
@@ -122,7 +156,7 @@ class Renderer:
             return a.position.y < b.position.y
     @staticmethod
     def entityKey(a):
-        return (a.position.y + a.pivot.y)*16 + a.position.x + a.pivot.x
+        return (a.position.y)*16 + a.position.x
 
     #def renderPlayer(self, camera, player):
     #    a = player.animator.getSpriteAttributes()

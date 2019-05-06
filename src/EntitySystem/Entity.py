@@ -10,7 +10,6 @@ class Entity(Box):
         super(Entity, self).__init__()
         self.position = Vector2f(0,0)
         self.size = Vector2f(16,16)
-        self.pivot = Vector2f(8,16)
         self.components = {}
 
     def getComponent(self, componentType):
@@ -20,7 +19,11 @@ class Entity(Box):
             return None
 
     def addComponent(self, componentType, component):
-        component.owner = self
+        try:
+            for c in component:
+                c.owner = self
+        except TypeError as te:
+             component.owner = self
         self.components[componentType] = component
 
     def removeComponent(self, componentType):

@@ -38,8 +38,8 @@ class App:
         application = self
 
         #global initialization
-        pyxel.init(255,255, caption="Nearym Quest", scale=3)
-        self.debugOverlay = False
+        pyxel.init(255,255, caption="Nearym Quest", scale=3, fps=30)
+        self.debugOverlay = True
         self.camera = Camera()
         self.streamingArea = Box()
         self.streamingArea.size = Vector2f(512, 512)
@@ -79,6 +79,7 @@ class App:
     def draw(self):
         # clear the scene
         pyxel.cls(0)
+        self.renderer.resetStat()
         self.draw_count += 1
 
         self.player.updateAnimation()
@@ -94,7 +95,8 @@ class App:
         # same for entities
         self.renderer.renderEntities(self.camera, self.world)
         if self.debugOverlay:
-            self.renderer.renderEntitiesColliders(self.camera, self.world)
+        #    self.renderer.renderEntitiesColliders(self.camera, self.world)
+            self.renderer.renderEntitiesPivot(self.camera, self.world)
 
 
         #creepy hud face
@@ -102,24 +104,7 @@ class App:
 
         #debug hud overlay
         if self.debugOverlay:
-            pyxel.rect(32, 236, 74, 245, 6)
-            pyxel.rectb(32, 236, 74, 245, 5)
-            pyxel.text(35,238, 'position', 0)
-
-            pyxel.rect(32, 246, 128, 254, 6)
-            pyxel.rectb(32, 246, 128, 254, 5)
-            pyxel.text(35,248, str(Vector2f(math.floor(10*self.player.position.x)/10.0, math.floor(10*self.player.position.y)/10.0)), 0)
-
-            pyxel.rect(212, 236, 254, 245, 6)
-            pyxel.rectb(212, 236, 254, 245, 5)
-            pyxel.text(216,238, 'region', 0)
-
-            pyxel.rect(160, 246, 254, 254, 6)
-            pyxel.rectb(160, 246, 254, 254, 5)
-
-            region = self.world.querryRegions(Box.fromPoint(self.player.center))[0]
-            regionPos = self.world.regionTwoDimensionalIndex(region)
-            pyxel.text(164,248, str(region) + ' : ' + str(regionPos), 0)
+            self.drawDebugHUD()
 
 
     def LoadMap(self):
@@ -133,6 +118,45 @@ class App:
         self.world = World(Vector2i(257,257))
         self.world.loadBanks("ressources/map3tileset.json", self.tilePalette, 0)
         self.world.updateRegions(self.streamingArea)
+
+    def drawDebugHUD(self):
+        # player position
+        pyxel.rect(32, 236, 74, 245, 6)
+        pyxel.rectb(32, 236, 74, 245, 5)
+        pyxel.text(35,238, 'position', 0)
+
+        pyxel.rect(32, 246, 128, 254, 6)
+        pyxel.rectb(32, 246, 128, 254, 5)
+        pyxel.text(35,248, str(Vector2f(math.floor(10*self.player.position.x)/10.0, math.floor(10*self.player.position.y)/10.0)), 0)
+
+        # player actual region
+        pyxel.rect(212, 236, 254, 245, 6)
+        pyxel.rectb(212, 236, 254, 245, 5)
+        pyxel.text(216,238, 'region', 0)
+
+        pyxel.rect(160, 246, 254, 254, 6)
+        pyxel.rectb(160, 246, 254, 254, 5)
+
+        region = self.world.querryRegions(Box.fromPoint(self.player.center))[0]
+        regionPos = self.world.regionTwoDimensionalIndex(region)
+        pyxel.text(164,248, str(region) + ' : ' + str(regionPos), 0)
+
+        # rendering statistics
+        pyxel.rect(212, 0, 254, 8, 6)
+        pyxel.rectb(212, 0, 254, 8, 5)
+        pyxel.text(216,2, 'rendering', 0)
+
+        pyxel.rect(196, 9, 254, 17, 6)
+        pyxel.rectb(196, 9, 254, 17, 5)
+        pyxel.text(200,11, 'tiles ' + str(self.renderer.tileDrawn), 0)
+
+        pyxel.rect(196, 18, 254, 26, 6)
+        pyxel.rectb(196, 18, 254, 26, 5)
+        pyxel.text(200,20, 'sptites ' + str(self.renderer.spriteDrawn), 0)
+
+        pyxel.rect(196, 27, 254, 35, 6)
+        pyxel.rectb(196, 27, 254, 35, 5)
+        pyxel.text(200,29, 'total ' + str(self.renderer.primitiveDrawn), 0)
 
 # program entry
 App()

@@ -303,6 +303,9 @@
   </properties>
   <objectgroup draworder="index">
    <object id="1" type="collider" x="4" y="8" width="8" height="8"/>
+   <object id="2" type="pivot" x="8" y="16">
+    <point/>
+   </object>
   </objectgroup>
  </tile>
 </tileset>

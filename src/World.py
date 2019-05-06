@@ -17,7 +17,7 @@ class World(Box):
         o = Vector2f(-self.size.x / 2, -self.size.y / 2)
         for i in range(self.regionsArray.x):
             for j in range(self.regionsArray.y):
-                self.regions.append(Region(o + Vector2f(i*self.regionSize.x, j*self.regionSize.y), self.regionSize))
+                self.regions.append(Region(o + Vector2f(i*self.regionSize.x, j*self.regionSize.y), self.regionSize, random.randint(0,2147483647)))
 
         self.flagBank = None
         self.colliderBank = None

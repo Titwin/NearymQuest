@@ -21,21 +21,22 @@ class EntityFactory():
     # private field
     def __RockBig(self):
         rock = Entity()
-        rock.addComponent('sprite', Sprite(0, Vector2f(16,80), Vector2f(16,16), 0))
+        rock.addComponent('spriteList', [Sprite(0, Vector2f(16,80), Vector2f(16,16), Vector2f(8,14), 0)])
         rock.size = Vector2f(random.choice([16,-16]),16)
-        rock.pivot = Vector2f(8,14)
+        #rock.spriteOffset = Vector2f(8,14)
         return rock
 
     def __RockSmall(self):
         rock = Entity()
-        rock.addComponent('sprite', Sprite(0, Vector2f(0,80), Vector2f(16,16), 0))
+        rock.addComponent('spriteList', [Sprite(0, Vector2f(0,80), Vector2f(16,16), Vector2f(8,12), 0)])
         rock.size = Vector2f(random.choice([16,-16]),16)
-        rock.pivot = Vector2f(8,12)
+        #rock.spriteOffset = Vector2f(8,12)
         return rock
 
     def __TreeSmall(self):
         tree = Entity()
-        tree.addComponent('sprite', Sprite(0, Vector2f(0,96), Vector2f(48, 64), 0))
+        tree.addComponent('spriteList', [Sprite(0, Vector2f(0,96), Vector2f(48, 32), Vector2f(24,64), 0),   #leaves
+                                         Sprite(0, Vector2f(16,128), Vector2f(16, 32), Vector2f(8,32), 0)])  #bark
         tree.size = Vector2f(random.choice([48,-48]),64)
-        tree.pivot = Vector2f(24,64)
+        #tree.spriteOffset = Vector2f(24,64)
         return tree

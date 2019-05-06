@@ -7,13 +7,14 @@ from QuadTree import *
 from Sprite import *
 
 class Region(Box):
-    def __init__(self, position, size):
+    def __init__(self, position, size, seed):
         super(Region, self).__init__()
         self.position = position
         self.size = size
         self.quadtree = None
         self.dynamicEntities = []
         self.tilemap = None
+        self.seed = seed
 
     def adjustChild(self):
         if self.quadtree:
@@ -39,6 +40,7 @@ class Region(Box):
                 pass
 
     def load(self, file, imageBank = 0, transparency = -1):
+        random.seed(self.seed)
         w = math.floor(self.size.x/16)
         h = math.floor(self.size.y/16)
         self.tilemap = TileMap(Vector2i(w, h))
@@ -47,6 +49,7 @@ class Region(Box):
             self.tilemap.importFromFile(file, imageBank, transparency)
 
     def randomPopulate(self, factory):
+        random.seed(self.seed)
         for t in self.tilemap.tiles:
             if (t.materials[0].index in (50,20)):
                 dice = random.randrange(30)
@@ -111,6 +114,7 @@ class Region(Box):
     # DEBUG
     def print(self):
         print('region')
+        print('seed : ' + str(self.seed))
         if self.tilemap:
             print('tilemap s: ' + str(self.tilemap.size.x) + ' ' + str(self.tilemap.size.y))
         else:
@@ -123,6 +127,7 @@ class Region(Box):
 
     def __str__(self):
         msg = '\nregion' + '\n'
+        msg += 'seed : ' + str(self.seed) + '\n'
         if self.tilemap:
             msg += 'tilemap s: ' + str(self.tilemap.size.x) + ' ' + str(self.tilemap.size.y) + '\n'
         else:
