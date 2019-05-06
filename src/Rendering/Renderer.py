@@ -26,6 +26,27 @@ class Renderer:
                                   material.transparency)
 
 
+    def renderEntities(self, camera, world):
+        entities = world.querryEntities(camera)
+        if entities != None:
+            entities.sort(key=Renderer.entityKey)
+            for entity in entities:
+                sprite = entity.getComponent('sprite')
+                animator = entity.getComponent('animator')
+                entityPosFromCam = entity.position - camera.position
+
+                if animator:
+                    a = animator.getSpriteAttributes()
+                    pyxel.blt(entityPosFromCam.x + a[0], entityPosFromCam.y + a[1], a[2], a[3], a[4], a[5], a[6], a[7])
+                elif sprite:
+                    pyxel.blt(entityPosFromCam.x, entityPosFromCam.y,
+                              sprite.imageBank,
+                              sprite.position.x, sprite.position.y,
+                              sprite.size.x, sprite.size.y,
+                              sprite.transparency)
+
+
+    # DEBUG
     def renderColliderOverlay(self, camera, world):
         regionIndexList = world.querryRegions(camera)
         for regionIndex in regionIndexList:
@@ -69,12 +90,21 @@ class Renderer:
                             pyxel.text(tilePosFromCam.x + 4, tilePosFromCam.y + 4, str(flag), 0)
 
 
+    #USEFULL
+    @staticmethod
+    def entityCmp(a,b):
+        if a.position.y == b.position.y:
+            return a.position.x < b.position.x
+        else:
+            return a.position.y < b.position.y
+    @staticmethod
+    def entityKey(a):
+        return (a.position.y+a.size.y)*16 + a.position.x
 
-
-    def renderPlayer(self, camera, player):
-        a = player.animator.getSpriteAttributes()
-        pPosFromCam = player.position - camera.position
-        pyxel.blt(pPosFromCam.x + a[0], pPosFromCam.y + a[1], a[2], a[3], a[4], a[5], a[6], a[7])
+    #def renderPlayer(self, camera, player):
+    #    a = player.animator.getSpriteAttributes()
+    #    pPosFromCam = player.position - camera.position
+    #    pyxel.blt(pPosFromCam.x + a[0], pPosFromCam.y + a[1], a[2], a[3], a[4], a[5], a[6], a[7])
 
 
 

@@ -7,7 +7,6 @@ from Box import *
 from Entity import *
 
 
-
 class TreeNode(Box):
     DIVISION = 2
 
@@ -77,6 +76,7 @@ class TreeNode(Box):
             for c in self.children:
                 if c.overlap(entity):
                     c.addEntity(entity)
+                    return
 
     def removeEntity(self, entity):
         if self.isLeaf():
@@ -87,7 +87,19 @@ class TreeNode(Box):
         else:
             for c in self.children:
                 if c.overlap(entity):
-                    c.addEntity(entity)
+                    c.removeEntity(entity)
+
+    def querryEntities(self, box):
+        if self.isLeaf():
+            return self.entities.copy()
+        else:
+            result = []
+            for c in self.children:
+                if c.overlap(box):
+                    r = c.querryEntities(box)
+                    if r:
+                        result.extend(r)
+            return result
 
 
     # DEBUG

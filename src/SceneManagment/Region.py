@@ -1,6 +1,10 @@
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/EntitySystem')
+
 from TileMap import *
 from QuadTree import *
-
+from Sprite import *
 
 class Region(Box):
     def __init__(self, position, size):
@@ -42,6 +46,14 @@ class Region(Box):
         if file:
             self.tilemap.importFromFile(file, imageBank, transparency)
 
+        for t in self.tilemap.tiles:
+            if t.materials[0].index == 50 and random.randrange(10) == 2:
+                self.rock = Entity()
+                self.rock.addComponent('sprite', Sprite(0, Vector2f(16,80), Vector2f(16,16), 0))
+                self.rock.position = 16*t.position
+                self.addEntity(self.rock)
+
+
     def setDepth(self, depth):
         if not self.quadtree:
             self.quadtree = TreeNode()
@@ -77,6 +89,13 @@ class Region(Box):
             for i in range(ox, fx):
                 result.append(i + j*self.tilemap.size.x)
         return result
+
+
+    def querryEntities(self, box):
+        if self.quadtree:
+            return self.quadtree.querryEntities(box)
+        else:
+            return []
 
 
     # DEBUG

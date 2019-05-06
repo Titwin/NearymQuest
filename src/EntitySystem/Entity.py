@@ -13,9 +13,13 @@ class Entity(Box):
         self.components = {}
 
     def getComponent(self, componentType):
-        return self.components[componentType]
+        if componentType in self.components.keys():
+            return self.components[componentType]
+        else:
+            return None
 
     def addComponent(self, componentType, component):
+        component.owner = self
         self.components[componentType] = component
 
     def removeComponent(self, componentType):

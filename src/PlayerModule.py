@@ -19,21 +19,21 @@ class Character(Entity):
 
 
 class Player(Character):
-    def __init__ (self):
+    def __init__ (self, palette):
         super(Player, self).__init__()
-        self.CreateAnimator()
+        self.CreateAnimator(palette)
 
-    def CreateAnimator(self):
-        self.charactersPalette = 1
-        self.animator = Animator(
-            self.charactersPalette,
-            (Animation("idle",Animation.Frame.CreateFrames(0,2),True,20,True,1),
-            Animation("walk_left",Animation.Frame.CreateFrames(2,4),True,4,True,-1),
-            Animation("walk_right",Animation.Frame.CreateFrames(2,4),True,4,True,1),
-            Animation("walk_up",Animation.Frame.CreateFrames(3,4),True,4,True,1),
-            Animation("walk_down",Animation.Frame.CreateFrames(4,4),True,4,True,1),
-            Animation("attack",(Animation.Frame(1,1,1), Animation.Frame(2,1,1),Animation.Frame(3,2,1)),False,2,False,1)),
-            "idle")
+    def CreateAnimator(self, palette):
+        self.charactersPalette = palette
+        self.addComponent('animator', Animator(
+                                    self.charactersPalette,
+                                    (Animation("idle",Animation.Frame.CreateFrames(0,2),True,20,True,1),
+                                    Animation("walk_left",Animation.Frame.CreateFrames(2,4),True,4,True,-1),
+                                    Animation("walk_right",Animation.Frame.CreateFrames(2,4),True,4,True,1),
+                                    Animation("walk_up",Animation.Frame.CreateFrames(3,4),True,4,True,1),
+                                    Animation("walk_down",Animation.Frame.CreateFrames(4,4),True,4,True,1),
+                                    Animation("attack",(Animation.Frame(1,1,1), Animation.Frame(2,1,1),Animation.Frame(3,2,1)),False,2,False,1)),
+                                    "idle"))
 
     def RegisterEvents(self, inputManager):
 
@@ -53,6 +53,7 @@ class Player(Character):
         inputManager.addInput(Input(InputType.BUTTON, InputNotify.NONE, [pyxel.KEY_SHIFT], 'run'))
 
     def UpdateControls(self, maxBound, minBound):
+        p = self.position
         if self.inputManager.CheckInputTrigger('attack') and self.atackTimer == 0:
             self.atackTimer = 2
             
@@ -83,13 +84,13 @@ class Player(Character):
                 direction.x = -1
             elif self.inputManager.CheckInput('right'):
                 direction.x = 1
-            if direction != Vector2f(0,0):
-                direction.normalized
+            #if direction != Vector2f(0,0):
+            #    direction.normalized
 
             self.speed = Vector2f(self.speed.x * direction.x, self.speed.y * direction.y)
-            self.position += self.speed
-            self.position.x = max(min(self.position.x, maxBound.x - self.size.x), minBound.x)
-            self.position.y = max(min(self.position.y, maxBound.y - self.size.y), minBound.y)
+            p = self.position + self.speed
+            p.x = max(min(p.x, maxBound.x - self.size.x), minBound.x)
+            p.y = max(min(p.y, maxBound.y - self.size.y), minBound.y)
 
             if self.speed.x > 0:
                 self.orientationX = 1
@@ -101,29 +102,33 @@ class Player(Character):
             elif self.speed.y < 0:
                 self.orientationY = -1
 
+        return p
+
 
     def updateAnimation(self):
-        playerX = min(self.position.x, 128)
-        playerY = min(self.position.y, 128)
+        animator = self.getComponent('animator')
+        if not animator:
+            return
+
 
         flip = self.orientationX
         #### Animations
         if(self.atackTimer > 0):
-            self.animator.play("attack",flip)
+            animator.play("attack",flip)
         # up
         elif (self.speed.x == 0 and self.speed.y > 0):
-            self.animator.play("walk_down",flip)
+            animator.play("walk_down",flip)
         # down
         elif(self.speed.x == 0 and self.speed.y < 0):
-            self.animator.play("walk_up",flip)
+            animator.play("walk_up",flip)
          # right
         elif(self.speed.x > 0):
-            self.animator.play("walk_right",flip)
+            animator.play("walk_right",flip)
         # left
         elif(self.speed.x < 0):
-            self.animator.play("walk_left",flip)
+            animator.play("walk_left",flip)
         else:
-            self.animator.play("idle",flip)
+            animator.play("idle",flip)
 
         #pyxel.blt(playerX, playerY, self.charactersPalette, 16*(math.floor(self.draw_count/animSpeed)%animLength), animStart*16, flip*16, 16, 0)
         #self.animator.draw(playerX, playerY)

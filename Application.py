@@ -22,6 +22,8 @@ from World import *
 from PlayerModule import *
 from Entity import *
 
+from Sprite import *
+
 from TileMap import *
 from Renderer import *
 from Camera import *
@@ -41,19 +43,21 @@ class App:
         self.camera = Camera()
         self.streamingArea = Box()
         self.streamingArea.size = Vector2f(512, 512)
+        self.streamingArea.center = Vector2f(0,0)
         self.renderer = Renderer()
         random.seed(0)
 
         # Event Manager
         self.inputManager = InputManager()
         self.inputManager.addInput(Input(InputType.BUTTON, InputNotify.PRESSED, [pyxel.KEY_F1], 'debug'))
-        self.LoadMap()
+        
 
-        #player
-        self.player = Player()
+        # world and player
+        self.LoadMap()
+        self.player = Player(self.charactersPalette)
         self.player.RegisterEvents(self.inputManager)
-        self.player.position.x = 0
-        self.player.position.y = 0
+        self.player.center = self.streamingArea.center
+        self.world.addEntity(self.player, True)
 
         self.draw_count = 0
 
@@ -63,8 +67,7 @@ class App:
 
     def update(self):
         self.inputManager.update()
-        #self.mapRenderer.update()
-        self.player.UpdateControls(self.world.position + 0.5*self.world.size, self.world.position - 0.5*self.world.size)
+        self.world.updateDynamicEntity(self.player, self.player.UpdateControls(self.world.position + 0.5*self.world.size, self.world.position - 0.5*self.world.size))
         self.camera.center = self.player.center
         self.streamingArea.center = self.player.center
         self.world.updateRegions(self.streamingArea)
@@ -87,7 +90,10 @@ class App:
             self.renderer.renderFlagOverlay(self.camera, self.world)
         else:
             self.renderer.renderTileMap(self.camera, self.world)
-        self.renderer.renderPlayer(self.camera, self.player)
+
+        self.renderer.renderEntities(self.camera, self.world)
+
+        #self.renderer.renderPlayer(self.camera, self.player)
 
         #creepy hud face
         pyxel.blt(0,14*16, self.charactersPalette, 4*16, 1*16, 32,32, 11)
@@ -100,7 +106,7 @@ class App:
 
             pyxel.rect(32, 246, 128, 254, 6)
             pyxel.rectb(32, 246, 128, 254, 5)
-            pyxel.text(35,248, str(self.player.position), 0)
+            pyxel.text(35,248, str(Vector2f(math.floor(10*self.player.position.x)/10.0, math.floor(10*self.player.position.y)/10.0)), 0)
 
             pyxel.rect(212, 236, 254, 245, 6)
             pyxel.rectb(212, 236, 254, 245, 5)
@@ -124,6 +130,7 @@ class App:
         # load world
         self.world = World(Vector2i(257,257))
         self.world.loadBanks("ressources/map3tileset.json", self.tilePalette, 0)
+        self.world.updateRegions(self.streamingArea)
 
 # program entry
 App()

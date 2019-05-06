@@ -1,7 +1,10 @@
 
 
 class Component:
-    pass
+    def __init__(self):
+        self.owner = None
+
+
     #@abstractmethod
     #def start(self):
     #    print("start here")

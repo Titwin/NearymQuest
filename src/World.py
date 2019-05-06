@@ -31,6 +31,7 @@ class World(Box):
         self.flagBank = FlagBank(file)
         self.colliderBank = ColliderBank(file)
 
+    # REGION RELATED
     def updateRegions(self, box):
         regionIndexList = self.querryRegions(box)
         for index in range(len(self.regions)):
@@ -74,6 +75,30 @@ class World(Box):
 
     def regionTwoDimensionalIndex(self, index):
         return Vector2i(math.floor(index/self.regionsArray.y), index%int(self.regionsArray.y))
+
+
+    # ENTITY RELATED
+    def addEntity(self, entity, dynamic = False):
+        region = self.querryRegions(Box.fromPoint(entity.position))
+        if(region != None):
+            self.regions[region[0]].addEntity(entity, dynamic)
+
+    def removeEntity(self, entity):
+        region = self.querryRegions(Box.fromPoint(entity.position))
+        if(region != None):
+            self.regions[region[0]].removeEntity(entity)
+
+    def querryEntities(self, box):
+        result = []
+        regionIndexList = self.querryRegions(box)
+        for index in regionIndexList:
+            result.extend(self.regions[index].querryEntities(box))
+        return result
+
+    def updateDynamicEntity(self, entity, newPosition):
+        self.removeEntity(entity)
+        entity.position = newPosition
+        self.addEntity(entity)
 
     #DEBUG
     def print(self):
