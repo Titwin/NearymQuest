@@ -1,16 +1,22 @@
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/Mathematic')
+
 import pyxel 
 import math
 from Component import *
+from Vector2 import Vector2f
 
 class Animation:
     class Frame:
         #int idx
         #int width
         #int height
-        def __init__(self, _idx,_width=1,_height=1):
+        def __init__(self, _idx,_width=1,_height=1, offset=Vector2f(8,16)):
             self.idx = _idx
             self.width = _width
             self.height = _height
+            self.offset = offset
 
         @staticmethod
         def CreateFrames(first,duration,width=1,height=1):
@@ -102,7 +108,11 @@ class Animator (Component):
             and self.__currentAnimation.frames[0].width == 1 
             and self.__currentAnimation.frames[self.__frame].width == 2):
             offset = -16
-        return (offset, 0, self.__palette, 16*self.__frame, self.__currentAnimation.frames[0].idx*16, self.__flip*16* self.__currentAnimation.frames[self.__frame].width, 16, 0)
+        return (offset - self.__currentAnimation.frames[self.__frame].offset.x, 0 - self.__currentAnimation.frames[self.__frame].offset.y,
+                self.__palette,
+                16*self.__frame, self.__currentAnimation.frames[0].idx*16,
+                self.__flip*16* self.__currentAnimation.frames[self.__frame].width, 16,
+                0)
 
     def draw(self, x, y):
         offset = 0

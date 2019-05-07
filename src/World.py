@@ -2,6 +2,7 @@ from Region import *
 from FlagBank import *
 from ColliderBank import *
 from EntityFactory import *
+from SpriteBank import *
 
 import math
 
@@ -24,7 +25,8 @@ class World(Box):
         self.bankFileName = None
         self.terrainBank = 0
         self.terrainTransparency = -1
-        self.factory = EntityFactory()
+        self.spriteBank = None
+        self.factory = None
 
     def loadBanks(self, file, terrainImageBank = 0, terrainImageTransparency = -1):
         self.bankFileName = file
@@ -32,6 +34,8 @@ class World(Box):
         self.terrainTransparency = terrainImageTransparency
         self.flagBank = FlagBank(file)
         self.colliderBank = ColliderBank(file)
+        self.spriteBank = SpriteBank(self.terrainBank)
+        self.factory = EntityFactory(self.spriteBank)
 
     # REGION RELATED
     def updateRegions(self, box):
@@ -39,10 +43,7 @@ class World(Box):
         for index in range(len(self.regions)):
             if index in regionIndexList and self.regions[index].tilemap==None:
                 print('loading region ' + str(index))
-                file = None
-                #if self.regions[index].overlap(Box.origin()):
-                #    file = 'ressources/map2.json'
-                self.regions[index].load(file, self.terrainBank, self.terrainTransparency)
+                self.regions[index].load(None, self.terrainBank, self.terrainTransparency)
                 self.regions[index].setDepth(3)
                 self.regions[index].randomPopulate(self.factory)
 

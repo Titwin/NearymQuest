@@ -56,11 +56,12 @@ class Renderer:
                     pyxel.blt(entityPosFromCam.x + a[0], entityPosFromCam.y + a[1], a[2], a[3], a[4], a[5], a[6], a[7])
                 elif sprites:
                     for sprite in sprites:
-                        pyxel.blt(entityPosFromCam.x - sprite.offset.x, entityPosFromCam.y - sprite.offset.y,
-                                  sprite.imageBank,
-                                  sprite.position.x, sprite.position.y,
-                                  sprite.size.x, sprite.size.y,
-                                  sprite.transparency)
+                        s = world.spriteBank[sprite]
+                        pyxel.blt(entityPosFromCam.x - s.pivot.x, entityPosFromCam.y - s.pivot.y,
+                                  world.spriteBank.imageBank,
+                                  s.position.x, s.position.y,
+                                  s.size.x, s.size.y,
+                                  s.transparency)
                     self.spriteDrawn += len(sprites)
         self.primitiveDrawn += self.spriteDrawn
 
