@@ -48,7 +48,7 @@ class TileMap:
     def getLayerCount(self):
         return len(self.layersName)
 
-    # NOT TESTED YET
+
     def queryTiles(self, box):
         overlaping = []
         o = box.position//16
