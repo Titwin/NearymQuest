@@ -28,6 +28,8 @@ class World(Box):
         self.spriteBank = None
         self.factory = None
 
+        self.dynamicEntities = set()
+
     def loadBanks(self, file, terrainImageBank = 0, terrainImageTransparency = -1):
         self.bankFileName = file
         self.terrainBank = terrainImageBank
@@ -83,10 +85,10 @@ class World(Box):
 
 
     # ENTITY RELATED
-    def addEntity(self, entity, dynamic = False):
+    def addEntity(self, entity):
         region = self.querryRegions(Box.fromPoint(entity.position))
         if(region != None):
-            self.regions[region[0]].addEntity(entity, dynamic)
+            self.regions[region[0]].addEntity(entity)
 
     def removeEntity(self, entity):
         region = self.querryRegions(Box.fromPoint(entity.position))
@@ -100,10 +102,14 @@ class World(Box):
             result.extend(self.regions[index].querryEntities(box))
         return result
 
-    def updateDynamicEntity(self, entity, newPosition):
-        self.removeEntity(entity)
-        entity.position = newPosition
-        self.addEntity(entity)
+
+    # ENTITY RELATED
+    def addDynamicEntity(self, entity):
+        self.dynamicEntities.add(entity)
+
+    def removeDynamicEntity(self, entity):
+        self.dynamicEntities.remove(entity)
+
 
     #DEBUG
     def print(self):

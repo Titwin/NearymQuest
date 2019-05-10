@@ -6,7 +6,7 @@ from Vector2 import *
 # all of these values are in pixels
 class Box:
     def __init__(self):
-        self.position = Vector2f(0,0)   # top left corner position in pixel
+        self._position = Vector2f(0,0)   # top left corner position in pixel
         self.size = Vector2f(16,16)     # size in pixel
 
     # test if an other box is overlapping the actual box
@@ -17,6 +17,14 @@ class Box:
             self.position.y <= b.position.y + b.size.y and self.position.y + self.size.y >= b.position.y):
             return True
         return False
+
+
+    @property
+    def position(self):
+        return self._position
+    @position.setter
+    def position(self, new_position):
+        self._position = new_position
 
     # return the box center position, or ajust the box position for a desired box center position
     @property

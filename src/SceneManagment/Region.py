@@ -20,7 +20,6 @@ class Region(Box):
         self.position = position
         self.size = size
         self.quadtree = None
-        self.dynamicEntities = []
         self.tilemap = None
         self.seed = seed
 
@@ -95,11 +94,9 @@ class Region(Box):
     # be notice that if the quadtree is not yet initialize, the entity will not be added to the region
     # parameter : entity : the entity to add
     # parameter : dynamic : specify if the entity created is dynamic or not
-    def addEntity(self, entity, dynamic = False):
+    def addEntity(self, entity):
         if self.quadtree and self.quadtree.overlap(entity):
             self.quadtree.addEntity(entity)
-        if dynamic:
-            self.dynamicEntities.append(entity)
 
     # remove an entity from the region
     # parameter : entity : the entity to remove
@@ -107,7 +104,6 @@ class Region(Box):
         if self.quadtree and self.quadtree.overlap(entity):
             try:
                 self.quadtree.removeEntity(entity)
-                self.dynamicEntities.removeEntity(entity)
             except Exception as e:
                 pass
 

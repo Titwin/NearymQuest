@@ -12,6 +12,7 @@ from Entity import *
 #     - children : a list of node considered as child (could be empty is node is a leaf)
 #     - entities : a list of entities attached to the node. these entities origins are inside the node boundaries
 #     - parent : a reference on the parent node. if None, this node is the tree root
+#     - physicsEntities : a list of fake entities attached to the node. Only used in physics process. please don't touch it
 class TreeNode(Box):
     DIVISION = 2    # number of division in one axis, defined on 2 for quadtree (2 child on x, 2 child on y)
 
@@ -20,6 +21,7 @@ class TreeNode(Box):
         super(TreeNode, self).__init__()
         self.children = []
         self.entities = []
+        self.physicsEntities = []
         self.parent = None
 
     # destructor
@@ -143,7 +145,37 @@ class TreeNode(Box):
             return result
 
 
-    # DEBUG
+    ## PHYSICS RELATED
+    # remove all fake entities placed during physics update
+    def clearPhysicsEntities(self):
+        self.physicsEntities = []
+        for c in children:
+            c.clearPhysicsEntities()
+
+    # add a physics entity to the node
+    def addPhysicsEntity(self, entity):
+        if self.isLeaf():
+            self.physicsEntities.append(entity)
+        else:
+            for c in self.children:
+                if c.overlap(entity):
+                    c.addPhysicsEntity(entity)
+                    return
+
+    # same as 'querryEntities', but return in addition all physicsEntities
+    def querryPhysicsEntities(self, box):
+        if self.isLeaf():
+            return self.entities.copy().extend(self.physicsEntities.copy())
+        else:
+            result = []
+            for c in self.children:
+                if c.overlap(box):
+                    r = c.querryPhysicsEntities(box)
+                    if r:
+                        result.extend(r)
+            return result
+
+    ## DEBUG
     def print(self):
         print(self)
         for c in self.children:

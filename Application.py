@@ -39,7 +39,7 @@ class App:
 
         #global initialization
         pyxel.init(255,255, caption="Nearym Quest", scale=3, fps=30)
-        self.debugOverlay = True
+        self.debugOverlay = False
         self.camera = Camera()
         self.streamingArea = Box()
         self.streamingArea.size = Vector2f(512, 512)
@@ -57,7 +57,7 @@ class App:
         self.player = Player(self.charactersPalette)
         self.player.RegisterEvents(self.inputManager)
         self.player.center = self.streamingArea.center
-        self.world.addEntity(self.player, True)
+        self.world.addEntity(self.player)
 
         self.draw_count = 0
 
@@ -67,13 +67,16 @@ class App:
 
     def update(self):
         self.inputManager.update()
-        self.world.updateDynamicEntity(self.player, self.player.UpdateControls(self.world.position + 0.5*self.world.size, self.world.position - 0.5*self.world.size))
+        self.player.position = self.player.UpdateControls(self.world.position + 0.5*self.world.size, self.world.position - 0.5*self.world.size)
+        #self.world.updateDynamicEntity(self.player, )
         self.camera.center = self.player.center
         self.streamingArea.center = self.player.center
         self.world.updateRegions(self.streamingArea)
 
         if self.inputManager.CheckInputTrigger('debug'):
             self.debugOverlay = not self.debugOverlay
+
+        self.updatePhysics()
 
 
     def draw(self):
@@ -95,7 +98,7 @@ class App:
         # same for entities
         self.renderer.renderEntities(self.camera, self.world)
         if self.debugOverlay:
-        #    self.renderer.renderEntitiesColliders(self.camera, self.world)
+            self.renderer.renderEntitiesColliders(self.camera, self.world)
             self.renderer.renderEntitiesPivot(self.camera, self.world)
 
 
@@ -118,6 +121,7 @@ class App:
         self.world = World(Vector2i(257,257))
         self.world.loadBanks("ressources/map3tileset.json", self.tilePalette, 0)
         self.world.updateRegions(self.streamingArea)
+        Entity.WORLD = self.world
 
     def drawDebugHUD(self):
         # player position
@@ -157,6 +161,9 @@ class App:
         pyxel.rect(196, 27, 254, 35, 6)
         pyxel.rectb(196, 27, 254, 35, 5)
         pyxel.text(200,29, 'total ' + str(self.renderer.primitiveDrawn), 0)
+
+    def updatePhysics(self):
+        pass
 
 # program entry
 App()

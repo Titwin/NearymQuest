@@ -18,7 +18,7 @@ class Entity(Box):
     # constructor
     def __init__(self):
         super(Entity, self).__init__()
-        self.position = Vector2f(0,0)
+        #self.position = Vector2f(0,0)
         self.size = Vector2f(16,16)
         self.components = {}
 
@@ -44,4 +44,21 @@ class Entity(Box):
     # remove the first component of type componentType from the entity
     def removeComponent(self, componentType):
         self.components.pop(component, None)
+
+    ## CONTAINER RELATED
+    # necessary to have Entity set
+    def __hash__(self):
+        return id(self)
+
+    ## OVERLOAD OF BOX ATTRIBUTES
+    @property
+    def position(self):
+        return self._position
+    @position.setter
+    def position(self, new_position):
+        if Entity.WORLD:
+            Entity.WORLD.removeEntity(self)
+        self._position = new_position
+        if Entity.WORLD:
+            Entity.WORLD.addEntity(self)
 

@@ -51,19 +51,19 @@ class EntityFactory():
     # private field : all the callbacks
     def __RockBig(self):
         rock = Entity()
-        rock.addComponent('spriteList', self.spritelist['bigRock'])
+        rock.addComponent('SpriteList', self.spritelist['bigRock'])
         rock.size = Vector2f(random.choice([16,-16]),16)
         return rock
 
     def __RockSmall(self):
         rock = Entity()
-        rock.addComponent('spriteList', self.spritelist['smallRock'])
+        rock.addComponent('SpriteList', self.spritelist['smallRock'])
         rock.size = Vector2f(random.choice([16,-16]),16)
         return rock
 
     def __TreeSmall(self):
         tree = Entity()
-        tree.addComponent('spriteList', self.spritelist['smallTree'])
+        tree.addComponent('SpriteList', self.spritelist['smallTree'])
         tree.size = Vector2f(random.choice([48,-48]),64)
         return tree
 

@@ -47,7 +47,7 @@ class Renderer:
         if entities != None:
             entities.sort(key=Renderer.entityKey)
             for entity in entities:
-                sprites = entity.getComponent('spriteList')
+                sprites = entity.getComponent('SpriteList')
                 animator = entity.getComponent('animator')
                 entityPosFromCam = entity.position - camera.position
 
@@ -118,34 +118,44 @@ class Renderer:
             if entities != None:
                 entities.sort(key=Renderer.entityKey)
                 for entity in entities:
-                    sprite = entity.getComponent('sprite')
                     entityPosFromCam = entity.position - camera.position
                     pyxel.pix(entityPosFromCam.x, entityPosFromCam.y, 0)
                 self.primitiveDrawn += len(entities)
 
 
-    def renderEntitiesColliders2(self, camera, world):
-        entities = world.querryEntities(camera)
+    def renderEntitiesColliders(self, camera, world):
+        entities = world.querryEntities(camera.inflate(Vector2f(48,64)))
         if entities != None:
             entities.sort(key=Renderer.entityKey)
             for entity in entities:
-                sprite = entity.getComponent('sprite')
+                sprites = entity.getComponent('SpriteList')
+                animator = entity.getComponent('animator')
                 entityPosFromCam = entity.position - camera.position
-                if sprite:
-                    for index in sprite.tileIndex:
-                        colliderList = world.colliderBank.map[index]
-                        if colliderList:
-                            for c in colliderList:
-                                p1 = entityPosFromCam + c.position
-                                p2 = entityPosFromCam + c.position + c.size
-                                if sprite.size.x == -1:
-                                    p1.x = entityPosFromCam.x + 15 - c.position.x
-                                    p2.x = entityPosFromCam.x + 15 - c.position.x - c.size.x
-                                if sprite.size.y == -1:
-                                    p1.y = entityPosFromCam.y + 16 - c.position.y
-                                    p2.y = entityPosFromCam.y + 16 - c.position.y - c.size.y
-                                pyxel.rectb(p1.x, p1.y, p2.x, p2.y, 0)
-                            self.primitiveDrawn += len(colliderList)
+
+                if animator:
+                    pass
+                    #a = animator.getSpriteAttributes()
+                    #pyxel.blt(entityPosFromCam.x + a[0], entityPosFromCam.y + a[1], a[2], a[3], a[4], a[5], a[6], a[7])
+                elif sprites:
+                    for sprite in sprites:
+                        s = world.spriteBank[sprite]
+                        for index in s.tileIndexes:
+                            colliderList = world.colliderBank.map[index]
+                            if colliderList:
+                                tileOffset = Vector2f(index%16, math.floor(index/16)) - Vector2f(math.floor(s.position.x/16), math.floor(s.position.y/16))
+                                o1 = entityPosFromCam - s.pivot + 16*tileOffset
+                                o2 = entityPosFromCam - s.pivot + 16*tileOffset        
+                                for c in colliderList:
+                                    p1 = o1 + c.position
+                                    p2 = o2 + c.position + c.size  
+                                    if s.size.x == -1:
+                                        p1.x = entityPosFromCam.x + 15  - c.position.x
+                                        p2.x = entityPosFromCam.x + 15  - c.position.x - c.size.x
+                                    if s.size.y == -1:
+                                        p1.y = entityPosFromCam.y + 16 - c.position.y
+                                        p2.y = entityPosFromCam.y + 16 - c.position.y - c.size.y
+                                    pyxel.rectb(p1.x, p1.y, p2.x, p2.y, 0)
+                                self.primitiveDrawn += len(colliderList)
 
 
     #USEFULL
