@@ -5,6 +5,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/Rendering'
 from Component import *
 from Entity import *
 from Sprite import *
+from SpriteRenderer import *
 
 import random
 
@@ -53,18 +54,21 @@ class EntityFactory():
         rock = Entity()
         rock.addComponent('SpriteList', self.spritelist['bigRock'])
         rock.size = Vector2f(random.choice([16,-16]),16)
+        rock.addComponent('ComponentRenderer', SpriteRenderer())
         return rock
 
     def __RockSmall(self):
         rock = Entity()
         rock.addComponent('SpriteList', self.spritelist['smallRock'])
         rock.size = Vector2f(random.choice([16,-16]),16)
+        rock.addComponent('ComponentRenderer', SpriteRenderer())
         return rock
 
     def __TreeSmall(self):
         tree = Entity()
         tree.addComponent('SpriteList', self.spritelist['smallTree'])
         tree.size = Vector2f(random.choice([48,-48]),64)
+        tree.addComponent('ComponentRenderer', SpriteRenderer())
         return tree
 
 
@@ -77,4 +81,4 @@ class EntityFactory():
 
 # TODO
 # . add a new job to this class : an entity pool managment
-#     -> instead of allocating a new entity we re-use an available one one
+#     -> instead of allocating a new entity we re-use an available one

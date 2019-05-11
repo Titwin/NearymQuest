@@ -10,12 +10,12 @@ from Vector2 import Vector2f
 
 class Renderer:
     def __init__(self):
-        self.spriteDrawn = 0
+        self.entitiesDrawn = 0
         self.tileDrawn = 0
         self.primitiveDrawn = 0
 
     def resetStat(self):
-        self.spriteDrawn = 0
+        self.entitiesDrawn = 0
         self.tileDrawn = 0
         self.primitiveDrawn = 0 
 
@@ -47,23 +47,26 @@ class Renderer:
         if entities != None:
             entities.sort(key=Renderer.entityKey)
             for entity in entities:
-                sprites = entity.getComponent('SpriteList')
-                animator = entity.getComponent('animator')
-                entityPosFromCam = entity.position - camera.position
+                renderer = entity.getComponent('ComponentRenderer')
+                if renderer:
+                    renderer.draw(camera, world)
+                    self.entitiesDrawn += 1
+                #animator = entity.getComponent('animator')
+                #entityPosFromCam = entity.position - camera.position
 
-                if animator:
-                    a = animator.getSpriteAttributes()
-                    pyxel.blt(entityPosFromCam.x + a[0], entityPosFromCam.y + a[1], a[2], a[3], a[4], a[5], a[6], a[7])
-                elif sprites:
-                    for sprite in sprites:
-                        s = world.spriteBank[sprite]
-                        pyxel.blt(entityPosFromCam.x - s.pivot.x, entityPosFromCam.y - s.pivot.y,
-                                  world.spriteBank.imageBank,
-                                  s.position.x, s.position.y,
-                                  s.size.x, s.size.y,
-                                  s.transparency)
-                    self.spriteDrawn += len(sprites)
-        self.primitiveDrawn += self.spriteDrawn
+                #if animator:
+                #    a = animator.getSpriteAttributes()
+                #    pyxel.blt(entityPosFromCam.x + a[0], entityPosFromCam.y + a[1], a[2], a[3], a[4], a[5], a[6], a[7])
+                #elif sprites:
+                #    for sprite in sprites:
+                #        s = world.spriteBank[sprite]
+                #        pyxel.blt(entityPosFromCam.x - s.pivot.x, entityPosFromCam.y - s.pivot.y,
+                #                  world.spriteBank.imageBank,
+                #                  s.position.x, s.position.y,
+                #                  s.size.x, s.size.y,
+                #                  s.transparency)
+                #    self.spriteDrawn += len(sprites)
+        self.primitiveDrawn += self.entitiesDrawn
 
 
     # DEBUG

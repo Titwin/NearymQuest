@@ -38,6 +38,7 @@ class SpriteBank():
         for i in len(self.dataName):
             if self.dataName[i] == name:
                 return i
+        return None
 
     # get the name of the sprite at a specified index, same as operator [] but for name list
     # parameter : index : the sprite index
