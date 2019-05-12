@@ -159,5 +159,10 @@ class Player(Character):
         #self.animator.draw(playerX, playerY)
 
 
-
+    def __str__(self):
+        msg = 'player, position : ' + str(self.position) + ', size : ' + str(self.size) + '\n'
+        for c in self.components.keys():
+            msg += '   ' + str(c) + '\n'
+        return msg
+        
 

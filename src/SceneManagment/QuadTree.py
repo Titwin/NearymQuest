@@ -20,8 +20,8 @@ class TreeNode(Box):
     def __init__ (self):
         super(TreeNode, self).__init__()
         self.children = []
-        self.entities = []
-        self.physicsEntities = []
+        self.entities = set()
+        self.physicsEntities = set()
         self.parent = None
 
     # destructor
@@ -106,7 +106,7 @@ class TreeNode(Box):
     # if node is a leaf it add this entity to its entity list
     def addEntity(self, entity):
         if self.isLeaf():
-            self.entities.append(entity)
+            self.entities.add(entity)
         else:
             for c in self.children:
                 if c.overlap(entity):
@@ -136,43 +136,43 @@ class TreeNode(Box):
         if self.isLeaf():
             return self.entities.copy()
         else:
-            result = []
+            result = set()
             for c in self.children:
                 if c.overlap(box):
                     r = c.querryEntities(box)
                     if r:
-                        result.extend(r)
+                        result = result | r
             return result
 
 
     ## PHYSICS RELATED
     # remove all fake entities placed during physics update
     def clearPhysicsEntities(self):
-        self.physicsEntities = []
-        for c in children:
+        self.physicsEntities.clear()
+        for c in self.children:
             c.clearPhysicsEntities()
 
     # add a physics entity to the node
     def addPhysicsEntity(self, entity):
         if self.isLeaf():
-            self.physicsEntities.append(entity)
+            self.physicsEntities.add(entity)
+            return self
         else:
             for c in self.children:
                 if c.overlap(entity):
-                    c.addPhysicsEntity(entity)
-                    return
+                    return c.addPhysicsEntity(entity)
 
     # same as 'querryEntities', but return in addition all physicsEntities
     def querryPhysicsEntities(self, box):
         if self.isLeaf():
-            return self.entities.copy().extend(self.physicsEntities.copy())
+            return (self.entities.copy() | self.physicsEntities.copy())
         else:
-            result = []
+            result = set()
             for c in self.children:
                 if c.overlap(box):
                     r = c.querryPhysicsEntities(box)
                     if r:
-                        result.extend(r)
+                        result = result | r
             return result
 
     ## DEBUG

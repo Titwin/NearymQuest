@@ -23,6 +23,7 @@ from PlayerModule import *
 from Entity import *
 
 from Sprite import *
+from PhysicsSweptBox import *
 
 from TileMap import *
 from Renderer import *
@@ -58,21 +59,26 @@ class App:
         self.player = Player(self.characterBank)
         self.player.RegisterEvents(self.inputManager)
         self.player.center = self.streamingArea.center
-        self.world.addEntity(self.player)
+        self.player.addComponent('RigidBody', RigidBody())
+        self.world.addDynamicEntity(self.player)
+
+        # debug
+        r = self.world.querryRegions(self.player)
+        self.world.regions[r[0]].print()
 
         self.draw_count = 0
 
         # has to be completely at the end of init
-        pyxel.run(self.update, self.draw)
+        #pyxel.run(self.update, self.draw)
+        pyxel.run_with_profiler(self.update, self.draw)
 
 
     def update(self):
         self.inputManager.update()
         self.player.position = self.player.UpdateControls(self.world.position + 0.5*self.world.size, self.world.position - 0.5*self.world.size)
-        #self.world.updateDynamicEntity(self.player, )
         self.camera.center = self.player.center
         self.streamingArea.center = self.player.center
-        self.world.updateRegions(self.streamingArea)
+        self.world.updateRegions(self.streamingArea, self.streamingArea.inflated(Vector2f(100,100)))
 
         if self.inputManager.CheckInputTrigger('debug'):
             self.debugOverlay = not self.debugOverlay
@@ -121,8 +127,10 @@ class App:
         # load world
         self.world = World(Vector2i(257,257))
         self.world.loadBanks("ressources/map3tileset.json", self.tilePalette, 0)
-        self.world.updateRegions(self.streamingArea)
+        self.world.updateRegions(self.streamingArea, self.streamingArea)
         Entity.WORLD = self.world
+
+
 
     def drawDebugHUD(self):
         # player position
@@ -157,14 +165,45 @@ class App:
 
         pyxel.rect(196, 18, 254, 26, 6)
         pyxel.rectb(196, 18, 254, 26, 5)
-        pyxel.text(200,20, 'sptites ' + str(self.renderer.spriteDrawn), 0)
+        pyxel.text(200,20, 'sptites ' + str(self.renderer.entitiesDrawn), 0)
 
         pyxel.rect(196, 27, 254, 35, 6)
         pyxel.rectb(196, 27, 254, 35, 5)
         pyxel.text(200,29, 'total ' + str(self.renderer.primitiveDrawn), 0)
 
     def updatePhysics(self):
-        pass
+        # predict transforms and creating bounding swept volume
+        fakeBoxList = []
+        quadtreeNode = []
+        for entity in self.world.dynamicEntities:
+            rb = entity.getComponent('RigidBody')
+            if rb:
+                fakeBox = PhysicsSweptBox(entity, rb.velocity)
+                fakeBoxList.append(fakeBox)
+                #self.world.removeEntity(entity)
+                quadtreeNode.append(self.world.addPhysicsEntity(fakeBox))
+
+        # detect pairs
+        for fb in fakeBoxList:
+            neighbours = self.world.querryPhysicsEntities(fb)
+            for e in neighbours:
+                if id(fb)!=id(e) and id(fb.entity)!=id(e) and fb.overlap(e):
+                    print("collision : " + str(e))
+        print("\n")
+
+
+        # compute contacts
+
+        # solve constraint
+
+        # integrate position
+
+        # clear
+        for n in quadtreeNode:
+            if n:
+                n.clearPhysicsEntities()
+        #for fb in fakeBoxList:
+        #    self.world.addEntity(fb.entity)
 
 # program entry
 App()

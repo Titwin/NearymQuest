@@ -18,6 +18,12 @@ class Box:
             return True
         return False
 
+    def inflated(self, inflationSize):
+        b = Box()
+        b.size = self.size + 2*inflationSize
+        b.center = self.center
+        return b
+
 
     @property
     def position(self):
