@@ -13,6 +13,7 @@ class Renderer:
         self.entitiesDrawn = 0
         self.tileDrawn = 0
         self.primitiveDrawn = 0
+        self.gizmos = []
 
     def resetStat(self):
         self.entitiesDrawn = 0
@@ -41,9 +42,8 @@ class Renderer:
                     self.tileDrawn += len(tile.materials)
         self.primitiveDrawn += self.tileDrawn
 
-
     def renderEntities(self, camera, world):
-        entities = world.querryEntities(camera.inflate(Vector2f(48,64)))
+        entities = list(world.querryEntities(camera.inflate(Vector2f(48,64))))
         if entities != None:
             entities.sort(key=Renderer.entityKey)
             for entity in entities:
@@ -80,6 +80,13 @@ class Renderer:
     def blt(x, y, img, u, v, w, h, colkey = -1):
         pyxel.blt(x, y, img, u, v, w, h, colkey)
 
+    def drawGizmos(self, camera):
+        for b in self.gizmos:
+            entityPosFromCam = b[0].position - camera.position
+            pyxel.rectb(entityPosFromCam.x, entityPosFromCam.y, entityPosFromCam.x + b[0].size.x, entityPosFromCam.y + b[0].size.y, b[1])
+        self.gizmos.clear()
+
+
     # DEBUG
     def renderColliderOverlay(self, camera, world):
         regionIndexList = world.querryRegions(camera)
@@ -92,7 +99,7 @@ class Renderer:
                     tilePosFromCam = region.position + 16*Vector2f(tile.position.x, tile.position.y) - camera.position
                     for layer in sorted(tile.materials):
                         material = tile.materials[layer]
-                        colliderList = world.colliderBank.map[material.index]
+                        colliderList = world.terrainBank.getColliders(material.index)
                         if colliderList:
                             for c in colliderList:
                                 p1 = tilePosFromCam + c.position
@@ -120,7 +127,7 @@ class Renderer:
                     tilePosFromCam = region.position + 16*Vector2f(tile.position.x, tile.position.y) - camera.position
                     for layer in sorted(tile.materials):
                         material = tile.materials[layer]
-                        flag = world.flagBank.map[material.index]
+                        flag = world.terrainBank.getFlags(material.index)
                         if flag != 0:
                             pyxel.text(tilePosFromCam.x + 4, tilePosFromCam.y + 4, str(flag), 0)
                             self.primitiveDrawn += 1
@@ -128,7 +135,7 @@ class Renderer:
 
     def renderEntitiesPivot(self, camera, world):
         if (math.floor(pyxel.frame_count / 5)%2) == 0:
-            entities = world.querryEntities(camera.inflate(Vector2f(48,64)))
+            entities = list(world.querryEntities(camera.inflate(Vector2f(48,64))))
             if entities != None:
                 entities.sort(key=Renderer.entityKey)
                 for entity in entities:
@@ -138,7 +145,7 @@ class Renderer:
 
 
     def renderEntitiesColliders(self, camera, world):
-        entities = world.querryEntities(camera.inflate(Vector2f(48,64)))
+        entities = list(world.querryEntities(camera.inflate(Vector2f(48,64))))
         if entities != None:
             entities.sort(key=Renderer.entityKey)
             for entity in entities:
@@ -154,7 +161,7 @@ class Renderer:
                     for sprite in sprites:
                         s = world.spriteBank[sprite]
                         for index in s.tileIndexes:
-                            colliderList = world.colliderBank.map[index]
+                            colliderList = world.terrainBank.getColliders(index)
                             if colliderList:
                                 tileOffset = Vector2f(index%16, math.floor(index/16)) - Vector2f(math.floor(s.position.x/16), math.floor(s.position.y/16))
                                 o1 = entityPosFromCam - s.pivot + 16*tileOffset

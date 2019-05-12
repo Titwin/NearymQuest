@@ -10,10 +10,11 @@ from Sprite import *
 class SpriteBank():
     # constructor
     # parameter : bank : the image bank this bank refer too
-    def __init__(self, bank):
+    def __init__(self, bank, fileName = "None"):
         self.data = []
         self.dataName = []
         self.imageBank = bank
+        self.fileName = fileName
 
     # register a new sprite into the bank
     # parameter : sprite : a sprite object to add into the bank

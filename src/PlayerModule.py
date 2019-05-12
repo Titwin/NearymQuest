@@ -9,7 +9,7 @@ from Entity import *
 from RigidBody import *
 import json
 from Sprite import *
-
+from SpriteBank import *
 
 class Character(Entity):
     def __init__ (self):
@@ -24,49 +24,66 @@ class Character(Entity):
 
 
 class Player(Character):
-    def __init__ (self, spriteBank):
+    def __init__ (self):
         super(Player, self).__init__()
-        self.CreateAnimator(spriteBank)
+       # self.CreateAnimator(spriteBank)
 
     def CreateAnimator(self, spriteBank):
         self.charactersPalette = spriteBank.imageBank
 
         filename = 'ressources/animationBank.json'
+        banks ={}
         with open(filename) as json_file:
             data = json.load(json_file)
-            player = data["player"]
-            #Register the related frames
-            for s in player["sprites"]:
-                spriteBank.addSprite(
-                    Sprite(
-                        Vector2f(s["pos_x"],s["pos_y"]), 
-                        Vector2f(s["width"],s["height"]),
-                        Vector2f(s["pivot_x"],s["pivot_y"]), 
-                    s["transparent"]), s["id"])
+
+            # Register the related frames
+            if(not ('imageBanks' in data.keys())):
+                print("warning: no imageBanks in "+filename)
+            else:
+                for bank in data["imageBanks"]:
+                    #create new bank
+
+                    banks[bank["id"]] = SpriteBank(bank["id"],bank["file"])
+                    pyxel.image(bank["id"]).load(0, 0, bank["file"])
+                    #add sprites
+                    for s in bank["sprites"]:
+                        banks[bank["id"]].addSprite(
+                            Sprite(
+                                Vector2f(s["pos_x"],s["pos_y"]), 
+                                Vector2f(s["width"],s["height"]),
+                                Vector2f(s["pivot_x"],s["pivot_y"]), 
+                            s["transparent"]), s["id"])
             
-            for i in range(0,len(spriteBank.data)-1):
-                print(str(i)+": spriteBank["+str(spriteBank.data[i])+"]="+str(spriteBank.dataName[i]))
+            # create entity
+            if(not('entities' in data.keys())):
+                print("warning: no entities in "+filename)
+            else:
+                if(not('player' in data["entities"].keys())):
+                    print("warning: no entities.player in "+filename)
+                else:
 
-            animations = []
-            #create the animations    
-            for a in player["animations"]:
-                print(a["animationName"])
-                frames = []
-                for f in a["frames"]:
-                    frame = spriteBank.searchByName(f)
-                    if(frame!= None):
-                        frames.append(frame)
-                        print(str(f)+"::"+str(spriteBank.searchByName(f)))
-                    else:
-                        print("no sprite under the name "+str(f))    
-                animation = Animation(a["animationName"], spriteBank, frames,a["interruptable"],1.0/a["duration"],a["loop"],1)
-                animations.append(animation)
+                    player = data["entities"]["player"]
+                    bank = banks[player["renderer"]["imageBank"]]
+                    animations = []
+                    #create the animations    
+                    for a in player["renderer"]["animations"]:
+                        print(a["animationName"])
+                        frames = []
+                        for f in a["frames"]:
+                            frame = bank.searchByName(f)
+                            if(frame != None):
+                                frames.append(frame)
+                                print(str(f)+"::"+str(spriteBank.searchByName(f)))
+                            else:
+                                print("no sprite under the name "+str(f))    
+                        animation = Animation(a["animationName"], bank, frames,a["interruptable"],1.0/a["duration"],a["loop"],1)
+                        animations.append(animation)
 
-        animator = Animator(self.charactersPalette,
-                            animations, 
-                            "idle")
+                animator = Animator(self.charactersPalette,
+                                    animations, 
+                                    "idle")
 
-        self.addComponent('animator', animator)
+                self.addComponent('animator', animator)
 
     def RegisterEvents(self, inputManager):
 
@@ -162,10 +179,6 @@ class Player(Character):
             animator.play("walk_horizontal",flip)
         else:
             animator.play("idle",flip)
-
-        #pyxel.blt(playerX, playerY, self.charactersPalette, 16*(math.floor(self.draw_count/animSpeed)%animLength), animStart*16, flip*16, 16, 0)
-        #self.animator.draw(playerX, playerY)
-
 
     def __str__(self):
         msg = 'player, position : ' + str(self.position) + ', size : ' + str(self.size) + '\n'

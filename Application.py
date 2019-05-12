@@ -55,16 +55,6 @@ class App:
 
         # world and player
         self.LoadMap()
-        self.characterBank = SpriteBank(self.charactersPalette)
-        self.player = Player(self.characterBank)
-        self.player.RegisterEvents(self.inputManager)
-        self.player.center = self.streamingArea.center
-        self.player.addComponent('RigidBody', RigidBody())
-        self.world.addDynamicEntity(self.player)
-
-        # debug
-        r = self.world.querryRegions(self.player)
-        self.world.regions[r[0]].print()
 
         self.draw_count = 0
 
@@ -108,6 +98,8 @@ class App:
             self.renderer.renderEntitiesColliders(self.camera, self.world)
             self.renderer.renderEntitiesPivot(self.camera, self.world)
 
+        # gizmos
+        self.renderer.drawGizmos(self.camera)
 
         #creepy hud face
         pyxel.blt(0,14*16, self.charactersPalette, 4*16, 1*16, 32,32, 11)
@@ -123,12 +115,16 @@ class App:
         self.tilePalette = 0
         pyxel.image(1).load(0, 0, 'ressources/characters.png')
         self.charactersPalette = 1
-        
+        self.characterBank = SpriteBank(self.charactersPalette,'ressources/characters.png')
         # load world
         self.world = World(Vector2i(257,257))
         self.world.loadBanks("ressources/map3tileset.json", self.tilePalette, 0)
         self.world.updateRegions(self.streamingArea, self.streamingArea)
         Entity.WORLD = self.world
+
+        self.player = self.world.factory.instanciate("player")#(self.characterBank)
+        self.player.RegisterEvents(self.inputManager)
+        self.player.center = self.streamingArea.center
 
 
 
@@ -185,11 +181,15 @@ class App:
 
         # detect pairs
         for fb in fakeBoxList:
-            neighbours = self.world.querryPhysicsEntities(fb)
+            self.renderer.gizmos.append((Box.fromBox(fb.position, Vector2f(abs(fb.size.x), abs(fb.size.y))).inflated(Vector2f(16,16)), 6))
+            neighbours = self.world.querryPhysicsEntities(fb.inflated(Vector2f(16,16)))
             for e in neighbours:
-                if id(fb)!=id(e) and id(fb.entity)!=id(e) and fb.overlap(e):
-                   pass# print("collision : " + str(e))
-        print("\n")
+
+                if id(fb)!=id(e) and id(fb.entity)!=id(e):
+                    self.renderer.gizmos.append((Box.fromBox(e.position, Vector2f(abs(e.size.x), abs(e.size.y))), 8))
+                    if fb.overlap(e):
+                        #print("collision : " + str(e))
+                        pass
 
 
         # compute contacts

@@ -18,11 +18,18 @@ class SpriteRenderer(ComponentRenderer):
         if sprites:
             for spriteIndex in sprites:
                 sprite = spriteBank[spriteIndex]
-                pyxel.blt(entityPosFromCam.x - sprite.pivot.x, entityPosFromCam.y - sprite.pivot.y,
-                          spriteBank.imageBank,
-                          sprite.position.x, sprite.position.y,
-                          sprite.size.x,     sprite.size.y,
-                          sprite.transparency)
+                if self.owner.size.x > 0:
+                    pyxel.blt(entityPosFromCam.x - sprite.pivot.x, entityPosFromCam.y - sprite.pivot.y,
+                              spriteBank.imageBank,
+                              sprite.position.x, sprite.position.y,
+                              sprite.size.x,     sprite.size.y,
+                              sprite.transparency)
+                else:
+                    pyxel.blt(entityPosFromCam.x - sprite.flippedPivot.x, entityPosFromCam.y - sprite.flippedPivot.y,
+                              spriteBank.imageBank,
+                              sprite.position.x, sprite.position.y,
+                              -sprite.size.x,     sprite.size.y,
+                              sprite.transparency)
 
 
 

@@ -6,8 +6,8 @@ from Vector2 import *
 # all of these values are in pixels
 class Box:
     def __init__(self):
-        self._position = Vector2f(0,0)   # top left corner position in pixel
-        self.size = Vector2f(16,16)     # size in pixel
+        self._position = Vector2f(0,0)  # top left corner position in pixel
+        self.size = Vector2f(16,16)       # size in pixel
 
     # test if an other box is overlapping the actual box
     # parameter : b : the box to check overlapping with
@@ -46,6 +46,13 @@ class Box:
         b = Box()
         b.position = position
         b.size = Vector2f(0,0)
+        return b
+
+    @staticmethod
+    def fromBox(position, size):
+        b = Box()
+        b.position = position
+        b.size = size
         return b
 
     # return a box inflated by a vector s in any direction
