@@ -7,6 +7,9 @@ from Inputs import *
 from AnimationModule import *
 from Entity import *
 from RigidBody import *
+import json
+from Sprite import *
+
 
 class Character(Entity):
     def __init__ (self):
@@ -21,21 +24,41 @@ class Character(Entity):
 
 
 class Player(Character):
-    def __init__ (self, palette):
+    def __init__ (self, spriteBank):
         super(Player, self).__init__()
-        self.CreateAnimator(palette)
+        self.CreateAnimator(spriteBank)
 
-    def CreateAnimator(self, palette):
-        self.charactersPalette = palette
-        self.addComponent('animator', Animator(
-                                    self.charactersPalette,
-                                    (Animation("idle",Animation.Frame.CreateFrames(0,2),True,20,True,1),
-                                    Animation("walk_left",Animation.Frame.CreateFrames(2,4),True,4,True,-1),
-                                    Animation("walk_right",Animation.Frame.CreateFrames(2,4),True,4,True,1),
-                                    Animation("walk_up",Animation.Frame.CreateFrames(3,4),True,4,True,1),
-                                    Animation("walk_down",Animation.Frame.CreateFrames(4,4),True,4,True,1),
-                                    Animation("attack",(Animation.Frame(1,1,1), Animation.Frame(2,1,1),Animation.Frame(3,2,1,Vector2f(8,16))),False,2,False,1)), # speed 2
-                                    "idle"))
+    def CreateAnimator(self, spriteBank):
+        self.charactersPalette = spriteBank.imageBank
+
+        filename = 'ressources/animationBank.json'
+        with open(filename) as json_file:
+            data = json.load(json_file)
+            player = data["player"]
+            #Register the related frames
+            for s in player["sprites"]:
+                spriteBank.addSprite(
+                    Sprite(Vector2f(s["pos_x"],s["pos_y"]), 
+                    Vector2f(s["width"],s["height"]),
+                    Vector2f(s["pivot_x"],s["pivot_y"]), 
+                    s["transparent"]), s["id"])
+            
+            animations = []
+            #create the animations    
+            for a in player["animations"]:
+                print(a["animationName"])
+                frames = []
+                for f in a["frames"]:
+                    frames.append(spriteBank.searchByName(f))
+                    print(f)
+                animation = Animation(a["animationName"], spriteBank, frames,a["interruptable"],1.0/a["duration"],a["loop"],1)
+                animations.append(animation)
+
+        animator = Animator(self.charactersPalette,
+                            animations, 
+                            "idle")
+
+        self.addComponent('animator', animator)
 
     def RegisterEvents(self, inputManager):
 
@@ -125,10 +148,10 @@ class Player(Character):
             animator.play("walk_up",flip)
          # right
         elif(self.speed.x > 0):
-            animator.play("walk_right",flip)
+            animator.play("walk_horizontal",flip)
         # left
         elif(self.speed.x < 0):
-            animator.play("walk_left",flip)
+            animator.play("walk_horizontal",flip)
         else:
             animator.play("idle",flip)
 

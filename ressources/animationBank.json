@@ -1,0 +1,286 @@
+{
+  "player": {
+    "groupName": "player",
+    "imageBank": 1,
+
+    "sprites": [
+        {
+            "id":0,
+            "pos_x":0,
+            "pos_y":0,
+            "width":16,
+            "height":16,
+            "pivot_x":8,
+            "pivot_y":16,
+            "transparent":0
+        },{
+            "id":1,
+            "pos_x":16,
+            "pos_y":0,
+            "width":16,
+            "height":16,
+            "pivot_x":8,
+            "pivot_y":16,
+            "transparent":0
+        },{
+            "id":2,
+            "pos_x":32,
+            "pos_y":0,
+            "width":16,
+            "height":16,
+            "pivot_x":8,
+            "pivot_y":16,
+            "transparent":0
+        },{
+            "id":3,
+            "pos_x":48,
+            "pos_y":0,
+            "width":16,
+            "height":16,
+            "pivot_x":8,
+            "pivot_y":16,
+            "transparent":0
+        },{
+            "id":4,
+            "pos_x":64,
+            "pos_y":0,
+            "width":16,
+            "height":16,
+            "pivot_x":8,
+            "pivot_y":16,
+            "transparent":0
+        },{
+            "id":5,
+            "pos_x":80,
+            "pos_y":0,
+            "width":16,
+            "height":16,
+            "pivot_x":8,
+            "pivot_y":16,
+            "transparent":0
+        },{
+            "id":16,
+            "pos_x":0,
+            "pos_y":16,
+            "width":16,
+            "height":16,
+            "pivot_x":8,
+            "pivot_y":16,
+            "transparent":0
+        },{
+            "id":17,
+            "pos_x":16,
+            "pos_y":16,
+            "width":16,
+            "height":16,
+            "pivot_x":8,
+            "pivot_y":16,
+            "transparent":0
+        },{
+            "id":18,
+            "pos_x":32,
+            "pos_y":16,
+            "width":32,
+            "height":16,
+            "pivot_x":8,
+            "pivot_y":16,
+            "transparent":0
+        },{
+            "id":32,
+            "pos_x":0,
+            "pos_y":32,
+            "width":16,
+            "height":16,
+            "pivot_x":8,
+            "pivot_y":16,
+            "transparent":0
+        },{
+            "id":33,
+            "pos_x":16,
+            "pos_y":32,
+            "width":16,
+            "height":16,
+            "pivot_x":8,
+            "pivot_y":16,
+            "transparent":0
+        },{
+            "id":34,
+            "pos_x":32,
+            "pos_y":32,
+            "width":16,
+            "height":16,
+            "pivot_x":8,
+            "pivot_y":16,
+            "transparent":0
+        },{
+            "id":35,
+            "pos_x":48,
+            "pos_y":32,
+            "width":16,
+            "height":16,
+            "pivot_x":8,
+            "pivot_y":16,
+            "transparent":0
+        },{
+            "id":48,
+            "pos_x":0,
+            "pos_y":48,
+            "width":16,
+            "height":16,
+            "pivot_x":8,
+            "pivot_y":16,
+            "transparent":0
+        },{
+            "id":49,
+            "pos_x":16,
+            "pos_y":48,
+            "width":16,
+            "height":16,
+            "pivot_x":8,
+            "pivot_y":16,
+            "transparent":0
+        },{
+            "id":50,
+            "pos_x":32,
+            "pos_y":48,
+            "width":16,
+            "height":16,
+            "pivot_x":8,
+            "pivot_y":16,
+            "transparent":0
+        },{
+            "id":51,
+            "pos_x":48,
+            "pos_y":48,
+            "width":16,
+            "height":16,
+            "pivot_x":8,
+            "pivot_y":16,
+            "transparent":0
+        },{
+            "id":64,
+            "pos_x":0,
+            "pos_y":64,
+            "width":16,
+            "height":16,
+            "pivot_x":8,
+            "pivot_y":16,
+            "transparent":0
+        },{
+            "id":65,
+            "pos_x":16,
+            "pos_y":64,
+            "width":16,
+            "height":16,
+            "pivot_x":8,
+            "pivot_y":16,
+            "transparent":0
+        },{
+            "id":66,
+            "pos_x":32,
+            "pos_y":64,
+            "width":16,
+            "height":16,
+            "pivot_x":8,
+            "pivot_y":16,
+            "transparent":0
+        },{
+            "id":67,
+            "pos_x":48,
+            "pos_y":64,
+            "width":16,
+            "height":16,
+            "pivot_x":8,
+            "pivot_y":16,
+            "transparent":0
+        },{
+            "id":80,
+            "pos_x":0,
+            "pos_y":80,
+            "width":16,
+            "height":16,
+            "pivot_x":8,
+            "pivot_y":16,
+            "transparent":0
+        },{
+            "id":81,
+            "pos_x":16,
+            "pos_y":80,
+            "width":16,
+            "height":16,
+            "pivot_x":8,
+            "pivot_y":16,
+            "transparent":0
+        },{
+            "id":82,
+            "pos_x":32,
+            "pos_y":80,
+            "width":16,
+            "height":16,
+            "pivot_x":8,
+            "pivot_y":16,
+            "transparent":0
+        }
+    ],
+
+    "animations": [
+      {
+        "animationName": "idle",
+        "frames": [
+          0,
+          1
+        ],
+        "duration": 0.1,
+        "loop": true,
+        "interruptable": true
+      },
+      {
+        "animationName": "walk_horizontal",
+        "frames": [
+          32,
+          33,
+          34,
+          35
+        ],
+        "duration": 0.25,
+        "loop": true,
+        "interruptable": true
+      },
+      {
+        "animationName": "walk_up",
+        "frames": [
+          48,
+          49,
+          50,
+          51
+        ],
+        "duration": 0.25,
+        "loop": true,
+        "interruptable": true
+      },
+      {
+        "animationName": "walk_down",
+        "frames": [
+          64,
+          65,
+          66,
+          67
+        ],
+        "duration": 0.25,
+        "loop": true,
+        "interruptable": true
+      },
+      {
+        "animationName": "attack",
+        "frames": [
+          16,
+          17,
+          18
+        ],
+        "duration": 0.15,
+        "loop": false,
+        "interruptable": false
+      }
+    ]
+  }
+}

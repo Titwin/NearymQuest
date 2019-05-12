@@ -55,7 +55,8 @@ class App:
 
         # world and player
         self.LoadMap()
-        self.player = Player(self.charactersPalette)
+        self.characterBank = SpriteBank(self.charactersPalette)
+        self.player = Player(self.characterBank)
         self.player.RegisterEvents(self.inputManager)
         self.player.center = self.streamingArea.center
         self.player.addComponent('RigidBody', RigidBody())

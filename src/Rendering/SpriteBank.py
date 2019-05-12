@@ -35,7 +35,7 @@ class SpriteBank():
     # parameter : name : the sprite name to search
     # return the first sprite registred under this name
     def searchByName(self, name):
-        for i in len(self.dataName):
+        for i in (0,len(self.dataName)-1):
             if self.dataName[i] == name:
                 return i
         return None
