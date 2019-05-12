@@ -4,6 +4,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/Mathematic
 
 from Box import *
 from Component import *
+import copy
 
 # All object in the world are entities, or heritate from it (so they are in a way)
 # each instance contains :
@@ -63,6 +64,11 @@ class Entity(Box):
             Entity.WORLD.addEntity(self)
 
 
+    def Copy(self):
+        other = Entity()
+        for name in self.components.keys():
+            other.addComponent(name, copy.copy(self.components[name]))
+        return other
 
     #DEBUG
     def print(self):

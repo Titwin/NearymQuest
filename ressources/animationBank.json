@@ -3,7 +3,45 @@
     {
       "file": "ressources/map3tileset.png",
       "id": 0,
-      "sprites": []
+      "sprites": [
+        {
+          "id": 0,
+          "pos_x": 16,
+          "pos_y": 80,
+          "width": 16,
+          "height": 16,
+          "pivot_x": 8,
+          "pivot_y": 14,
+          "transparent": 0
+        },{
+          "id": 1,
+          "pos_x": 0,
+          "pos_y": 80,
+          "width": 16,
+          "height": 16,
+          "pivot_x": 8,
+          "pivot_y": 12,
+          "transparent": 0
+        },{
+          "id": 2,
+          "pos_x": 0,
+          "pos_y": 96,
+          "width": 48,
+          "height": 32,
+          "pivot_x": 24,
+          "pivot_y": 64,
+          "transparent": 0
+        },{
+          "id": 3,
+          "pos_x": 16,
+          "pos_y": 128,
+          "width": 16,
+          "height": 32,
+          "pivot_x": 8,
+          "pivot_y": 32,
+          "transparent": 0
+        }
+        ]
     },
     {
       "file": "ressources/characters.png",
@@ -251,11 +289,61 @@
         }
       ]
     }
-  ]
-  ,
+  ],
   "entities": {
+    "bigRock": {
+      "size_x": 16,
+      "size_y": 16,
+      "colliders": [
+        {
+          "pos_x": 0,
+          "pos_y": 0,
+          "width": 16,
+          "height": 16,
+          "type": "flagggggs"
+        }
+      ],
+      "renderer": {
+        "imageBank": 0,
+        "spriteList": [0]
+      }
+    },
+    "smallRock": {
+      "size_x": 16,
+      "size_y": 16,
+      "colliders": [
+        {
+          "pos_x": 0,
+          "pos_y": 0,
+          "width": 16,
+          "height": 16,
+          "type": "flagggggs"
+        }
+      ],
+      "renderer": {
+        "imageBank": 0,
+        "spriteList": [1]
+      }
+    },"smallTree": {
+      "size_x": 48,
+      "size_y": 64,
+      "colliders": [
+        {
+          "pos_x": 0,
+          "pos_y": 0,
+          "width": 16,
+          "height": 16,
+          "type": "flagggggs"
+        }
+      ],
+      "renderer": {
+        "imageBank": 0,
+        "spriteList": [2,3]
+      }
+    },
     "player": {
-      "groupName": "player",
+      "size_x": 16,
+      "size_y": 16,
       "colliders": [
         {
           "pos_x": 0,
@@ -323,7 +411,7 @@
               17,
               18
             ],
-            "duration": 0.15,
+            "duration": 0.5,
             "loop": false,
             "interruptable": false
           }

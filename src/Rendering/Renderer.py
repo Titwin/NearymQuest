@@ -49,7 +49,7 @@ class Renderer:
             for entity in entities:
                 renderer = entity.getComponent('ComponentRenderer')
                 if renderer:
-                    renderer.draw(camera, world)
+                    self.draw(camera, entity,renderer)
                     self.entitiesDrawn += 1
                 #animator = entity.getComponent('animator')
                 #entityPosFromCam = entity.position - camera.position

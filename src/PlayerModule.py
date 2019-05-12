@@ -4,7 +4,6 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/EntitySyst
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/InputSystem')
 
 from Inputs import *
-from AnimationModule import *
 from Entity import *
 from RigidBody import *
 import json
@@ -20,7 +19,6 @@ class Character(Entity):
         self.speed = Vector2f(0,0)
         self.orientationX = 1
         self.orientationY = 1
-        self.addComponent('RigidBody', RigidBody())
 
 
 class Player(Character):
@@ -128,4 +126,9 @@ class Player(Character):
             msg += '   ' + str(c) + '\n'
         return msg
         
+    def Copy(self):
+        other = Player()
+        for name in self.components.keys():
+            other.addComponent(name, copy.copy(self.components[name]))
+        return other
 

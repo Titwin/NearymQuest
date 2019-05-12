@@ -14,5 +14,5 @@ class ComponentRenderer(Component):
         super(ComponentRenderer, self).__init__()
 
     # virtual draw
-    def draw(self, camera, world):
+    def draw(self, entityPosFromCam):
         pass
