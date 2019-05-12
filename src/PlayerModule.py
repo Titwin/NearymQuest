@@ -26,65 +26,7 @@ class Character(Entity):
 class Player(Character):
     def __init__ (self):
         super(Player, self).__init__()
-       # self.CreateAnimator(spriteBank)
-
-    def CreateAnimator(self, spriteBank):
-        self.charactersPalette = spriteBank.imageBank
-
-        filename = 'ressources/animationBank.json'
-        banks ={}
-        with open(filename) as json_file:
-            data = json.load(json_file)
-
-            # Register the related frames
-            if(not ('imageBanks' in data.keys())):
-                print("warning: no imageBanks in "+filename)
-            else:
-                for bank in data["imageBanks"]:
-                    #create new bank
-
-                    banks[bank["id"]] = SpriteBank(bank["id"],bank["file"])
-                    pyxel.image(bank["id"]).load(0, 0, bank["file"])
-                    #add sprites
-                    for s in bank["sprites"]:
-                        banks[bank["id"]].addSprite(
-                            Sprite(
-                                Vector2f(s["pos_x"],s["pos_y"]), 
-                                Vector2f(s["width"],s["height"]),
-                                Vector2f(s["pivot_x"],s["pivot_y"]), 
-                            s["transparent"]), s["id"])
-            
-            # create entity
-            if(not('entities' in data.keys())):
-                print("warning: no entities in "+filename)
-            else:
-                if(not('player' in data["entities"].keys())):
-                    print("warning: no entities.player in "+filename)
-                else:
-
-                    player = data["entities"]["player"]
-                    bank = banks[player["renderer"]["imageBank"]]
-                    animations = []
-                    #create the animations    
-                    for a in player["renderer"]["animations"]:
-                        print(a["animationName"])
-                        frames = []
-                        for f in a["frames"]:
-                            frame = bank.searchByName(f)
-                            if(frame != None):
-                                frames.append(frame)
-                                print(str(f)+"::"+str(spriteBank.searchByName(f)))
-                            else:
-                                print("no sprite under the name "+str(f))    
-                        animation = Animation(a["animationName"], bank, frames,a["interruptable"],1.0/a["duration"],a["loop"],1)
-                        animations.append(animation)
-
-                animator = Animator(self.charactersPalette,
-                                    animations, 
-                                    "idle")
-
-                self.addComponent('animator', animator)
-
+       
     def RegisterEvents(self, inputManager):
 
         self.inputManager = inputManager #perhaps use static propery

@@ -102,7 +102,7 @@ class App:
         self.renderer.drawGizmos(self.camera)
 
         #creepy hud face
-        pyxel.blt(0,14*16, self.charactersPalette, 4*16, 1*16, 32,32, 11)
+        #pyxel.blt(0,14*16, self.charactersPalette, 4*16, 1*16, 32,32, 11)
 
         #debug hud overlay
         if self.debugOverlay:
@@ -111,14 +111,14 @@ class App:
 
     def LoadMap(self):
         # load tile palettes
-        pyxel.image(0).load(0, 0, 'ressources/map3tileset.png')
-        self.tilePalette = 0
-        pyxel.image(1).load(0, 0, 'ressources/characters.png')
-        self.charactersPalette = 1
-        self.characterBank = SpriteBank(self.charactersPalette,'ressources/characters.png')
+        #pyxel.image(0).load(0, 0, 'ressources/map3tileset.png')
+        #self.tilePalette = 0
+        #pyxel.image(1).load(0, 0, 'ressources/characters.png')
+        #self.charactersPalette = 1
+        #self.characterBank = SpriteBank(self.charactersPalette,'ressources/characters.png')
         # load world
         self.world = World(Vector2i(257,257))
-        self.world.loadBanks("ressources/map3tileset.json", self.tilePalette, 0)
+        self.world.loadBanks("ressources/map3tileset.json", 'ressources/animationBank.json', 0, 0)
         self.world.updateRegions(self.streamingArea, self.streamingArea)
         Entity.WORLD = self.world
 

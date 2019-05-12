@@ -26,13 +26,13 @@ class World(Box):
 
         self.dynamicEntities = set()
 
-    def loadBanks(self, file, terrainImageBank = 0, terrainImageTransparency = -1):
-        self.terrainBank = TerrainBank(file, terrainImageBank)
+    def loadBanks(self, terrainFile, entityFile,terrainImageBank = 0, terrainImageTransparency = -1):
+        self.terrainBank = TerrainBank(terrainFile, terrainImageBank)
         self.terrainTransparency = terrainImageTransparency
         #self.flagBank = FlagBank(file)
         #self.colliderBank = ColliderBank(file)
         self.spriteBank = SpriteBank(self.terrainBank.imageBank)
-        self.factory = EntityFactory('ressources/animationBank.json',self.spriteBank)
+        self.factory = EntityFactory(entityFile,self.spriteBank)
 
     # REGION RELATED
     def updateRegions(self, loadBox, unloadBox):
