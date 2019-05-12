@@ -40,17 +40,18 @@ class World(Box):
         self.factory = EntityFactory(self.spriteBank)
 
     # REGION RELATED
-    def updateRegions(self, box):
-        regionIndexList = self.querryRegions(box)
-        for index in range(len(self.regions)):
-            if index in regionIndexList and self.regions[index].tilemap==None:
-                print('loading region ' + str(index))
+    def updateRegions(self, loadBox, unloadBox):
+        unloadIndexList = self.querryRegions(unloadBox)
+        loadIndexList = self.querryRegions(loadBox)
+        for index in unloadIndexList:
+            if index in loadIndexList and self.regions[index].tilemap==None:
+                print('load reg ' + str(index))
                 self.regions[index].load(None, self.terrainBank, self.terrainTransparency)
-                self.regions[index].setDepth(3)
+                self.regions[index].setDepth(4)
                 self.regions[index].randomPopulate(self.factory)
 
-            elif not(index in regionIndexList) and self.regions[index].tilemap:
-                print('unload region ' + str(index))
+            elif not(index in loadIndexList) and self.regions[index].tilemap:
+                print('unload reg ' + str(index))
                 del self.regions[index].tilemap
                 del self.regions[index].quadtree
                 self.regions[index].tilemap = None
@@ -109,6 +110,29 @@ class World(Box):
 
     def removeDynamicEntity(self, entity):
         self.dynamicEntities.remove(entity)
+
+
+    ## PHYSICS RELATED
+    # remove all fake entities placed during physics update
+    def clearPhysicsEntities(self, box):
+        regionIndexList = self.querryRegions(box)
+        for index in range(len(self.regions)):
+            self.regions[index].clearPhysicsEntities()
+
+    # add a physics entity to the node
+    def addPhysicsEntity(self, entity):
+        region = self.querryRegions(Box.fromPoint(entity.position))
+        if(region != None):
+            return self.regions[region[0]].quadtree.addPhysicsEntity(entity)
+        return None
+
+    # same as 'querryEntities', but return in addition all physicsEntities
+    def querryPhysicsEntities(self, box):
+        result = []
+        regionIndexList = self.querryRegions(box)
+        for index in regionIndexList:
+            result.extend(self.regions[index].querryPhysicsEntities(box))
+        return result
 
 
     #DEBUG

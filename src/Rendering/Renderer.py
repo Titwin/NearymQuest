@@ -30,7 +30,7 @@ class Renderer:
                 tilesIndexList = region.querryTiles(camera)
                 for tileIndex in tilesIndexList:
                     tile = region.tilemap.tiles[tileIndex]
-                    tilePosFromCam = region.position + 16*Vector2f(tile.position.x, tile.position.y) - camera.position
+                    tilePosFromCam = region.position + 16*tile.position - camera.position
                     for layer in sorted(tile.materials):
                         material = tile.materials[layer]
                         pyxel.blt(tilePosFromCam.x, tilePosFromCam.y,
@@ -54,9 +54,11 @@ class Renderer:
                 #animator = entity.getComponent('animator')
                 #entityPosFromCam = entity.position - camera.position
 
-                #if animator:
-                #    a = animator.getSpriteAttributes()
-                #    pyxel.blt(entityPosFromCam.x + a[0], entityPosFromCam.y + a[1], a[2], a[3], a[4], a[5], a[6], a[7])
+                elif entity.getComponent('animator'):
+                    a = entity.getComponent('animator').getSpriteAttributes()
+                    entityPosFromCam = entity.position - camera.position
+                    pyxel.blt(entityPosFromCam.x + a[0], entityPosFromCam.y + a[1], a[2], a[3], a[4], a[5], a[6], a[7])
+                    self.entitiesDrawn += 1
                 #elif sprites:
                 #    for sprite in sprites:
                 #        s = world.spriteBank[sprite]

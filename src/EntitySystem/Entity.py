@@ -62,3 +62,15 @@ class Entity(Box):
         if Entity.WORLD:
             Entity.WORLD.addEntity(self)
 
+
+
+    #DEBUG
+    def print(self):
+        print(str(self))
+
+    def __str__(self):
+        msg = 'entity, position : ' + str(self.position) + ', size : ' + str(self.size)
+        for c in self.components.keys():
+            msg += '\n   ' + str(c)
+        return msg
+

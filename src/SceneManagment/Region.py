@@ -115,7 +115,7 @@ class Region(Box):
         if self.quadtree:
             return self.quadtree.querryEntities(box)
         else:
-            return []
+            return set()
 
 
     ## TILEMAP RELATED
@@ -141,6 +141,15 @@ class Region(Box):
                 result.append(i + j*self.tilemap.size.x)
         return result
 
+    ## PHYSICS RELATED
+    #
+    def clearPhysicsEntities(self):
+        if self.quadtree:
+            self.quadtree.clearPhysicsEntities()
+    def querryPhysicsEntities(self, box):
+        if self.quadtree:
+            return self.quadtree.querryPhysicsEntities(box)
+        return []
 
 
 
