@@ -42,7 +42,6 @@ class Renderer:
                     self.tileDrawn += len(tile.materials)
         self.primitiveDrawn += self.tileDrawn
 
-
     def renderEntities(self, camera, world):
         entities = list(world.querryEntities(camera.inflate(Vector2f(48,64))))
         if entities != None:
@@ -52,11 +51,11 @@ class Renderer:
                 if renderer:
                     renderer.draw(camera, world)
                     self.entitiesDrawn += 1
-                elif entity.getComponent('animator'):
-                    a = entity.getComponent('animator').getSpriteAttributes()
-                    entityPosFromCam = entity.position - camera.position
-                    pyxel.blt(entityPosFromCam.x + a[0], entityPosFromCam.y + a[1], a[2], a[3], a[4], a[5], a[6], a[7])
-                    self.entitiesDrawn += 1
+                #elif entity.getComponent('animator'):
+                #    a = entity.getComponent('animator').getSpriteAttributes()
+                #    entityPosFromCam = entity.position - camera.position
+                #    pyxel.blt(entityPosFromCam.x + a[0], entityPosFromCam.y + a[1], a[2], a[3], a[4], a[5], a[6], a[7])
+                #    self.entitiesDrawn += 1
         self.primitiveDrawn += self.entitiesDrawn
 
     def drawGizmos(self, camera):
@@ -78,7 +77,7 @@ class Renderer:
                     tilePosFromCam = region.position + 16*Vector2f(tile.position.x, tile.position.y) - camera.position
                     for layer in sorted(tile.materials):
                         material = tile.materials[layer]
-                        colliderList = world.colliderBank.map[material.index]
+                        colliderList = world.terrainBank.getColliders(material.index)
                         if colliderList:
                             for c in colliderList:
                                 p1 = tilePosFromCam + c.position
@@ -106,7 +105,7 @@ class Renderer:
                     tilePosFromCam = region.position + 16*Vector2f(tile.position.x, tile.position.y) - camera.position
                     for layer in sorted(tile.materials):
                         material = tile.materials[layer]
-                        flag = world.flagBank.map[material.index]
+                        flag = world.terrainBank.getFlags(material.index)
                         if flag != 0:
                             pyxel.text(tilePosFromCam.x + 4, tilePosFromCam.y + 4, str(flag), 0)
                             self.primitiveDrawn += 1
@@ -140,7 +139,7 @@ class Renderer:
                     for sprite in sprites:
                         s = world.spriteBank[sprite]
                         for index in s.tileIndexes:
-                            colliderList = world.colliderBank.map[index]
+                            colliderList = world.terrainBank.getColliders(index)
                             if colliderList:
                                 tileOffset = Vector2f(index%16, math.floor(index/16)) - Vector2f(math.floor(s.position.x/16), math.floor(s.position.y/16))
                                 o1 = entityPosFromCam - s.pivot + 16*tileOffset

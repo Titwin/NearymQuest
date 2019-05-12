@@ -62,10 +62,6 @@ class App:
         self.player.addComponent('RigidBody', RigidBody())
         self.world.addDynamicEntity(self.player)
 
-        # debug
-        r = self.world.querryRegions(self.player)
-        self.world.regions[r[0]].print()
-
         self.draw_count = 0
 
         # has to be completely at the end of init
@@ -193,8 +189,9 @@ class App:
                 if id(fb)!=id(e) and id(fb.entity)!=id(e):
                     self.renderer.gizmos.append((Box.fromBox(e.position, Vector2f(abs(e.size.x), abs(e.size.y))), 8))
                     if fb.overlap(e):
-                        print("collision : " + str(e))
-        print("\n")
+                        #print("collision : " + str(e))
+                        pass
+        #print("\n")
 
 
         # compute contacts

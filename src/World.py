@@ -1,8 +1,7 @@
 from Region import *
-from FlagBank import *
-from ColliderBank import *
 from EntityFactory import *
 from SpriteBank import *
+from TerrainBank import *
 
 import math
 
@@ -20,10 +19,7 @@ class World(Box):
             for j in range(self.regionsArray.y):
                 self.regions.append(Region(o + Vector2f(i*self.regionSize.x, j*self.regionSize.y), self.regionSize, random.randint(0,2147483647)))
 
-        self.flagBank = None
-        self.colliderBank = None
-        self.bankFileName = None
-        self.terrainBank = 0
+        self.terrainBank = None
         self.terrainTransparency = -1
         self.spriteBank = None
         self.factory = None
@@ -31,12 +27,11 @@ class World(Box):
         self.dynamicEntities = set()
 
     def loadBanks(self, file, terrainImageBank = 0, terrainImageTransparency = -1):
-        self.bankFileName = file
-        self.terrainBank = terrainImageBank
+        self.terrainBank = TerrainBank(file, terrainImageBank)
         self.terrainTransparency = terrainImageTransparency
-        self.flagBank = FlagBank(file)
-        self.colliderBank = ColliderBank(file)
-        self.spriteBank = SpriteBank(self.terrainBank)
+        #self.flagBank = FlagBank(file)
+        #self.colliderBank = ColliderBank(file)
+        self.spriteBank = SpriteBank(self.terrainBank.imageBank)
         self.factory = EntityFactory(self.spriteBank)
 
     # REGION RELATED
@@ -46,7 +41,7 @@ class World(Box):
         for index in unloadIndexList:
             if index in loadIndexList and self.regions[index].tilemap==None:
                 print('load reg ' + str(index))
-                self.regions[index].load(None, self.terrainBank, self.terrainTransparency)
+                self.regions[index].load(None, self.terrainBank.imageBank, self.terrainTransparency)
                 self.regions[index].setDepth(4)
                 self.regions[index].randomPopulate(self.factory)
 
