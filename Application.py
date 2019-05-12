@@ -188,7 +188,7 @@ class App:
             neighbours = self.world.querryPhysicsEntities(fb)
             for e in neighbours:
                 if id(fb)!=id(e) and id(fb.entity)!=id(e) and fb.overlap(e):
-                    print("collision : " + str(e))
+                   pass# print("collision : " + str(e))
         print("\n")
 
 

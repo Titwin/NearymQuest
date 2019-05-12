@@ -6,7 +6,7 @@ import pyxel
 import math
 from Component import *
 from Vector2 import Vector2f
-
+from Renderer import *
 class Animation:
 
     # string name
@@ -49,8 +49,10 @@ class Animation:
     def length(self):
         return len(self.__frames)
 
-    def __get__(self, idx):
-        self.bank[frames[idx]]
+    def __getitem__(self, idx):
+        #print(self.name +"["+str(idx)+"/"+str(len(self.__frames))+"]="+str(self.__frames[idx]))
+        if(self.__frames[idx] != None):
+            return self.bank[self.__frames[idx]]
 
 class Animator (Component):
     # Dictionary(string,Animation) animations
@@ -90,28 +92,41 @@ class Animator (Component):
             else:
                 self.play(self.__defaultAnimation,self.__flip, True)
 
+    
     def getSpriteAttributes(self):
         animation = self.__currentAnimation
-        frame = animation[self.__frame]
         
+        frame = animation[self.__frame]
+        firstFrame = animation[0]
+
         offset = 0
         if(self.__flip == -1
-            and animation.frames[0].width == 1 
-            and animation.frames[self.__frame].width == 2):
+            and firstFrame.size.x == 1 
+            and frame.size.x == 2):
             offset = -16
-        return (offset - self.__currentAnimation.frames[self.__frame].offset.x, 0 - self.__currentAnimation.frames[self.__frame].offset.y,
+        return (offset - frame.pivot.x, 0 - frame.pivot.y,
                 self.__palette,
-                16*self.__frame, self.__currentAnimation.frames[0].idx*16,
-                self.__flip*16* self.__currentAnimation.frames[self.__frame].width, 16,
+                self.__frame, firstFrame*16,
+                self.__flip* frame.size.x, 16,
                 0)
-
-    def draw(self, x, y):
+    
+    def draw(self, position):
+        animation = self.__currentAnimation
+        
+        frame = animation[self.__frame]
+        firstFrame = animation[0]
 
         offset = 0
+        uv = Vector2f(frame.position.x,frame.position.y)
+        
         if(self.__flip == -1
-            and self.__currentAnimation.frames[0].width == 1 
-            and self.__currentAnimation.frames[self.__frame].width == 2):
-            offset = -16
-        pyxel.blt(x+offset, y, self.__palette, 16*self.__frame, self.__currentAnimation.frames[0].idx*16, self.__flip*16* self.__currentAnimation.frames[self.__frame].width, 16, 0)
-
-
+            and firstFrame.size.x != frame.size.x):
+            offset = firstFrame.size.x-frame.size.x
+        Renderer.blt(position.x+offset - frame.pivot.x, 
+                position.y - frame.pivot.y,
+                self.__palette,
+                frame.position.x, frame.position.y,
+                self.__flip* frame.size.x, frame.size.y,
+                0)
+     
+    

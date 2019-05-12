@@ -55,9 +55,7 @@ class Renderer:
                 #entityPosFromCam = entity.position - camera.position
 
                 elif entity.getComponent('animator'):
-                    a = entity.getComponent('animator').getSpriteAttributes()
-                    entityPosFromCam = entity.position - camera.position
-                    pyxel.blt(entityPosFromCam.x + a[0], entityPosFromCam.y + a[1], a[2], a[3], a[4], a[5], a[6], a[7])
+                    self.draw(camera,entity, entity.getComponent('animator'))
                     self.entitiesDrawn += 1
                 #elif sprites:
                 #    for sprite in sprites:
@@ -70,6 +68,17 @@ class Renderer:
                 #    self.spriteDrawn += len(sprites)
         self.primitiveDrawn += self.entitiesDrawn
 
+    
+    # compute position of the entity in relationship to the camera, then ask its delegator to render
+    def draw(self, camera, entity, renderDelegate):
+         #blt(x, y, img, u, v, w, h, [colkey])
+         entityPosFromCam = entity.position - camera.position
+         renderDelegate.draw(entityPosFromCam)
+
+    # Wrapper for the pyxel blt function
+    # probably unnecessary
+    def blt(x, y, img, u, v, w, h, colkey = -1):
+        pyxel.blt(x, y, img, u, v, w, h, colkey)
 
     # DEBUG
     def renderColliderOverlay(self, camera, world):

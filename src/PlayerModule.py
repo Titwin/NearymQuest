@@ -38,19 +38,27 @@ class Player(Character):
             #Register the related frames
             for s in player["sprites"]:
                 spriteBank.addSprite(
-                    Sprite(Vector2f(s["pos_x"],s["pos_y"]), 
-                    Vector2f(s["width"],s["height"]),
-                    Vector2f(s["pivot_x"],s["pivot_y"]), 
+                    Sprite(
+                        Vector2f(s["pos_x"],s["pos_y"]), 
+                        Vector2f(s["width"],s["height"]),
+                        Vector2f(s["pivot_x"],s["pivot_y"]), 
                     s["transparent"]), s["id"])
             
+            for i in range(0,len(spriteBank.data)-1):
+                print(str(i)+": spriteBank["+str(spriteBank.data[i])+"]="+str(spriteBank.dataName[i]))
+
             animations = []
             #create the animations    
             for a in player["animations"]:
                 print(a["animationName"])
                 frames = []
                 for f in a["frames"]:
-                    frames.append(spriteBank.searchByName(f))
-                    print(f)
+                    frame = spriteBank.searchByName(f)
+                    if(frame!= None):
+                        frames.append(frame)
+                        print(str(f)+"::"+str(spriteBank.searchByName(f)))
+                    else:
+                        print("no sprite under the name "+str(f))    
                 animation = Animation(a["animationName"], spriteBank, frames,a["interruptable"],1.0/a["duration"],a["loop"],1)
                 animations.append(animation)
 
