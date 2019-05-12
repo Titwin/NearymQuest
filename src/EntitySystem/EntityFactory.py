@@ -132,9 +132,6 @@ class EntityFactory():
                         print(name +" has colliders: "+str(len(colliderList)))
                         template.addComponent('ColliderList', colliderList)
 
-
-                        pass
-
                     # register template
                     self.templates[name] = template
 
