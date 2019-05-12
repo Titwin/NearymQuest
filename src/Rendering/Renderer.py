@@ -13,6 +13,7 @@ class Renderer:
         self.entitiesDrawn = 0
         self.tileDrawn = 0
         self.primitiveDrawn = 0
+        self.gizmos = []
 
     def resetStat(self):
         self.entitiesDrawn = 0
@@ -43,7 +44,7 @@ class Renderer:
 
 
     def renderEntities(self, camera, world):
-        entities = world.querryEntities(camera.inflate(Vector2f(48,64)))
+        entities = list(world.querryEntities(camera.inflate(Vector2f(48,64))))
         if entities != None:
             entities.sort(key=Renderer.entityKey)
             for entity in entities:
@@ -51,24 +52,18 @@ class Renderer:
                 if renderer:
                     renderer.draw(camera, world)
                     self.entitiesDrawn += 1
-                #animator = entity.getComponent('animator')
-                #entityPosFromCam = entity.position - camera.position
-
                 elif entity.getComponent('animator'):
                     a = entity.getComponent('animator').getSpriteAttributes()
                     entityPosFromCam = entity.position - camera.position
                     pyxel.blt(entityPosFromCam.x + a[0], entityPosFromCam.y + a[1], a[2], a[3], a[4], a[5], a[6], a[7])
                     self.entitiesDrawn += 1
-                #elif sprites:
-                #    for sprite in sprites:
-                #        s = world.spriteBank[sprite]
-                #        pyxel.blt(entityPosFromCam.x - s.pivot.x, entityPosFromCam.y - s.pivot.y,
-                #                  world.spriteBank.imageBank,
-                #                  s.position.x, s.position.y,
-                #                  s.size.x, s.size.y,
-                #                  s.transparency)
-                #    self.spriteDrawn += len(sprites)
         self.primitiveDrawn += self.entitiesDrawn
+
+    def drawGizmos(self, camera):
+        for b in self.gizmos:
+            entityPosFromCam = b[0].position - camera.position
+            pyxel.rectb(entityPosFromCam.x, entityPosFromCam.y, entityPosFromCam.x + b[0].size.x, entityPosFromCam.y + b[0].size.y, b[1])
+        self.gizmos.clear()
 
 
     # DEBUG
@@ -119,7 +114,7 @@ class Renderer:
 
     def renderEntitiesPivot(self, camera, world):
         if (math.floor(pyxel.frame_count / 5)%2) == 0:
-            entities = world.querryEntities(camera.inflate(Vector2f(48,64)))
+            entities = list(world.querryEntities(camera.inflate(Vector2f(48,64))))
             if entities != None:
                 entities.sort(key=Renderer.entityKey)
                 for entity in entities:
@@ -129,7 +124,7 @@ class Renderer:
 
 
     def renderEntitiesColliders(self, camera, world):
-        entities = world.querryEntities(camera.inflate(Vector2f(48,64)))
+        entities = list(world.querryEntities(camera.inflate(Vector2f(48,64))))
         if entities != None:
             entities.sort(key=Renderer.entityKey)
             for entity in entities:

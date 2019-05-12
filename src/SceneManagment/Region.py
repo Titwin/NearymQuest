@@ -149,7 +149,7 @@ class Region(Box):
     def querryPhysicsEntities(self, box):
         if self.quadtree:
             return self.quadtree.querryPhysicsEntities(box)
-        return []
+        return set()
 
 
 

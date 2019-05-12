@@ -107,6 +107,8 @@ class App:
             self.renderer.renderEntitiesColliders(self.camera, self.world)
             self.renderer.renderEntitiesPivot(self.camera, self.world)
 
+        # gizmos
+        self.renderer.drawGizmos(self.camera)
 
         #creepy hud face
         pyxel.blt(0,14*16, self.charactersPalette, 4*16, 1*16, 32,32, 11)
@@ -184,10 +186,13 @@ class App:
 
         # detect pairs
         for fb in fakeBoxList:
-            neighbours = self.world.querryPhysicsEntities(fb)
+            self.renderer.gizmos.append((Box.fromBox(fb.position, Vector2f(abs(fb.size.x), abs(fb.size.y))).inflated(Vector2f(16,16)), 6))
+            neighbours = self.world.querryPhysicsEntities(fb.inflated(Vector2f(16,16)))
             for e in neighbours:
-                if id(fb)!=id(e) and id(fb.entity)!=id(e) and fb.overlap(e):
-                    print("collision : " + str(e))
+                if id(fb)!=id(e) and id(fb.entity)!=id(e):
+                    self.renderer.gizmos.append((Box.fromBox(e.position, Vector2f(abs(e.size.x), abs(e.size.y))), 8))
+                    if fb.overlap(e):
+                        print("collision : " + str(e))
         print("\n")
 
 

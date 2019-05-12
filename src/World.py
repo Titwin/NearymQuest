@@ -97,10 +97,10 @@ class World(Box):
             self.regions[region[0]].removeEntity(entity)
 
     def querryEntities(self, box):
-        result = []
+        result = set()
         regionIndexList = self.querryRegions(box)
         for index in regionIndexList:
-            result.extend(self.regions[index].querryEntities(box))
+            result = result | self.regions[index].querryEntities(box)
         return result
 
 
@@ -128,10 +128,10 @@ class World(Box):
 
     # same as 'querryEntities', but return in addition all physicsEntities
     def querryPhysicsEntities(self, box):
-        result = []
+        result = set()
         regionIndexList = self.querryRegions(box)
         for index in regionIndexList:
-            result.extend(self.regions[index].querryPhysicsEntities(box))
+            result = result | self.regions[index].querryPhysicsEntities(box)
         return result
 
 
