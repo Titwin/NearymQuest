@@ -1,6 +1,7 @@
 import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/Rendering')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/Physics')
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src')
 
 from Component import *
@@ -11,6 +12,7 @@ from Animation import *
 from Animator import *
 from SpriteBank import *
 from PlayerModule import *
+from Collider import * 
 import json
 
 import random
@@ -47,7 +49,6 @@ class EntityFactory():
                     pyxel.image(b["id"]).load(0, 0, b["file"])
                     #add sprites
                     for s in b["sprites"]:
-                        print("sprite to load:"+str(s))
                         bank.addSprite(
                             Sprite(
                                 Vector2f(s["pos_x"],s["pos_y"]), 
@@ -117,10 +118,21 @@ class EntityFactory():
                             #player.addComponent('animator', animator)
 
                     # collision information
-                    if(not('collider' in templateData)):
+                    if(not('colliders' in templateData)):
                         print("warning: no entities."+name+".collider in "+self.__file)
                     else:
                         #import colliders and other related stuff
+                        colliderList = []
+                        for c in templateData["colliders"]:
+                            ctype = c["type"]
+                            collider = Collider(ctype)
+                            collider.position = Vector2f(c["pos_x"],c["pos_y"])
+                            collider.size = Vector2f(c["width"],c["height"])
+                            colliderList.append(collider)
+                        print(name +" has colliders: "+str(len(colliderList)))
+                        template.addComponent('ColliderList', colliderList)
+
+
                         pass
 
                     # register template

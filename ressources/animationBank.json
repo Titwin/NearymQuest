@@ -300,7 +300,7 @@
           "pos_y": 0,
           "width": 16,
           "height": 16,
-          "type": "flagggggs"
+          "type": 1
         }
       ],
       "renderer": {
@@ -317,7 +317,7 @@
           "pos_y": 0,
           "width": 16,
           "height": 16,
-          "type": "flagggggs"
+          "type": 1
         }
       ],
       "renderer": {
@@ -333,7 +333,7 @@
           "pos_y": 0,
           "width": 16,
           "height": 16,
-          "type": "flagggggs"
+          "type": 1
         }
       ],
       "renderer": {
@@ -350,7 +350,7 @@
           "pos_y": 0,
           "width": 16,
           "height": 16,
-          "type": "flagggggs"
+          "type": 1
         }
       ],
       "renderer": {
