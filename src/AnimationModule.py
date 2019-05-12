@@ -8,42 +8,30 @@ from Component import *
 from Vector2 import Vector2f
 
 class Animation:
-    class Frame:
-        #int idx
-        #int width
-        #int height
-        def __init__(self, _idx,_width=1,_height=1, offset=Vector2f(8,16)):
-            self.idx = _idx
-            self.width = _width
-            self.height = _height
-            self.offset = offset
-
-        @staticmethod
-        def CreateFrames(first,duration,width=1,height=1):
-            frames = []
-            for idx in range(first,first+duration):
-                frames.append(Animation.Frame(idx,width,height))
-            return frames
 
     # string name
-    # Frame[] frames
+    # int[] frames
     # float speed
     # bool loop
-    def __init__(self,name,frames,interruptable = True,speed = 20,loop = False, flip = 1):
+    def __init__(self,name,bank,frames,interruptable = True,speed = 20,loop = False, flip = 1):
         self.__name = name
+        self.__bank = bank
         self.__frames = frames
         self.__speed = speed
         self.__loop = loop
-        self.__flip = flip
         self.__interruptable = interruptable
 
     @property
     def name(self):
         return self.__name
-
+   
     @property
-    def frames(self):
-        return self.__frames
+    def bank(self):
+        return self.__bank
+
+    #@property
+    #def frames(self):
+    #    return self.__frames
 
     @property
     def speed(self):
@@ -52,9 +40,6 @@ class Animation:
     @property
     def loop(self):
         return self.__loop
-    @property
-    def flip(self):
-        return self.__flip
 
     @property
     def interruptable(self):
@@ -63,6 +48,9 @@ class Animation:
     @property
     def length(self):
         return len(self.__frames)
+
+    def __get__(self, idx):
+        self.bank[frames[idx]]
 
 class Animator (Component):
     # Dictionary(string,Animation) animations
@@ -103,10 +91,13 @@ class Animator (Component):
                 self.play(self.__defaultAnimation,self.__flip, True)
 
     def getSpriteAttributes(self):
+        animation = self.__currentAnimation
+        frame = animation[self.__frame]
+        
         offset = 0
         if(self.__flip == -1
-            and self.__currentAnimation.frames[0].width == 1 
-            and self.__currentAnimation.frames[self.__frame].width == 2):
+            and animation.frames[0].width == 1 
+            and animation.frames[self.__frame].width == 2):
             offset = -16
         return (offset - self.__currentAnimation.frames[self.__frame].offset.x, 0 - self.__currentAnimation.frames[self.__frame].offset.y,
                 self.__palette,
@@ -115,6 +106,7 @@ class Animator (Component):
                 0)
 
     def draw(self, x, y):
+
         offset = 0
         if(self.__flip == -1
             and self.__currentAnimation.frames[0].width == 1 
