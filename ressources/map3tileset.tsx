@@ -257,7 +257,7 @@
    <property name="solid" type="bool" value="true"/>
   </properties>
   <objectgroup draworder="index">
-   <object id="1" type="collider" x="2" y="5.875" width="12" height="9.125"/>
+   <object id="1" type="collider" x="2" y="6" width="12" height="9"/>
   </objectgroup>
  </tile>
  <tile id="96">
