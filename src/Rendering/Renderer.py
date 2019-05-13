@@ -19,7 +19,6 @@ class Renderer:
         self.entitiesDrawn = 0
         self.tileDrawn = 0
         self.primitiveDrawn = 0
-        self.gizmos.clear()
 
 
     # STANDARD DRAW PASS

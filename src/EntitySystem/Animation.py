@@ -10,7 +10,7 @@ class Animation:
     # int[] frames
     # float speed
     # bool loop
-    def __init__(self,name,bank,frames,interruptable = True,speed = 20,loop = False, flip = 1):
+    def __init__(self,name,bank,frames,interruptable = True,speed = 20,loop = False):
         self.__name = name
         self.__bank = bank
         self.__frames = frames

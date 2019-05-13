@@ -80,7 +80,6 @@ class App:
         # clear the scene
         pyxel.cls(0)
         self.renderer.resetStat()
-        self.draw_count += 1
 
         self.player.updateAnimation()
 
@@ -102,20 +101,14 @@ class App:
         self.renderer.drawGizmos(self.camera)
 
         #creepy hud face
-        #pyxel.blt(0,14*16, self.charactersPalette, 4*16, 1*16, 32,32, 11)
+        pyxel.blt(0,14*16, 1, 4*16, 1*16, 32,32, 11)
 
         #debug hud overlay
         if self.debugOverlay:
             self.drawDebugHUD()
-
+        self.renderer.gizmos.clear()
 
     def LoadMap(self):
-        # load tile palettes
-        #pyxel.image(0).load(0, 0, 'ressources/map3tileset.png')
-        #self.tilePalette = 0
-        #pyxel.image(1).load(0, 0, 'ressources/characters.png')
-        #self.charactersPalette = 1
-        #self.characterBank = SpriteBank(self.charactersPalette,'ressources/characters.png')
         # load world
         self.world = World(Vector2i(257,257))
         self.world.loadBanks("ressources/map3tileset.json", 'ressources/animationBank.json', 0, 0)
@@ -179,7 +172,7 @@ class App:
                 collider = Box.fromBox(entity.position - c.position, Vector2f(abs(c.size.x), abs(c.size.y)))
                 fakeBox = PhysicsSweptBox(collider, rb.velocity, entity)
                 fakeBoxList.append(fakeBox)
-                #self.world.removeEntity(entity)
+                self.world.removeEntity(entity)
                 quadtreeNode.append(self.world.addPhysicsEntity(fakeBox))
 
         # detect pairs
@@ -197,15 +190,27 @@ class App:
                         if fb.overlap(colFromEntity):
                             self.renderer.gizmos.append((colFromEntity, 0))
                             if not collided:
-                                pass#islandList.append()
+                                islandList.append(set())
+                                islandList[len(islandList)-1].add(fb)
                             collided = True
-                            #pairList.append(fb, )
+                            islandList[len(islandList)-1].add(e)
                             pass
             if(not collided):
                 fb.entity.position += fb.entity.getComponent("RigidBody").velocity
 
+        for i in range(0, len(islandList)):
+            for j in range(i, len(islandList)):
+                if not islandList[i].isdisjoint(islandList[j]):
+                    islandList[i] = islandList[i] | islandList[j]
+                    islandList.remove(islandList[j])
 
         # compute contacts
+        if len(islandList) != 0:
+            for island in islandList:
+                print("island:")
+                for entity in island:
+                    print(str(entity))
+            print("\n")
 
         # solve constraint
 
@@ -215,8 +220,8 @@ class App:
         for n in quadtreeNode:
             if n:
                 n.clearPhysicsEntities()
-        #for fb in fakeBoxList:
-        #    self.world.addEntity(fb.entity)
+        for fb in fakeBoxList:
+            self.world.addEntity(fb.entity)
 
 # program entry
 App()

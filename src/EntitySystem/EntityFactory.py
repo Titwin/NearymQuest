@@ -25,9 +25,8 @@ import random
 class EntityFactory():
     # constructor
     # parameter : file : the file name to load for prefab instancing
-    # parameter : spriteBank : the sprite bank to use to construct the spriteList
     # the entity factory load several prefabs from a json file, and when 'instanciate' is called the related prefab is simply copied
-    def __init__(self, file, spriteBank):
+    def __init__(self, file):
         self.file = file
         self.spriteBanks =[]
         self.templates = {}
@@ -91,7 +90,7 @@ class EntityFactory():
                                         frames.append(frame)
                                     else:
                                         print("Warning: EntityFactory: no sprite under the name "+str(f)+", for loading "+name)    
-                                animations.append(Animation(a["animationName"], bank, frames, a["interruptable"], 1.0/a["duration"], a["loop"], 1))
+                                animations.append(Animation(a["animationName"], bank, frames, a["interruptable"], 1.0/a["duration"], a["loop"]))
 
                             template.addComponent('Animator', Animator(palette, animations, renderer["defaultAnimation"]))
 
