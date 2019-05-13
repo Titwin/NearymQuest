@@ -65,7 +65,7 @@ class App:
 
     def update(self):
         self.inputManager.update()
-        self.player.position = self.player.UpdateControls(self.world.position + 0.5*self.world.size, self.world.position - 0.5*self.world.size)
+        self.player.UpdateControls(self.world.position + 0.5*self.world.size, self.world.position - 0.5*self.world.size)
         self.camera.center = self.player.center
         self.streamingArea.center = self.player.center
         self.world.updateRegions(self.streamingArea, self.streamingArea.inflated(Vector2f(100,100)))
@@ -99,7 +99,7 @@ class App:
             self.renderer.renderEntitiesPivot(self.camera, self.world)
 
         # gizmos
-        self.renderer.drawGizmos(self.camera)
+        #self.renderer.drawGizmos(self.camera)
 
         #creepy hud face
         #pyxel.blt(0,14*16, self.charactersPalette, 4*16, 1*16, 32,32, 11)
@@ -171,25 +171,38 @@ class App:
         # predict transforms and creating bounding swept volume
         fakeBoxList = []
         quadtreeNode = []
+        islandList = []
         for entity in self.world.dynamicEntities:
             rb = entity.getComponent('RigidBody')
             if rb:
-                fakeBox = PhysicsSweptBox(entity, rb.velocity)
+                c = entity.getComponent('ColliderList')[0]
+                collider = Box.fromBox(entity.position - c.position, Vector2f(abs(c.size.x), abs(c.size.y)))
+                fakeBox = PhysicsSweptBox(collider, rb.velocity, entity)
                 fakeBoxList.append(fakeBox)
                 #self.world.removeEntity(entity)
                 quadtreeNode.append(self.world.addPhysicsEntity(fakeBox))
 
         # detect pairs
         for fb in fakeBoxList:
-            self.renderer.gizmos.append((Box.fromBox(fb.position, Vector2f(abs(fb.size.x), abs(fb.size.y))).inflated(Vector2f(16,16)), 6))
+            self.renderer.gizmos.append((fb.inflated(Vector2f(16,16)), 6))
+            self.renderer.gizmos.append((fb, 8))
             neighbours = self.world.querryPhysicsEntities(fb.inflated(Vector2f(16,16)))
+            collided = False
             for e in neighbours:
-
                 if id(fb)!=id(e) and id(fb.entity)!=id(e):
-                    self.renderer.gizmos.append((Box.fromBox(e.position, Vector2f(abs(e.size.x), abs(e.size.y))), 8))
-                    if fb.overlap(e):
-                        #print("collision : " + str(e))
-                        pass
+                    colliders = e.getComponent('ColliderList')
+                    for c in colliders:
+                        colFromEntity = Box.fromBox(e.position - c.position, Vector2f(abs(c.size.x), abs(c.size.y)))
+                        self.renderer.gizmos.append((colFromEntity, 8))
+                        if fb.overlap(colFromEntity):
+                            self.renderer.gizmos.append((colFromEntity, 0))
+                            if not collided:
+                                islandList.append()
+                            collided = True
+                            #pairList.append(fb, )
+                            pass
+            if(not collided):
+                fb.entity.position += fb.entity.getComponent("RigidBody").velocity
 
 
         # compute contacts

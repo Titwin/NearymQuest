@@ -248,7 +248,7 @@
    <property name="destructible" type="bool" value="true"/>
   </properties>
   <objectgroup draworder="index">
-   <object id="1" type="hitbox" x="3" y="7" width="9" height="6"/>
+   <object id="1" type="hitbox" x="3" y="8" width="9" height="5"/>
   </objectgroup>
  </tile>
  <tile id="81">
@@ -257,7 +257,7 @@
    <property name="solid" type="bool" value="true"/>
   </properties>
   <objectgroup draworder="index">
-   <object id="1" type="collider" x="2" y="2" width="12" height="13"/>
+   <object id="1" type="collider" x="2" y="5.875" width="12" height="9.125"/>
   </objectgroup>
  </tile>
  <tile id="96">
@@ -303,9 +303,6 @@
   </properties>
   <objectgroup draworder="index">
    <object id="1" type="collider" x="4" y="8" width="8" height="8"/>
-   <object id="2" type="pivot" x="8" y="16">
-    <point/>
-   </object>
   </objectgroup>
  </tile>
 </tileset>

@@ -14,4 +14,5 @@ class RigidBody:
     def velocity(self, v):
         if v != Vector2f.zero and RigidBody.WORLD:
             RigidBody.WORLD.addDynamicEntity(self)
+        self._velocity = v
     
