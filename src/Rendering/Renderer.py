@@ -52,22 +52,12 @@ class Renderer:
                 if renderer:
                     self.draw(camera, entity,renderer)
                     self.entitiesDrawn += 1
-                #animator = entity.getComponent('animator')
-                #entityPosFromCam = entity.position - camera.position
 
-                elif entity.getComponent('animator'):
-                    self.draw(camera,entity, entity.getComponent('animator'))
+                elif entity.getComponent('Animator'):
+                    self.draw(camera,entity, entity.getComponent('Animator'))
                     self.entitiesDrawn += 1
-                #elif sprites:
-                #    for sprite in sprites:
-                #        s = world.spriteBank[sprite]
-                #        pyxel.blt(entityPosFromCam.x - s.pivot.x, entityPosFromCam.y - s.pivot.y,
-                #                  world.spriteBank.imageBank,
-                #                  s.position.x, s.position.y,
-                #                  s.size.x, s.size.y,
-                #                  s.transparency)
-                #    self.spriteDrawn += len(sprites)
-        self.primitiveDrawn += self.entitiesDrawn
+
+        self.primitiveDrawn += 1
 
     
     # compute position of the entity in relationship to the camera, then ask its delegator to render
@@ -157,6 +147,7 @@ class Renderer:
                         pyxel.rectb(entityPosFromCam.x - c.position.x, entityPosFromCam.y - c.position.y, 
                                     entityPosFromCam.x - c.position.x + c.size.x, entityPosFromCam.y - c.position.y + c.size.y, 
                                     0)
+                    self.primitiveDrawn += len(colliders)
 
 
     #USEFULL
@@ -170,10 +161,6 @@ class Renderer:
     def entityKey(a):
         return (a.position.y)*16 + a.position.x
 
-    #def renderPlayer(self, camera, player):
-    #    a = player.animator.getSpriteAttributes()
-    #    pPosFromCam = player.position - camera.position
-    #    pyxel.blt(pPosFromCam.x + a[0], pPosFromCam.y + a[1], a[2], a[3], a[4], a[5], a[6], a[7])
 
 
 

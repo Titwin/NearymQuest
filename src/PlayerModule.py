@@ -97,7 +97,7 @@ class Player(Character):
 
 
     def updateAnimation(self):
-        animator = self.getComponent('animator')
+        animator = self.getComponent('Animator')
         if not animator:
             return
 

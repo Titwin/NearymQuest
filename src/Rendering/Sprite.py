@@ -26,10 +26,3 @@ class Sprite(Box):
     def flippedPivot(self):
         return Vector2f(self.size.x - self.pivot.x, self.pivot.y)
 
-    @property
-    def tileIndexes(self):
-        result = []
-        for i in range(math.floor(self.position.x/16), math.floor((self.position.x + self.size.x)/16)):
-            for j in range(math.floor(self.position.y/16), math.floor((self.position.y + self.size.y)/16)):
-                result.append(j*16 + i)
-        return result

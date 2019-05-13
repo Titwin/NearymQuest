@@ -153,6 +153,8 @@ class TreeNode(Box):
             c.clearPhysicsEntities()
 
     # add a physics entity to the node
+    # parameter : entity ; the physics entity to add
+    # return the node possesing the entity added
     def addPhysicsEntity(self, entity):
         if self.isLeaf():
             self.physicsEntities.add(entity)

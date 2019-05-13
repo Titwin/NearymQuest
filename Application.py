@@ -99,7 +99,7 @@ class App:
             self.renderer.renderEntitiesPivot(self.camera, self.world)
 
         # gizmos
-        #self.renderer.drawGizmos(self.camera)
+        self.renderer.drawGizmos(self.camera)
 
         #creepy hud face
         #pyxel.blt(0,14*16, self.charactersPalette, 4*16, 1*16, 32,32, 11)
@@ -197,7 +197,7 @@ class App:
                         if fb.overlap(colFromEntity):
                             self.renderer.gizmos.append((colFromEntity, 0))
                             if not collided:
-                                islandList.append()
+                                pass#islandList.append()
                             collided = True
                             #pairList.append(fb, )
                             pass
