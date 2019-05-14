@@ -21,6 +21,7 @@ class PhysicsSweptBox(Box):
         self.center = collider.center + 0.5 * delta
         self.delta = delta
         self.initial = Box.fromBox(collider.position, collider.size)
+        self.final = Box.fromBox(collider.position, collider.size)
 
     # DEBUG
     def __str__(self):

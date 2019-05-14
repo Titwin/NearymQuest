@@ -175,7 +175,7 @@ class App:
                 self.world.removeEntity(entity)
                 quadtreeNode.append(self.world.addPhysicsEntity(fakeBox))
 
-        # detect pairs
+        # detect islands
         for fb in fakeBoxList:
             self.renderer.gizmos.append((fb.inflated(Vector2f(16,16)), 6))
             self.renderer.gizmos.append((fb, 8))
@@ -188,33 +188,69 @@ class App:
                         colFromEntity = Box.fromBox(e.position - c.position, Vector2f(abs(c.size.x), abs(c.size.y)))
                         self.renderer.gizmos.append((colFromEntity, 8))
                         if fb.overlap(colFromEntity):
-                            self.renderer.gizmos.append((colFromEntity, 0))
-                            if not collided:
-                                islandList.append(set())
-                                islandList[len(islandList)-1].add(fb)
-                            collided = True
-                            islandList[len(islandList)-1].add(e)
-                            pass
+                            if c.type == Collider.BOUNDINGBOX:
+                                self.renderer.gizmos.append((colFromEntity, 0))
+                                if not collided:
+                                    islandList.append(set())
+                                    islandList[-1].add(fb)
+                                collided = True
+                                islandList[-1].add(colFromEntity)
+                            elif c.type == Collider.TRIGGERBOX or c.type == Collider.HITBOX:
+                                print("enter trigger or hitbox")
             if(not collided):
-                fb.entity.position += fb.entity.getComponent("RigidBody").velocity
+                fb.entity.position += fb.delta
+        islandList = App.simplyIslands(islandList)
 
-        for i in range(0, len(islandList)):
-            for j in range(i, len(islandList)):
-                if not islandList[i].isdisjoint(islandList[j]):
-                    islandList[i] = islandList[i] | islandList[j]
-                    islandList.remove(islandList[j])
 
-        # compute contacts
-        if len(islandList) != 0:
-            for island in islandList:
-                print("island:")
-                for entity in island:
-                    print(str(entity))
-            print("\n")
+        # per island continuous collision detection
+        for island in islandList:
+            d = App.prepareIsland(island)
+            iterations = math.floor(d[2].magnitude) +1
+
+            # move every one up to 1 pixel at same time
+            for x in range(iterations):
+                for swept in d[0]:
+                    if swept.delta == Vector2f.zero:
+                        continue
+
+                    self.renderer.gizmos.append((swept.initial, 7))
+                    swept.initial.position.x += swept.delta.x / iterations
+                    for box in island:
+                        if swept != box:
+                            
+                            #if isinstance(box, PhysicsSweptBox):
+                            #    if swept.initial.overlap(box.initial):
+                            #        swept.initial.position.x -= swept.delta.x / iterations
+                            #        swept.delta.x = 0
+                            #el
+                            if swept.initial.overlap(box):
+                                swept.initial.position.x -= swept.delta.x / iterations
+                                swept.delta.x = 0
+                                break
+
+                    swept.initial.position.y += swept.delta.y / iterations
+                    for box in island:
+                        if swept != box:
+                            #self.renderer.gizmos.append((swept.initial, 2))
+                            #if isinstance(box, PhysicsSweptBox):
+                            #    if swept.initial.overlap(box.initial):
+                            #        swept.initial.position.y -= swept.delta.y / iterations
+                            #        swept.delta.y = 0
+                            #el
+                            if swept.initial.overlap(box):
+                                swept.initial.position.y -= swept.delta.y / iterations
+                                swept.delta.y = 0
+                                break
+
+
+            for fb in d[0]:
+                fb.entity.position += fb.delta
+
 
         # solve constraint
 
         # integrate position
+        
 
         # clear
         for n in quadtreeNode:
@@ -222,6 +258,31 @@ class App:
                 n.clearPhysicsEntities()
         for fb in fakeBoxList:
             self.world.addEntity(fb.entity)
+
+    def simplyIslands(islands):
+        result = []
+        while len(islands):
+            current = islands.pop(0)
+            for island in islands:
+                if not islands.isdisjoint(current):
+                    current = current | island
+            result.append(current)
+        return result
+
+    def prepareIsland(island):
+        moving = []
+        static = []
+        delta = Vector2f(0,0)
+        for e in island:
+            if isinstance(e, PhysicsSweptBox):
+                moving.append(e)
+                if e.delta.magnitudeSqr > delta.magnitudeSqr:
+                    delta = e.delta
+            else:
+                static.append(e)
+        return (moving, static, delta)
+
+
 
 # program entry
 App()
