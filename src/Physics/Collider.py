@@ -20,3 +20,11 @@ class Collider(Box):
     def __init__(self, type = UNKNOWN):
         super(Collider, self).__init__()
         self.type = type
+
+
+    @staticmethod
+    def fromBox(position, size, type):
+        c = Collider(type)
+        c.position = position
+        c.size = size
+        return c

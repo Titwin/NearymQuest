@@ -28,7 +28,8 @@ from PhysicsSweptBox import *
 from TileMap import *
 from Renderer import *
 from Camera import *
-
+from Color import *
+from Physics import *
 
 pyxel.DEFAULT_PALETTE[11] = 0x00BC2C
 
@@ -46,6 +47,7 @@ class App:
         self.streamingArea.size = Vector2f(512, 512)
         self.streamingArea.center = Vector2f(0,0)
         self.renderer = Renderer()
+        self.physics = Physics()
         random.seed(0)
 
         # Event Manager
@@ -72,20 +74,21 @@ class App:
 
         if self.inputManager.CheckInputTrigger('debug'):
             self.debugOverlay = not self.debugOverlay
+            self.physics.renderer = self.renderer
 
-        self.updatePhysics()
+        self.physics.update(self.world)
 
 
     def draw(self):
         # clear the scene
-        pyxel.cls(0)
+        pyxel.cls(Color.Black)
         self.renderer.resetStat()
 
         self.player.updateAnimation()
 
         #debug overlay or standard rendering
         if self.debugOverlay:
-            self.renderer.renderTileMap(self.camera, self.world, 16 )
+            self.renderer.renderTileMap(self.camera, self.world, 16)
             self.renderer.renderColliderOverlay(self.camera, self.world)
             self.renderer.renderFlagOverlay(self.camera, self.world)
         else:
@@ -93,12 +96,9 @@ class App:
 
         # same for entities
         self.renderer.renderEntities(self.camera, self.world)
-        if self.debugOverlay:
-            self.renderer.renderEntitiesColliders(self.camera, self.world)
-            self.renderer.renderEntitiesPivot(self.camera, self.world)
-
-        # gizmos
         self.renderer.drawGizmos(self.camera)
+        if self.debugOverlay:
+            self.renderer.renderEntitiesPivot(self.camera, self.world)
 
         #creepy hud face
         pyxel.blt(0,14*16, 1, 4*16, 1*16, 32,32, 11)
@@ -107,6 +107,7 @@ class App:
         if self.debugOverlay:
             self.drawDebugHUD()
         self.renderer.gizmos.clear()
+
 
     def LoadMap(self):
         # load world
@@ -118,8 +119,6 @@ class App:
         self.player = self.world.factory.instanciate("player")#(self.characterBank)
         self.player.RegisterEvents(self.inputManager)
         self.player.center = self.streamingArea.center
-
-
 
     def drawDebugHUD(self):
         # player position
@@ -159,129 +158,6 @@ class App:
         pyxel.rect(196, 27, 254, 35, 6)
         pyxel.rectb(196, 27, 254, 35, 5)
         pyxel.text(200,29, 'total ' + str(self.renderer.primitiveDrawn), 0)
-
-    def updatePhysics(self):
-        # predict transforms and creating bounding swept volume
-        fakeBoxList = []
-        quadtreeNode = []
-        islandList = []
-        for entity in self.world.dynamicEntities:
-            rb = entity.getComponent('RigidBody')
-            if rb:
-                c = entity.getComponent('ColliderList')[0]
-                collider = Box.fromBox(entity.position - c.position, Vector2f(abs(c.size.x), abs(c.size.y)))
-                fakeBox = PhysicsSweptBox(collider, rb.velocity, entity)
-                fakeBoxList.append(fakeBox)
-                self.world.removeEntity(entity)
-                quadtreeNode.append(self.world.addPhysicsEntity(fakeBox))
-
-        # detect islands
-        for fb in fakeBoxList:
-            self.renderer.gizmos.append((fb.inflated(Vector2f(16,16)), 6))
-            self.renderer.gizmos.append((fb, 8))
-            neighbours = self.world.querryPhysicsEntities(fb.inflated(Vector2f(16,16)))
-            collided = False
-            for e in neighbours:
-                if id(fb)!=id(e) and id(fb.entity)!=id(e):
-                    colliders = e.getComponent('ColliderList')
-                    for c in colliders:
-                        colFromEntity = Box.fromBox(e.position - c.position, Vector2f(abs(c.size.x), abs(c.size.y)))
-                        self.renderer.gizmos.append((colFromEntity, 8))
-                        if fb.overlap(colFromEntity):
-                            if c.type == Collider.BOUNDINGBOX:
-                                self.renderer.gizmos.append((colFromEntity, 0))
-                                if not collided:
-                                    islandList.append(set())
-                                    islandList[-1].add(fb)
-                                collided = True
-                                islandList[-1].add(colFromEntity)
-                            elif c.type == Collider.TRIGGERBOX or c.type == Collider.HITBOX:
-                                print("enter trigger or hitbox")
-            if(not collided):
-                fb.entity.position += fb.delta
-        islandList = App.simplyIslands(islandList)
-
-
-        # per island continuous collision detection
-        for island in islandList:
-            d = App.prepareIsland(island)
-            iterations = math.floor(d[2].magnitude) +1
-
-            # move every one up to 1 pixel at same time
-            for x in range(iterations):
-                for swept in d[0]:
-                    if swept.delta == Vector2f.zero:
-                        continue
-
-                    self.renderer.gizmos.append((swept.initial, 7))
-                    swept.initial.position.x += swept.delta.x / iterations
-                    for box in island:
-                        if swept != box:
-                            
-                            #if isinstance(box, PhysicsSweptBox):
-                            #    if swept.initial.overlap(box.initial):
-                            #        swept.initial.position.x -= swept.delta.x / iterations
-                            #        swept.delta.x = 0
-                            #el
-                            if swept.initial.overlap(box):
-                                swept.initial.position.x -= swept.delta.x / iterations
-                                swept.delta.x = 0
-                                break
-
-                    swept.initial.position.y += swept.delta.y / iterations
-                    for box in island:
-                        if swept != box:
-                            #self.renderer.gizmos.append((swept.initial, 2))
-                            #if isinstance(box, PhysicsSweptBox):
-                            #    if swept.initial.overlap(box.initial):
-                            #        swept.initial.position.y -= swept.delta.y / iterations
-                            #        swept.delta.y = 0
-                            #el
-                            if swept.initial.overlap(box):
-                                swept.initial.position.y -= swept.delta.y / iterations
-                                swept.delta.y = 0
-                                break
-
-
-            for fb in d[0]:
-                fb.entity.position += fb.delta
-
-
-        # solve constraint
-
-        # integrate position
-        
-
-        # clear
-        for n in quadtreeNode:
-            if n:
-                n.clearPhysicsEntities()
-        for fb in fakeBoxList:
-            self.world.addEntity(fb.entity)
-
-    def simplyIslands(islands):
-        result = []
-        while len(islands):
-            current = islands.pop(0)
-            for island in islands:
-                if not islands.isdisjoint(current):
-                    current = current | island
-            result.append(current)
-        return result
-
-    def prepareIsland(island):
-        moving = []
-        static = []
-        delta = Vector2f(0,0)
-        for e in island:
-            if isinstance(e, PhysicsSweptBox):
-                moving.append(e)
-                if e.delta.magnitudeSqr > delta.magnitudeSqr:
-                    delta = e.delta
-            else:
-                static.append(e)
-        return (moving, static, delta)
-
 
 
 # program entry
