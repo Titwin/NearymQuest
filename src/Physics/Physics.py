@@ -14,12 +14,19 @@ class Physics:
         self.sweptBoxList = []
         self.quadtreeNode = []
         self.islandList = []
+        self.inflationFactor = Vector2f(16,16)
+        self.broadPhase = 0
+        self.islandSolveur = 0
+        self.avgIterations = 0
 
-    def update(self, world):
+    def update(self, world, speed = 1):
         # reset temp variables
         self.sweptBoxList.clear()
         self.quadtreeNode.clear()
         self.islandList.clear()
+        self.avgBroadPhase = 0
+        self.avgIslandSolveur = 0
+        self.avgIterations = 0
 
         # predict transforms and creating bounding swept volume
         for entity in world.dynamicEntities:
@@ -27,7 +34,7 @@ class Physics:
             if rb:
                 c = entity.getComponent('ColliderList')[0]
                 collider = Box.fromBox(entity.position - c.position, Vector2f(abs(c.size.x), abs(c.size.y)))
-                swept = PhysicsSweptBox(collider, rb.velocity, entity)
+                swept = PhysicsSweptBox(collider, speed * rb.velocity, entity)
                 self.sweptBoxList.append(swept)
                 world.removeEntity(entity)
                 self.quadtreeNode.append(world.addPhysicsEntity(swept))
@@ -35,9 +42,11 @@ class Physics:
         # detect islands
         for swept in self.sweptBoxList:
             if self.renderer:
-                self.renderer.gizmos.append((swept.inflated(Vector2f(16,16)), Color.LightGrey))
+                self.renderer.gizmos.append((swept.inflated(self.inflationFactor), Color.LightGrey))
                 self.renderer.gizmos.append((swept, Color.Red))
-            neighbours = world.querryPhysicsEntities(swept.inflated(Vector2f(16,16)))
+            neighbours = world.querryPhysicsEntities(swept.inflated(self.inflationFactor))
+            self.avgBroadPhase += len(neighbours)
+
             collided = False
             for neigh in neighbours:
                 if id(swept)!=id(neigh) and id(swept.entity)!=id(neigh):
@@ -59,6 +68,8 @@ class Physics:
             if(not collided):
                 swept.entity.position += swept.delta
 
+        if len(self.sweptBoxList):
+            self.avgBroadPhase /= len(self.sweptBoxList)
 
         # simplify islands (merge all non disjoint)
         if len(self.islandList):
@@ -70,7 +81,6 @@ class Physics:
                         current = current | island
                 temp.append(current)
             self.islandList , temp = temp , self.islandList
-
 
         # per island continuous collision detection and intergration
         for island in self.islandList:
@@ -84,9 +94,11 @@ class Physics:
                     if box.delta.magnitudeSqr > maxdelta.magnitudeSqr:
                         maxdelta = box.delta
             iterations = math.floor(maxdelta.magnitude)+1
+            self.avgIterations += iterations
             if self.renderer:
                 for swept in moving:
                     self.renderer.gizmos.append((swept.initial, Color.White))
+            self.avgIslandSolveur += len(island)
 
             # move every moving boxes, up to 1 pixel at same time
             for x in range(iterations):
@@ -115,7 +127,11 @@ class Physics:
             for swept in moving:
                 swept.entity.position += swept.finalDelta
 
-        # clear
+        if len(self.islandList):
+            self.avgIslandSolveur /= len(self.islandList)
+            self.avgIterations /= len(self.islandList)
+
+        # clear world of temp data
         for n in self.quadtreeNode:
             if n:
                 n.clearPhysicsEntities()
@@ -133,6 +149,6 @@ class Physics:
                 swept.delta.y = 0
         else:
             if dp.x != 0:
-                print("enter TRIGGER on x")
+                print("enter TRIGGER by x")
             else:
-                print("enter TRIGGER on y")
+                print("enter TRIGGER by y")
