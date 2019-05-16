@@ -1,0 +1,8 @@
+TODO:
+- Agent : Random walker
+- Adjective based entities (entity.adjectives[adjective] = components_adding_adjective)
+- mensaje based events
+- PAC AI
+- streaming region data (temporary entities pull/push from permanent entities)
+
+DONE:
