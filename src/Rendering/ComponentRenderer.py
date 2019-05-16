@@ -14,5 +14,6 @@ class ComponentRenderer(Component):
         super(ComponentRenderer, self).__init__()
 
     # virtual draw
+    # parameter : entityPosFromCam : the entity position in camera space
     def draw(self, entityPosFromCam):
         pass

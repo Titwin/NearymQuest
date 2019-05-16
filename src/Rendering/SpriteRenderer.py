@@ -3,6 +3,8 @@ from ComponentRenderer import *
 # render of entity containing sprites
 # render entity depending on sprites in 'SpriteList' component
 # for now renderer is asking for spriteList component each frame
+# contain :
+#    - bank : the spritebank used for render this entity
 class SpriteRenderer(ComponentRenderer):
     # constructor
     def __init__(self, bank):

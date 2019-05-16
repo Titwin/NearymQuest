@@ -92,11 +92,12 @@ class Player(Character):
             elif self.speed.y < 0:
                 self.orientationY = -1
 
-        return p
+        self.getComponent("RigidBody").velocity =  self.speed
+        return self.position
 
 
     def updateAnimation(self):
-        animator = self.getComponent('animator')
+        animator = self.getComponent('Animator')
         if not animator:
             return
 

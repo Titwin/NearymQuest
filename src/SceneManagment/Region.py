@@ -142,10 +142,12 @@ class Region(Box):
         return result
 
     ## PHYSICS RELATED
-    #
+    # delete all physics entity in the quadtree
     def clearPhysicsEntities(self):
         if self.quadtree:
             self.quadtree.clearPhysicsEntities()
+
+    # same as querryEntity but add all Physics entity too
     def querryPhysicsEntities(self, box):
         if self.quadtree:
             return self.quadtree.querryPhysicsEntities(box)

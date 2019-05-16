@@ -23,7 +23,6 @@ class SpriteBank():
     def addSprite(self, sprite, name = 'unknown'):
         self.data.append(sprite)
         self.dataName.append(name)
-        return len(self.data)-1
 
     # operator []
     # no function protection (index check, good init, ...), so use it carefully
@@ -36,7 +35,7 @@ class SpriteBank():
     # parameter : name : the sprite name to search
     # return the first sprite registred under this name
     def searchByName(self, name):
-        for i in range(0,len(self.dataName)):
+        for i in range(len(self.dataName)):
             if self.dataName[i] == name:
                 return i
         return None

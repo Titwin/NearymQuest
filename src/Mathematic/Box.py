@@ -23,7 +23,7 @@ class Box:
         b.size = self.size + 2*inflationSize
         b.center = self.center
         return b
-
+        
 
     @property
     def position(self):

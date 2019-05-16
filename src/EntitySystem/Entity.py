@@ -19,7 +19,6 @@ class Entity(Box):
     # constructor
     def __init__(self):
         super(Entity, self).__init__()
-        #self.position = Vector2f(0,0)
         self.size = Vector2f(16,16)
         self.components = {}
 
@@ -33,6 +32,8 @@ class Entity(Box):
             return None
 
     # add a component to the component list
+    # parameter : componentType : the component type or name
+    # parameter : component : the real object to attach as component
     def addComponent(self, componentType, component):
         try:
             for c in component:
@@ -43,6 +44,7 @@ class Entity(Box):
         self.components[componentType] = component
 
     # remove the first component of type componentType from the entity
+    # parameter : componentType : the component to remove
     def removeComponent(self, componentType):
         self.components.pop(component, None)
 
@@ -63,7 +65,10 @@ class Entity(Box):
         if Entity.WORLD:
             Entity.WORLD.addEntity(self)
 
-
+    ## PREFAB INSTANCING
+    # create a copy of entity
+    # instanciate a new entity and populate with shared component
+    # return a copy
     def Copy(self):
         other = Entity()
         for name in self.components.keys():

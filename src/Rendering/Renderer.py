@@ -18,7 +18,7 @@ class Renderer:
     def resetStat(self):
         self.entitiesDrawn = 0
         self.tileDrawn = 0
-        self.primitiveDrawn = 0 
+        self.primitiveDrawn = 0
 
 
     # STANDARD DRAW PASS
@@ -51,22 +51,12 @@ class Renderer:
                 if renderer:
                     self.draw(camera, entity,renderer)
                     self.entitiesDrawn += 1
-                #animator = entity.getComponent('animator')
-                #entityPosFromCam = entity.position - camera.position
 
-                elif entity.getComponent('animator'):
-                    self.draw(camera,entity, entity.getComponent('animator'))
+                elif entity.getComponent('Animator'):
+                    self.draw(camera,entity, entity.getComponent('Animator'))
                     self.entitiesDrawn += 1
-                #elif sprites:
-                #    for sprite in sprites:
-                #        s = world.spriteBank[sprite]
-                #        pyxel.blt(entityPosFromCam.x - s.pivot.x, entityPosFromCam.y - s.pivot.y,
-                #                  world.spriteBank.imageBank,
-                #                  s.position.x, s.position.y,
-                #                  s.size.x, s.size.y,
-                #                  s.transparency)
-                #    self.spriteDrawn += len(sprites)
-        self.primitiveDrawn += self.entitiesDrawn
+
+        self.primitiveDrawn += 1
 
     
     # compute position of the entity in relationship to the camera, then ask its delegator to render
@@ -149,34 +139,14 @@ class Renderer:
         if entities != None:
             entities.sort(key=Renderer.entityKey)
             for entity in entities:
-                sprites = entity.getComponent('SpriteList')
-                animator = entity.getComponent('animator')
                 entityPosFromCam = entity.position - camera.position
-
-                if animator:
-                    pass
-                    #a = animator.getSpriteAttributes()
-                    #pyxel.blt(entityPosFromCam.x + a[0], entityPosFromCam.y + a[1], a[2], a[3], a[4], a[5], a[6], a[7])
-                elif sprites:
-                    for sprite in sprites:
-                        s = world.spriteBank[sprite]
-                        for index in s.tileIndexes:
-                            colliderList = world.terrainBank.getColliders(index)
-                            if colliderList:
-                                tileOffset = Vector2f(index%16, math.floor(index/16)) - Vector2f(math.floor(s.position.x/16), math.floor(s.position.y/16))
-                                o1 = entityPosFromCam - s.pivot + 16*tileOffset
-                                o2 = entityPosFromCam - s.pivot + 16*tileOffset        
-                                for c in colliderList:
-                                    p1 = o1 + c.position
-                                    p2 = o2 + c.position + c.size  
-                                    if s.size.x == -1:
-                                        p1.x = entityPosFromCam.x + 15  - c.position.x
-                                        p2.x = entityPosFromCam.x + 15  - c.position.x - c.size.x
-                                    if s.size.y == -1:
-                                        p1.y = entityPosFromCam.y + 16 - c.position.y
-                                        p2.y = entityPosFromCam.y + 16 - c.position.y - c.size.y
-                                    pyxel.rectb(p1.x, p1.y, p2.x, p2.y, 0)
-                                self.primitiveDrawn += len(colliderList)
+                colliders = entity.getComponent('ColliderList')
+                if colliders:
+                    for c in colliders:
+                        pyxel.rectb(entityPosFromCam.x - c.position.x, entityPosFromCam.y - c.position.y, 
+                                    entityPosFromCam.x - c.position.x + c.size.x, entityPosFromCam.y - c.position.y + c.size.y, 
+                                    0)
+                    self.primitiveDrawn += len(colliders)
 
 
     #USEFULL
@@ -190,10 +160,6 @@ class Renderer:
     def entityKey(a):
         return (a.position.y)*16 + a.position.x
 
-    #def renderPlayer(self, camera, player):
-    #    a = player.animator.getSpriteAttributes()
-    #    pPosFromCam = player.position - camera.position
-    #    pyxel.blt(pPosFromCam.x + a[0], pPosFromCam.y + a[1], a[2], a[3], a[4], a[5], a[6], a[7])
 
 
 
