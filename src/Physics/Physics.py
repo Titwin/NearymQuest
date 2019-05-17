@@ -50,9 +50,19 @@ class Physics:
             collided = False
             for neigh in neighbours:
                 if id(swept)!=id(neigh) and id(swept.entity)!=id(neigh):
-                    colliders = neigh.getComponent('ColliderList')
+                    colliders = []
+                    if isinstance(neigh, PhysicsSweptBox):
+                        colliders = neigh.entity.getComponent('ColliderList')
+                    else:
+                        colliders = neigh.getComponent('ColliderList')
+
                     for c in colliders:
-                        collider = Collider.fromBox(neigh.position - c.position, Vector2f(abs(c.size.x), abs(c.size.y)), c.type)
+                        collider = None
+                        if isinstance(neigh, PhysicsSweptBox):
+                            collider = Collider.fromBox(neigh.entity.position - c.position, Vector2f(abs(c.size.x), abs(c.size.y)), c.type)
+                        else:
+                            collider = Collider.fromBox(neigh.position - c.position, Vector2f(abs(c.size.x), abs(c.size.y)), c.type)
+
                         if self.renderer:
                             self.renderer.gizmos.append((collider, Color.Red))
                         if swept.overlap(collider):
@@ -77,7 +87,7 @@ class Physics:
             while len(self.islandList):
                 current = self.islandList.pop(0)
                 for island in self.islandList:
-                    if not self.islandList.isdisjoint(current):
+                    if not island.isdisjoint(current):
                         current = current | island
                 temp.append(current)
             self.islandList , temp = temp , self.islandList
