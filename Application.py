@@ -116,7 +116,7 @@ class App:
         self.world.updateRegions(self.streamingArea, self.streamingArea)
         Entity.WORLD = self.world
 
-        self.player = self.world.factory.instanciate("player")#(self.characterBank)
+        self.player = self.world.factory.instanciate("player")
         self.player.RegisterEvents(self.inputManager)
         self.player.center = self.streamingArea.center
 

@@ -60,16 +60,17 @@ class EntityFactory():
                     template = None
                     if(name == "player"):
                         template = Player()
-
-                        # rigidbody
-                        template.addComponent('RigidBody', RigidBody())
-
+                    elif(name == "wolf"):
+                        template = Player()
                     else:
                         template = Entity()
 
                     # basic information
                     template.size.x = templateData["size_x"]
                     template.size.y = templateData["size_y"]
+
+                    if('rigidbody' in templateData):
+                        template.addComponent('RigidBody', RigidBody())
 
                     # rendering informations
                     if('renderer' in templateData):
