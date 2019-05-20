@@ -123,13 +123,18 @@ class App:
     def LoadMap(self):
         # load world
         self.world = World(Vector2i(257,257))
+        Entity.WORLD = self.world
         self.world.loadBanks("ressources/map3tileset.json", 'ressources/animationBank.json', 0, 0)
         self.world.updateRegions(self.streamingArea, self.streamingArea)
-        Entity.WORLD = self.world
 
         self.player = self.world.factory.instanciate("player")
         self.player.RegisterEvents(self.inputManager)
         self.player.center = self.streamingArea.center
+
+        self.wolf = self.world.factory.instanciate("wolf")
+        self.wolf.center = self.streamingArea.center - Vector2f(-32, 0)
+        self.wolf.getComponent('Scripts')[0].target = self.player
+
 
     def drawDebugHUD(self):
         # player position

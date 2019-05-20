@@ -124,16 +124,16 @@ class EntityFactory():
                     else:
                         print("Warning: EntityFactory: no colliders for entity "+name)
 
+                    # scripts
                     if('scripts' in templateData):
                         scripts = []
                         for s in templateData["scripts"]:
-                            #class_ = getattr(ScriptInclude, s["name"])
-                            #script = s["name"]()
-                            #script = eval(s["name"])()
-                            print("wolf loaded")
-                            #script.position = Vector2f(s["pos_x"],s["pos_y"])
-                            #script.size = Vector2f(s["width"],s["height"])
-                            scripts.append(script)
+                            try:
+                                module = __import__(s["name"])
+                                script = getattr(module, s["name"])()
+                                scripts.append(script)
+                            except:
+                                print("Warning: EntityFactory: script loading error for entity "+name)
                         template.addComponent('Scripts', scripts)
 
                     # register template
@@ -148,6 +148,8 @@ class EntityFactory():
     def instanciate(self, instanceReference, randomFlip=True):
         if instanceReference in self.templates.keys():
             instance = self.templates[instanceReference].Copy()
+            if instance.getComponent('Scripts'):
+                instance.WORLD.addScriptedEntity(instance)
             if randomFlip:
                 instance.size = Vector2f(random.choice([-instance.size.x,instance.size.x]),instance.size.y)
             return instance
