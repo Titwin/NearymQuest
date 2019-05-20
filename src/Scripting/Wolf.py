@@ -10,6 +10,7 @@ class Wolf(Script):
         self.runningSpeed = 10
 
     def update(self):
+        print("wolf")
         rigidbody = self.owner.getComponent('RigidBody')
         if not rigidbody:
             return

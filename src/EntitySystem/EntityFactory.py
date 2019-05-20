@@ -127,7 +127,10 @@ class EntityFactory():
                     if('scripts' in templateData):
                         scripts = []
                         for s in templateData["scripts"]:
-                            script = eval(s["name"])
+                            #class_ = getattr(ScriptInclude, s["name"])
+                            #script = s["name"]()
+                            #script = eval(s["name"])()
+                            print("wolf loaded")
                             #script.position = Vector2f(s["pos_x"],s["pos_y"])
                             #script.size = Vector2f(s["width"],s["height"])
                             scripts.append(script)
