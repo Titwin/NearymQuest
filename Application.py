@@ -10,6 +10,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/Physics')
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/Rendering')
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/SceneManagment')
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/Terrain')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/Scripting')
 
 # import modules
 import random
@@ -75,22 +76,11 @@ class App:
         if self.inputManager.CheckInputTrigger('debug'):
             self.debugOverlay = not self.debugOverlay
 
-        # dog behaviour
-        d = self.player.position - self.wolf.position
-        if d != Vector2f(0,0) and d.magnitude > 48:
-            self.wolf.speed = d.normalize()
-        elif d.magnitude < 20:
-            self.wolf.speed = Vector2f(0,0)
-        self.wolf.getComponent("RigidBody").velocity =  self.wolf.speed
-        if self.wolf.speed.x > 0:
-            self.wolf.orientationX = 1
-        elif self.wolf.speed.x < 0:
-            self.wolf.orientationX = -1
-        if self.wolf.speed.y > 0:
-            self.wolf.orientationY = 1
-        elif self.wolf.speed.y < 0:
-            self.wolf.orientationY = -1
-
+        for entity in self.world.scriptedEntities:
+            scripts = entity.getComponent('Scripts')
+            if scripts:
+                for s in scripts:
+                    s.update()
 
         # physics
         if self.debugOverlay:
@@ -106,7 +96,6 @@ class App:
         self.renderer.resetStat()
 
         self.player.updateAnimation()
-        self.wolf.updateAnimation()
 
         #debug overlay or standard rendering
         if self.debugOverlay:
@@ -141,8 +130,6 @@ class App:
         self.player = self.world.factory.instanciate("player")
         self.player.RegisterEvents(self.inputManager)
         self.player.center = self.streamingArea.center
-        self.wolf = self.world.factory.instanciate("wolf")
-        self.wolf.position = Vector2f(-64,0)
 
     def drawDebugHUD(self):
         # player position

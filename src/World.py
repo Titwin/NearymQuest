@@ -23,6 +23,7 @@ class World(Box):
         self.terrainTransparency = -1
         self.factory = None
         self.dynamicEntities = set()
+        self.scriptedEntities = set()
 
     def loadBanks(self, terrainFile, entityFile,terrainImageBank = 0, terrainImageTransparency = -1):
         self.terrainBank = TerrainBank(terrainFile, terrainImageBank)
@@ -93,14 +94,17 @@ class World(Box):
             result = result | self.regions[index].querryEntities(box)
         return result
 
-
-    # ENTITY RELATED
     def addDynamicEntity(self, entity):
         self.dynamicEntities.add(entity)
 
     def removeDynamicEntity(self, entity):
         self.dynamicEntities.remove(entity)
 
+    def addScriptedEntity(self, entity):
+        self.scriptedEntities.add(entity)
+
+    def removeScriptedEntity(self, entity):
+        self.scriptedEntities.remove(entity)
 
     ## PHYSICS RELATED
     # remove all fake entities placed during physics update

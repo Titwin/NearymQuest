@@ -44,7 +44,7 @@
         ]
     },
     {
-      "file": "ressources/characters2.png",
+      "file": "ressources/characters.png",
       "id": 1,
       "sprites": [
         {
@@ -491,6 +491,11 @@
         }
       ],
       "rigidbody": {},
+      "scripts": [
+        {
+          "name" : "Wolf"
+        }
+      ],
       "renderer": {
         "imageBank": 1,
         "defaultAnimation": "idle",

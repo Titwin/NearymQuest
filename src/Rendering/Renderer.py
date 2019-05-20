@@ -47,6 +47,11 @@ class Renderer:
         if entities != None:
             entities.sort(key=Renderer.entityKey)
             for entity in entities:
+                scripts = entity.getComponent('Scripts')
+                if scripts:
+                    for s in scripts:
+                        s.onPreRender()
+
                 renderer = entity.getComponent('ComponentRenderer')
                 if renderer:
                     self.draw(camera, entity,renderer)

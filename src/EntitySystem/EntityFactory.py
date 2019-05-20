@@ -2,6 +2,7 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/Rendering')
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/Physics')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/Scripting')
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src')
 
 from Component import *
@@ -13,8 +14,10 @@ from Animator import *
 from SpriteBank import *
 from PlayerModule import *
 from Collider import * 
-import json
 
+from ScriptInclude import * 
+
+import json
 import random
 
 # Use this to create a new entity from a specified blueprint
@@ -120,6 +123,15 @@ class EntityFactory():
                         template.addComponent('ColliderList', colliderList)
                     else:
                         print("Warning: EntityFactory: no colliders for entity "+name)
+
+                    if('scripts' in templateData):
+                        scripts = []
+                        for s in templateData["scripts"]:
+                            script = eval(s["name"])
+                            #script.position = Vector2f(s["pos_x"],s["pos_y"])
+                            #script.size = Vector2f(s["width"],s["height"])
+                            scripts.append(script)
+                        template.addComponent('Scripts', scripts)
 
                     # register template
                     self.templates[name] = template
