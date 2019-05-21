@@ -23,8 +23,8 @@ class TreeNode(Box):
     def __del__(self):
         for c in self.children:
             del c
-        #for e in self.entities:
-        #    del e
+        for e in self.entities:
+            del e
 
     ## TREE RELATED
     # change node position and size (and adjust children if needed)

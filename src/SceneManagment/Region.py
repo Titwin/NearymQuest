@@ -19,6 +19,9 @@ class Region(Box):
         self.tilemap = None
         self.seed = seed
 
+    def __del__(self):
+        del self.quadtree
+
     ## INITIALIZATION SPECIFIC
     # change region position and size
     # be carefull to only use this before any entities to be added into the region.

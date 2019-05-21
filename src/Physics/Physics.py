@@ -23,9 +23,15 @@ class Physics:
         self.avgBroadPhase = 0
         self.avgIslandSolveur = 0
         self.avgIterations = 0
+        deadEntities = []
 
         # predict transforms and creating bounding swept volume
         for entity in world.dynamicEntities:
+            if not world.isValidEntity(entity):
+                deadEntities.append(entity)
+                continue
+
+
             rb = entity.getComponent('RigidBody')
             if rb:
                 c = entity.getComponent('ColliderList')[0]
@@ -143,6 +149,10 @@ class Physics:
                 n.clearPhysicsEntities()
         for swept in self.sweptBoxList:
             world.addEntity(swept.entity)
+        for e in deadEntities:
+            world.removeEntity(e)
+            world.removeDynamicEntity(e)
+            world.removeScriptedEntity(e)
 
 
     def collision(self, swept, box2, dp):

@@ -43,6 +43,7 @@ class World(Box):
 
             elif not(index in loadIndexList) and self.regions[index].tilemap:
                 print('unload reg ' + str(index))
+                self.regions[index].setDepth(0)
                 del self.regions[index].tilemap
                 del self.regions[index].quadtree
                 self.regions[index].tilemap = None
@@ -87,6 +88,12 @@ class World(Box):
         if(region != None):
             self.regions[region[0]].removeEntity(entity)
 
+    def isValidEntity(self, entity):
+        region = self.querryRegions(Box.fromPoint(entity.position))
+        if region != None and self.regions[region[0]].quadtree:
+            return True
+        return False
+
     def querryEntities(self, box):
         result = set()
         regionIndexList = self.querryRegions(box)
@@ -98,13 +105,19 @@ class World(Box):
         self.dynamicEntities.add(entity)
 
     def removeDynamicEntity(self, entity):
-        self.dynamicEntities.remove(entity)
+        try:
+            self.dynamicEntities.remove(entity)
+        except:
+            pass
 
     def addScriptedEntity(self, entity):
         self.scriptedEntities.add(entity)
 
     def removeScriptedEntity(self, entity):
-        self.scriptedEntities.remove(entity)
+        try:
+            self.scriptedEntities.remove(entity)
+        except:
+            pass
 
     ## PHYSICS RELATED
     # remove all fake entities placed during physics update
@@ -117,7 +130,11 @@ class World(Box):
     def addPhysicsEntity(self, entity):
         region = self.querryRegions(Box.fromPoint(entity.position))
         if(region != None):
-            return self.regions[region[0]].quadtree.addPhysicsEntity(entity)
+            tree = self.regions[region[0]].quadtree
+            if tree:
+                return tree.addPhysicsEntity(entity)
+            else:
+                entity.entity = None
         return None
 
     # same as 'querryEntities', but return in addition all physicsEntities

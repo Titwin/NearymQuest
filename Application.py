@@ -70,11 +70,20 @@ class App:
         if self.inputManager.CheckInputTrigger('debug'):
             self.debugOverlay = not self.debugOverlay
 
+        deadEntities = []
         for entity in self.world.scriptedEntities:
+            if not self.world.isValidEntity(entity):
+                deadEntities.append(entity)
+                continue
+
             scripts = entity.getComponent('Scripts')
             if scripts:
                 for s in scripts:
                     s.update()
+        for e in deadEntities:
+            self.world.removeEntity(e)
+            self.world.removeDynamicEntity(e)
+            self.world.removeScriptedEntity(e)
 
         # physics
         if self.debugOverlay:
@@ -82,6 +91,7 @@ class App:
         else:
             self.physics.renderer = None
         self.physics.update(self.world)
+
 
 
     def draw(self):
@@ -120,9 +130,9 @@ class App:
         self.player.addComponent('Scripts', [PlayerController()])
         self.player.center = self.streamingArea.center
 
-        self.dog = self.world.factory.instanciate("wolf")
-        self.dog.center = self.streamingArea.center - Vector2f(-32, 0)
-        self.dog.getComponent('Scripts')[0].target = self.player
+        dog = self.world.factory.instanciate("wolf")
+        dog.center = self.streamingArea.center - Vector2f(-32, 0)
+        dog.getComponent('Scripts')[0].target = self.player
 
 
     def drawDebugHUD(self):
