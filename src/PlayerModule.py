@@ -1,8 +1,3 @@
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/EntitySystem')
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/InputSystem')
-
 from Inputs import *
 from Entity import *
 from RigidBody import *

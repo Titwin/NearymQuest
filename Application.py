@@ -55,7 +55,6 @@ class App:
         self.inputManager = InputManager()
         self.inputManager.addInput(Input(InputType.BUTTON, InputNotify.PRESSED, [pyxel.KEY_F1], 'debug'))
         
-
         # world and player
         self.LoadMap()
 
@@ -68,7 +67,7 @@ class App:
 
     def update(self):
         self.inputManager.update()
-        self.player.UpdateControls(self.world.position + 0.5*self.world.size, self.world.position - 0.5*self.world.size)
+        #self.player.UpdateControls(self.world.position + 0.5*self.world.size, self.world.position - 0.5*self.world.size)
         self.camera.center = self.player.center
         self.streamingArea.center = self.player.center
         self.world.updateRegions(self.streamingArea, self.streamingArea.inflated(Vector2f(100,100)))
@@ -95,7 +94,7 @@ class App:
         pyxel.cls(Color.Black)
         self.renderer.resetStat()
 
-        self.player.updateAnimation()
+        #self.player.updateAnimation()
 
         #debug overlay or standard rendering
         if self.debugOverlay:
@@ -128,7 +127,7 @@ class App:
         self.world.updateRegions(self.streamingArea, self.streamingArea)
 
         self.player = self.world.factory.instanciate("player")
-        self.player.RegisterEvents(self.inputManager)
+        #self.player.RegisterEvents(self.inputManager)
         self.player.center = self.streamingArea.center
 
         self.wolf = self.world.factory.instanciate("wolf")

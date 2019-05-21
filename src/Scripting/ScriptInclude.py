@@ -1,3 +1,3 @@
 from Script import *
-from Wolf import *
-
+from WolfBehaviour import *
+from PlayerController import *

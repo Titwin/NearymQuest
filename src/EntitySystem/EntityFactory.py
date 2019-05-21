@@ -1,20 +1,11 @@
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/Rendering')
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/Physics')
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/Scripting')
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src')
-
-from Component import *
+from RigidBody import *
 from Entity import *
 from Sprite import *
 from SpriteRenderer import *
 from Animation import *
 from Animator import *
 from SpriteBank import *
-from PlayerModule import *
 from Collider import * 
-
 from ScriptInclude import * 
 
 import json
@@ -60,13 +51,11 @@ class EntityFactory():
             if('entities' in data.keys()):
                 for name in data["entities"].keys():
                     templateData = data["entities"][name]
-                    template = None
-                    if(name == "player"):
-                        template = Player()
-                    elif(name == "wolf"):
-                        template = Player()
-                    else:
-                        template = Entity()
+                    template = Entity()
+                    #if(name == "player"):
+                    #    template = Entity()
+                    #else:
+                    #    template = Entity()
 
                     # basic information
                     template.size.x = templateData["size_x"]
@@ -130,7 +119,11 @@ class EntityFactory():
                         for s in templateData["scripts"]:
                             try:
                                 module = __import__(s["name"])
-                                script = getattr(module, s["name"])()
+                                print(module)
+                                class_ = getattr(module, s["name"])
+                                print(class_)
+                                script = class_()
+                                print(script)
                                 scripts.append(script)
                             except:
                                 print("Warning: EntityFactory: script loading error for entity "+name)
@@ -150,6 +143,7 @@ class EntityFactory():
             instance = self.templates[instanceReference].Copy()
             if instance.getComponent('Scripts'):
                 instance.WORLD.addScriptedEntity(instance)
+                print("new scriptable")
             if randomFlip:
                 instance.size = Vector2f(random.choice([-instance.size.x,instance.size.x]),instance.size.y)
             return instance

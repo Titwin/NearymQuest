@@ -12,7 +12,7 @@ class InputManager:
     
     # Constructor
     def __init__(self):
-        singleton = self
+        InputManager.singleton = self
         self.InputList = []
         self.frameInputs = []
 

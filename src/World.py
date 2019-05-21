@@ -39,7 +39,7 @@ class World(Box):
                 print('load reg ' + str(index))
                 self.regions[index].load(None, self.terrainBank.imageBank, self.terrainTransparency)
                 self.regions[index].setDepth(4)
-                self.regions[index].randomPopulate(self.factory)
+                #self.regions[index].randomPopulate(self.factory)
 
             elif not(index in loadIndexList) and self.regions[index].tilemap:
                 print('unload reg ' + str(index))

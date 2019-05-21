@@ -153,10 +153,13 @@ class Physics:
         if isinstance(box2, PhysicsSweptBox) or box2.type == Collider.BOUNDINGBOX:
             swept.initial.position -= dp
             swept.finalDelta -= dp
+            rb = swept.entity.getComponent('RigidBody')
             if dp.x != 0:
                 swept.delta.x = 0
+                rb.velocity.x = 0
             else:
                 swept.delta.y = 0
+                rb.velocity.y = 0
         else:
             if dp.x != 0:
                 print("enter TRIGGER by x")
