@@ -1,8 +1,3 @@
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/Mathematic')
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/EntitySystem')
-
 from Box import *
 from Entity import *
 

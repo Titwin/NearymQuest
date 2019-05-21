@@ -1,9 +1,5 @@
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/Mathematic')
-
 from Box import *
-from Vector2 import *
+from Vector2 import Vector2f
 
 
 # A Box derivated class to represent a camera

@@ -1,8 +1,5 @@
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/Mathematic')
-
 from Box import *
+from Vector2 import Vector2f
 
 # special class to represent a moving entity box
 # used by the physics engine

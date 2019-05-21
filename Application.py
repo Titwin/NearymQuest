@@ -15,18 +15,13 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/Scripting'
 # import modules
 import random
 import pyxel
+
 from InputManager import *
 from Inputs import *
 
 #from TilemapModule import *
 from World import *
-from PlayerModule import *
 from Entity import *
-
-from Sprite import *
-from PhysicsSweptBox import *
-
-from TileMap import *
 from Renderer import *
 from Camera import *
 from Color import *
@@ -54,7 +49,7 @@ class App:
         # Event Manager
         self.inputManager = InputManager()
         self.inputManager.addInput(Input(InputType.BUTTON, InputNotify.PRESSED, [pyxel.KEY_F1], 'debug'))
-        
+
         # world and player
         self.LoadMap()
 
