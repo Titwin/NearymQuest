@@ -89,8 +89,6 @@ class App:
         pyxel.cls(Color.Black)
         self.renderer.resetStat()
 
-        #self.player.updateAnimation()
-
         #debug overlay or standard rendering
         if self.debugOverlay:
             self.renderer.renderTileMap(self.camera, self.world, 16)
@@ -104,9 +102,6 @@ class App:
         self.renderer.drawGizmos(self.camera)
         if self.debugOverlay:
             self.renderer.renderEntitiesPivot(self.camera, self.world)
-
-        #creepy hud face
-        pyxel.blt(0,14*16, 1, 4*16, 1*16, 32,32, 11)
 
         #debug hud overlay
         if self.debugOverlay:
@@ -122,12 +117,12 @@ class App:
         self.world.updateRegions(self.streamingArea, self.streamingArea)
 
         self.player = self.world.factory.instanciate("player")
-        #self.player.RegisterEvents(self.inputManager)
+        self.player.addComponent('Scripts', [PlayerController()])
         self.player.center = self.streamingArea.center
 
-        self.wolf = self.world.factory.instanciate("wolf")
-        self.wolf.center = self.streamingArea.center - Vector2f(-32, 0)
-        self.wolf.getComponent('Scripts')[0].target = self.player
+        self.dog = self.world.factory.instanciate("wolf")
+        self.dog.center = self.streamingArea.center - Vector2f(-32, 0)
+        self.dog.getComponent('Scripts')[0].target = self.player
 
 
     def drawDebugHUD(self):

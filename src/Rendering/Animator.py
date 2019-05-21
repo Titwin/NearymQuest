@@ -1,4 +1,4 @@
-import pyxel 
+import pyxel
 import math
 from Vector2 import Vector2f
 from ComponentRenderer import *

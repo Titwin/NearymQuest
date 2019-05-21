@@ -138,49 +138,49 @@
           {
             "animationName": "idle",
             "frames": [0, 1],
-            "duration": 0.025,
+            "speed": 0.025,
             "loop": true,
             "interruptable": true
           },{
             "animationName": "walk_horizontal",
             "frames": [32,33,34,35],
-            "duration": 0.2,
+            "speed": 0.2,
             "loop": true,
             "interruptable": true
           },{
             "animationName": "walk_up",
             "frames": [50,51],
-            "duration": 0.25,
+            "speed": 0.25,
             "loop": true,
             "interruptable": true
           },{
             "animationName": "walk_down",
             "frames": [48,49],
-            "duration": 0.25,
+            "speed": 0.25,
             "loop": true,
             "interruptable": true
           },{
             "animationName": "run_horizontal",
             "frames": [36,37,38,39],
-            "duration": 0.25,
+            "speed": 0.25,
             "loop": true,
             "interruptable": true
           },{
             "animationName": "run_up",
             "frames": [50,51],
-            "duration": 0.15,
+            "speed": 0.5,
             "loop": true,
             "interruptable": true
           },{
             "animationName": "run_down",
             "frames": [48,49],
-            "duration": 0.15,
+            "speed": 0.5,
             "loop": true,
             "interruptable": true
           },{
             "animationName": "attack",
             "frames": [16, 17, 18],
-            "duration": 0.5,
+            "speed": 0.5,
             "loop": false,
             "interruptable": false
           }
@@ -212,61 +212,61 @@
           {
             "animationName": "idle",
             "frames": [96,97],
-            "duration": 0.05,
+            "speed": 0.05,
             "loop": true,
             "interruptable": true
           },{
             "animationName": "idle2",
             "frames": [98,99],
-            "duration": 0.1,
+            "speed": 0.1,
             "loop": true,
             "interruptable": true
           },{
             "animationName": "howling",
             "frames": [100],
-            "duration": 0.05,
+            "speed": 0.05,
             "loop": false,
             "interruptable": true
           },{
             "animationName": "walk_horizontal",
             "frames": [128,129,130,131],
-            "duration": 0.25,
+            "speed": 0.25,
             "loop": true,
             "interruptable": true
           },{
             "animationName": "walk_up",
             "frames": [146,147],
-            "duration": 0.25,
+            "speed": 0.25,
             "loop": true,
             "interruptable": true
           },{
             "animationName": "walk_down",
             "frames": [144,145],
-            "duration": 0.25,
+            "speed": 0.25,
             "loop": true,
             "interruptable": true
           },{
             "animationName": "run_horizontal",
             "frames": [132,133,134,135],
-            "duration": 0.4,
+            "speed": 0.4,
             "loop": true,
             "interruptable": true
           },{
             "animationName": "run_up",
             "frames": [146,147],
-            "duration": 0.15,
+            "speed": 0.5,
             "loop": true,
             "interruptable": true
           },{
             "animationName": "run_down",
             "frames": [144,145],
-            "duration": 0.15,
+            "speed": 0.5,
             "loop": true,
             "interruptable": true
           },{
             "animationName": "attack",
             "frames": [112,113],
-            "duration": 0.5,
+            "speed": 0.5,
             "loop": false,
             "interruptable": false
           }

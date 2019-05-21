@@ -14,7 +14,6 @@ class PlayerController(Script):
         self.walkingSpeed = 1
         self.runningSpeed = 2
         self.speedMag = 0
-        print("0")
 
         InputManager.singleton.addInput(Input(InputType.BUTTON, InputNotify.NONE, [pyxel.KEY_W], 'forward'))
         InputManager.singleton.addInput(Input(InputType.BUTTON, InputNotify.NONE, [pyxel.KEY_S], 'backward'))
@@ -28,7 +27,6 @@ class PlayerController(Script):
         InputManager.singleton.addInput(Sequence([pyxel.KEY_D, pyxel.KEY_D], 'dash right'))
 
         InputManager.singleton.addInput(Input(InputType.BUTTON, InputNotify.NONE, [pyxel.KEY_SHIFT], 'run'))
-        print("1")
 
     def update(self):
         rigidbody = self.owner.getComponent('RigidBody')
@@ -66,9 +64,6 @@ class PlayerController(Script):
                 self.speedMag = self.runningSpeed
 
             rigidbody.velocity = self.speedMag * direction
-            #self.speed = Vector2f(self.speed.x * direction.x, self.speed.y * direction.y)
-            #p.x = max(min(p.x, maxBound.x - self.size.x), minBound.x)
-            #p.y = max(min(p.y, maxBound.y - self.size.y), minBound.y)
 
 
     def onPreRender(self):

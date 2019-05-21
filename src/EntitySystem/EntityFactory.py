@@ -52,10 +52,6 @@ class EntityFactory():
                 for name in data["entities"].keys():
                     templateData = data["entities"][name]
                     template = Entity()
-                    #if(name == "player"):
-                    #    template = Entity()
-                    #else:
-                    #    template = Entity()
 
                     # basic information
                     template.size.x = templateData["size_x"]
@@ -83,7 +79,7 @@ class EntityFactory():
                                         frames.append(frame)
                                     else:
                                         print("Warning: EntityFactory: no sprite under the name "+str(f)+", for loading "+name)    
-                                animations.append(Animation(a["animationName"], bank, frames, a["interruptable"], 1.0/a["duration"], a["loop"]))
+                                animations.append(Animation(a["animationName"], bank, frames, a["interruptable"], 1.0/a["speed"], a["loop"]))
 
                             template.addComponent('Animator', Animator(palette, animations, renderer["defaultAnimation"]))
 
@@ -119,11 +115,8 @@ class EntityFactory():
                         for s in templateData["scripts"]:
                             try:
                                 module = __import__(s["name"])
-                                print(module)
                                 class_ = getattr(module, s["name"])
-                                print(class_)
                                 script = class_()
-                                print(script)
                                 scripts.append(script)
                             except:
                                 print("Warning: EntityFactory: script loading error for entity "+name)
@@ -143,7 +136,6 @@ class EntityFactory():
             instance = self.templates[instanceReference].Copy()
             if instance.getComponent('Scripts'):
                 instance.WORLD.addScriptedEntity(instance)
-                print("new scriptable")
             if randomFlip:
                 instance.size = Vector2f(random.choice([-instance.size.x,instance.size.x]),instance.size.y)
             return instance
