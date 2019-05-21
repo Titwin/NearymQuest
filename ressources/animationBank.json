@@ -14,16 +14,15 @@
       "file": "ressources/characters.png",
       "id": 1,
       "sprites": [
-        { "id": 0, "pos_x": 0, "pos_y": 0, "width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0,"tag":"player idle"},
+        {"id": 0,  "pos_x": 0, "pos_y": 0, "width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0,"tag":"player idle"},
         {"id": 1,  "pos_x": 16,"pos_y": 0, "width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
-        {"id": 2,  "pos_x": 32,"pos_y": 0, "width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
-        {"id": 3,  "pos_x": 48,"pos_y": 0, "width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
-        {"id": 4,  "pos_x": 64,"pos_y": 0, "width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
-        {"id": 5,  "pos_x": 80,"pos_y": 0, "width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
         {"id": 16, "pos_x": 0, "pos_y": 16,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0,"tag":"player attack"},
         {"id": 17, "pos_x": 16,"pos_y": 16,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
         {"id": 18, "pos_x": 32,"pos_y": 16,"width": 32,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
-        {"id": 32, "pos_x": 0, "pos_y": 32,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0,"tag":"player walk horizontal"},
+        {"id": 19, "pos_x": 48,"pos_y": 16,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
+        {"id": 20, "pos_x": 64,"pos_y": 16,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
+        {"id": 21, "pos_x": 80,"pos_y": 16,"width": 32,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
+        {"id": 32, "pos_x": 0, "pos_y": 32,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0,"tag":"player horizontal"},
         {"id": 33, "pos_x": 16,"pos_y": 32,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
         {"id": 34, "pos_x": 32,"pos_y": 32,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
         {"id": 35, "pos_x": 48,"pos_y": 32,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
@@ -31,13 +30,14 @@
         {"id": 37, "pos_x": 80, "pos_y": 32,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
         {"id": 38, "pos_x": 96, "pos_y": 32,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
         {"id": 39, "pos_x": 112,"pos_y": 32,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
-        {"id": 48, "pos_x": 0, "pos_y": 48,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0,"tag":"player walk vertical"},
-        {"id": 49, "pos_x": 16,"pos_y": 48,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
-        {"id": 50, "pos_x": 32,"pos_y": 48,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
-        {"id": 51, "pos_x": 48,"pos_y": 48,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
-        {"id": 80, "pos_x": 0, "pos_y": 80,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
-        {"id": 81, "pos_x": 16,"pos_y": 80,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
-        {"id": 82, "pos_x": 32,"pos_y": 80,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
+        {"id": 40, "pos_x": 128,"pos_y": 32,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0,"tag":"player vertical"},
+        {"id": 41, "pos_x": 144,"pos_y": 32,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
+        {"id": 42, "pos_x": 160,"pos_y": 32,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
+        {"id": 43, "pos_x": 176,"pos_y": 32,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
+        {"id": 44, "pos_x": 192,"pos_y": 32,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
+        {"id": 45, "pos_x": 208,"pos_y": 32,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
+        {"id": 46, "pos_x": 224,"pos_y": 32,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
+        {"id": 47, "pos_x": 240,"pos_y": 32,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
 
         {"id": 96, "pos_x": 0, "pos_y": 96, "width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0,"tag":"wolf idle"},
         {"id": 97, "pos_x": 16,"pos_y": 96, "width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
@@ -46,7 +46,7 @@
         {"id": 100,"pos_x": 64,"pos_y": 96, "width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
         {"id": 112,"pos_x": 0, "pos_y": 112,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0,"tag":"wolf attack"},
         {"id": 113,"pos_x": 16,"pos_y": 112,"width": 32,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
-        {"id": 128,"pos_x": 0, "pos_y": 128,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0,"tag":"wolf walk horitontal"},
+        {"id": 128,"pos_x": 0, "pos_y": 128,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0,"tag":"wolf horitontal"},
         {"id": 129,"pos_x": 16,"pos_y": 128,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
         {"id": 130,"pos_x": 32,"pos_y": 128,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
         {"id": 131,"pos_x": 48,"pos_y": 128,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
@@ -54,10 +54,14 @@
         {"id": 133,"pos_x": 80,"pos_y": 128,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
         {"id": 134,"pos_x": 96,"pos_y": 128,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
         {"id": 135,"pos_x": 112,"pos_y": 128,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
-        {"id": 144,"pos_x": 0, "pos_y": 144,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0,"tag":"wolf walk vertical"},
-        {"id": 145,"pos_x": 16,"pos_y": 144,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
-        {"id": 146,"pos_x": 32,"pos_y": 144,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
-        {"id": 147,"pos_x": 48,"pos_y": 144,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0}
+        {"id": 136,"pos_x": 128,"pos_y": 128,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0,"tag":"wolf vertical"},
+        {"id": 137,"pos_x": 144,"pos_y": 128,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
+        {"id": 138,"pos_x": 160,"pos_y": 128,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
+        {"id": 139,"pos_x": 176,"pos_y": 128,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
+        {"id": 140,"pos_x": 192,"pos_y": 128,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
+        {"id": 141,"pos_x": 208,"pos_y": 128,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
+        {"id": 142,"pos_x": 224,"pos_y": 128,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0},
+        {"id": 143,"pos_x": 240,"pos_y": 128,"width": 16,"height": 16,"pivot_x": 8,"pivot_y": 16,"transparent": 0}
       ]
     }
   ],
@@ -135,55 +139,16 @@
         "imageBank": 1,
         "defaultAnimation": "idle",
         "animations": [
-          {
-            "animationName": "idle",
-            "frames": [0, 1],
-            "speed": 0.025,
-            "loop": true,
-            "interruptable": true
-          },{
-            "animationName": "walk_horizontal",
-            "frames": [32,33,34,35],
-            "speed": 0.2,
-            "loop": true,
-            "interruptable": true
-          },{
-            "animationName": "walk_up",
-            "frames": [50,51],
-            "speed": 0.25,
-            "loop": true,
-            "interruptable": true
-          },{
-            "animationName": "walk_down",
-            "frames": [48,49],
-            "speed": 0.25,
-            "loop": true,
-            "interruptable": true
-          },{
-            "animationName": "run_horizontal",
-            "frames": [36,37,38,39],
-            "speed": 0.25,
-            "loop": true,
-            "interruptable": true
-          },{
-            "animationName": "run_up",
-            "frames": [50,51],
-            "speed": 0.5,
-            "loop": true,
-            "interruptable": true
-          },{
-            "animationName": "run_down",
-            "frames": [48,49],
-            "speed": 0.5,
-            "loop": true,
-            "interruptable": true
-          },{
-            "animationName": "attack",
-            "frames": [16, 17, 18],
-            "speed": 0.5,
-            "loop": false,
-            "interruptable": false
-          }
+          {"animationName": "idle",           "frames": [0, 1],         "speed": 0.025,"loop": true,"interruptable": true},
+
+          {"animationName": "attack",         "frames": [16, 17, 18],   "speed": 0.5,"loop": false,"interruptable": false},
+
+          {"animationName": "walk_horizontal","frames": [32,33,34,35],  "speed": 0.2,  "loop": true,"interruptable": true},
+          {"animationName": "walk_up",        "frames": [42,43],        "speed": 0.25,"loop": true,"interruptable": true},
+          {"animationName": "walk_down",      "frames": [40,41],        "speed": 0.25,"loop": true,"interruptable": true},
+          {"animationName": "run_horizontal", "frames": [36,37,38,39],  "speed": 0.25,"loop": true,"interruptable": true},
+          {"animationName": "run_up",         "frames": [46,47],        "speed": 0.25,"loop": true,"interruptable": true},
+          {"animationName": "run_down",       "frames": [44,45],        "speed": 0.25,"loop": true,"interruptable": true}
         ]
       }
     },
@@ -209,67 +174,19 @@
         "imageBank": 1,
         "defaultAnimation": "idle",
         "animations":[
-          {
-            "animationName": "idle",
-            "frames": [96,97],
-            "speed": 0.05,
-            "loop": true,
-            "interruptable": true
-          },{
-            "animationName": "idle2",
-            "frames": [98,99],
-            "speed": 0.1,
-            "loop": true,
-            "interruptable": true
-          },{
-            "animationName": "howling",
-            "frames": [100],
-            "speed": 0.05,
-            "loop": false,
-            "interruptable": true
-          },{
-            "animationName": "walk_horizontal",
-            "frames": [128,129,130,131],
-            "speed": 0.25,
-            "loop": true,
-            "interruptable": true
-          },{
-            "animationName": "walk_up",
-            "frames": [146,147],
-            "speed": 0.25,
-            "loop": true,
-            "interruptable": true
-          },{
-            "animationName": "walk_down",
-            "frames": [144,145],
-            "speed": 0.25,
-            "loop": true,
-            "interruptable": true
-          },{
-            "animationName": "run_horizontal",
-            "frames": [132,133,134,135],
-            "speed": 0.4,
-            "loop": true,
-            "interruptable": true
-          },{
-            "animationName": "run_up",
-            "frames": [146,147],
-            "speed": 0.5,
-            "loop": true,
-            "interruptable": true
-          },{
-            "animationName": "run_down",
-            "frames": [144,145],
-            "speed": 0.5,
-            "loop": true,
-            "interruptable": true
-          },{
-            "animationName": "attack",
-            "frames": [112,113],
-            "speed": 0.5,
-            "loop": false,
-            "interruptable": false
-          }
+          {"animationName": "idle",            "frames": [96,97],           "speed": 0.04,"loop": true,"interruptable": true},
+          {"animationName": "idle2",           "frames": [98,99],           "speed": 0.1, "loop": true,"interruptable": true},
+          {"animationName": "howling",         "frames": [100],             "speed": 0.05,"loop": false,"interruptable": true},
+          {"animationName": "sleep",           "frames": [101,101,102],     "speed": 0.05,"loop": false,"interruptable": true},
+
+          {"animationName": "attack",          "frames": [112,113],         "speed": 0.5, "loop": false,"interruptable": false},
+
+          {"animationName": "walk_horizontal", "frames": [128,129,130,131], "speed": 0.25,"loop": true,"interruptable": true},
+          {"animationName": "walk_up",         "frames": [138,139],         "speed": 0.25,"loop": true,"interruptable": true},
+          {"animationName": "walk_down",       "frames": [136,137],         "speed": 0.25,"loop": true,"interruptable": true},
+          {"animationName": "run_horizontal",  "frames": [132,133,134,135], "speed": 0.4, "loop": true,"interruptable": true},
+          {"animationName": "run_up",          "frames": [142,143],         "speed": 0.25,"loop": true,"interruptable": true},
+          {"animationName": "run_down",        "frames": [140,141],         "speed": 0.25,"loop": true,"interruptable": true}
         ]
       }
     }
