@@ -10,6 +10,7 @@ class WolfBehaviour(Script):
         self.walkingSpeed = 1
         self.runningSpeed = 3
         self.speedMag = 0
+        self.defaultAnimation = "idle2" # "idle", "dig", "idle2", "sleep", "howling"
 
     def update(self):
         rigidbody = self.owner.getComponent('RigidBody')
@@ -83,7 +84,7 @@ class WolfBehaviour(Script):
             else:
                 animator.play("run_horizontal", self.flip)
         else:
-            animator.play("idle", self.flip)
+            animator.play(self.defaultAnimation, self.flip)
 
     def getPrincipalDirection(self, v):
         u = v.normalize()
