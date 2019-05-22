@@ -94,8 +94,10 @@ class Region(Box):
     # parameter : entity : the entity to add
     # parameter : dynamic : specify if the entity created is dynamic or not
     def addEntity(self, entity):
-        if self.quadtree and self.quadtree.overlap(entity):
+        if self.quadtree and self.quadtree.overlapPoint(entity.position):
             self.quadtree.addEntity(entity)
+        else:
+            print("ERROR : Region.addEntity : entity outside world bounds")
 
     # remove an entity from the region
     # parameter : entity : the entity to remove

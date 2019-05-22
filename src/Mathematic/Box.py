@@ -19,6 +19,13 @@ class Box:
             return True
         return False
 
+    def overlapPoint(self, p):
+        x1,y1,sx1,sy1 = self.position.x, self.position.y, self.size.x, self.size.y
+        x2,y2 = p.x, p.y
+        if (x1 <= x2 and x1 + sx1 >= x2 and y1 <= y2 and y1 + sy1 >= y2):
+            return True
+        return False
+
     def inflated(self, inflationSize):
         b = Box()
         b.size = self.size + 2*inflationSize

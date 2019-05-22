@@ -8,7 +8,7 @@ class WolfBehaviour(Script):
         self.flip = 1
         self.atackTimer = 0
         self.walkingSpeed = 1
-        self.runningSpeed = 3
+        self.runningSpeed = 1
         self.speedMag = 0
         self.defaultAnimation = "idle" # "idle", "dig", "idle2", "sleep", "howling"
 

@@ -82,6 +82,8 @@ class World(Box):
         region = self.querryRegions(Box.fromPoint(entity.position))
         if(region != None):
             self.regions[region[0]].addEntity(entity)
+        else:
+            print("ERROR : World.addEntity : entity outside world bounds")
 
     def removeEntity(self, entity):
         region = self.querryRegions(Box.fromPoint(entity.position))

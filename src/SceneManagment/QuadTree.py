@@ -104,9 +104,10 @@ class TreeNode(Box):
             self.entities.add(entity)
         else:
             for c in self.children:
-                if c.overlap(entity):
+                if c.overlapPoint(entity.position):
                     c.addEntity(entity)
                     return
+            print("ERROR : TreeNode.addEntity : entity outside of node bounds")
 
     # remove an entity to the local tree
     # search the first child that overlap the entity and call this function on it
