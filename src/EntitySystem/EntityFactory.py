@@ -6,10 +6,11 @@ from Animation import *
 from Animator import *
 from SpriteBank import *
 from Collider import * 
-from ScriptInclude import * 
+from ScriptInclude import *
 
 import json
 import random
+import copy
 
 # Use this to create a new entity from a specified blueprint
 # a blueprint is a specific callback to call. it's also a list of sprite to attach to the instanciate entity as a 'spriteList' component
@@ -133,7 +134,19 @@ class EntityFactory():
     # return the instanciate entity, or None in case of failure
     def instanciate(self, instanceReference, randomFlip=True):
         if instanceReference in self.templates.keys():
-            instance = self.templates[instanceReference].Copy()
+            prefab = self.templates[instanceReference]
+            instance = prefab.Copy()
+            for componentType in prefab.components.keys():
+                if componentType in ("ColliderList", "SpriteList"):
+                    instance.addComponent(componentType, prefab.getComponent(componentType))
+                elif componentType == "Scripts":
+                    l = []
+                    for s in prefab.getComponent(componentType):
+                        l.append(copy.deepcopy(s))
+                    instance.addComponent(componentType, l)
+                elif componentType in ("RigidBody", "Animator", "ComponentRenderer"):
+                    instance.addComponent(componentType, copy.copy(prefab.getComponent(componentType)))
+
             if instance.getComponent('Scripts'):
                 instance.WORLD.addScriptedEntity(instance)
             if randomFlip:

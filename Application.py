@@ -62,7 +62,6 @@ class App:
 
     def update(self):
         self.inputManager.update()
-        #self.player.UpdateControls(self.world.position + 0.5*self.world.size, self.world.position - 0.5*self.world.size)
         self.camera.center = self.player.center
         self.streamingArea.center = self.player.center
         self.world.updateRegions(self.streamingArea, self.streamingArea.inflated(Vector2f(100,100)))
@@ -127,12 +126,16 @@ class App:
         self.world.updateRegions(self.streamingArea, self.streamingArea)
 
         self.player = self.world.factory.instanciate("player")
-        self.player.addComponent('Scripts', [PlayerController()])
-        self.player.center = self.streamingArea.center
+        #self.player.addComponent('Scripts', [PlayerController()])
+        self.player.position = self.streamingArea.center
 
-        dog = self.world.factory.instanciate("wolf")
-        dog.center = self.streamingArea.center - Vector2f(-32, 0)
-        dog.getComponent('Scripts')[0].target = self.player
+        for i in range(-5,6):
+            for j in range(-5,6):
+                if i==0 and j==0:
+                    continue
+                dog = self.world.factory.instanciate("wolf")
+                dog.position = self.player.position + Vector2f(16*i, 16*j)
+                dog.getComponent('Scripts')[0].target = self.player
 
 
     def drawDebugHUD(self):

@@ -50,11 +50,11 @@ class Renderer:
 
                 renderer = entity.getComponent('ComponentRenderer')
                 if renderer:
-                    self.draw(camera, entity,renderer)
+                    self.draw(camera, entity, renderer)
                     self.entitiesDrawn += 1
 
                 elif entity.getComponent('Animator'):
-                    self.draw(camera,entity, entity.getComponent('Animator'))
+                    self.draw(camera, entity, entity.getComponent('Animator'))
                     self.entitiesDrawn += 1
 
         self.primitiveDrawn += 1

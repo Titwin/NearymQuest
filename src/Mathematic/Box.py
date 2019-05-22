@@ -13,8 +13,9 @@ class Box:
     # parameter : b : the box to check overlapping with
     # return True if the two box overlap, False otherwise
     def overlap(self, b):
-        if (self.position.x <= b.position.x + b.size.x and self.position.x + self.size.x >= b.position.x and 
-            self.position.y <= b.position.y + b.size.y and self.position.y + self.size.y >= b.position.y):
+        x1,y1,sx1,sy1 = self.position.x, self.position.y, self.size.x, self.size.y
+        x2,y2,sx2,sy2 = b.position.x, b.position.y, b.size.x, b.size.y
+        if (x1 <= x2 + sx2 and x1 + sx1 >= x2 and y1 <= y2 + sy2 and y1 + sy1 >= y2):
             return True
         return False
 
@@ -62,7 +63,9 @@ class Box:
         b.center = self.center
         return b
 
-
+    def __hash__(self):
+        return id(self)
+        
     #DEBUG
     def print(self):
         print('box, position : ' + str(self.position) + ', size : ' + str(self.size))

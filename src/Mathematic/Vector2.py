@@ -1,7 +1,6 @@
 import math
   
 class Vector2f:
-
 # constructor
     def __init__(self, x=0, y=0): 
         self._x = self.__cast(x) 
@@ -124,14 +123,15 @@ class Vector2f:
             return Vector2f(self.x/mag,self.y/mag)
 
 # Commodity constructors
-    @property
-    def zero(self):
-        return Vector2f(0,0)
+    #@property
+    #def zero(self):
+    #    global __zero
+    #    return __zero
 
-    @property
-    def one(self):
-        return Vector2f(1,1)
-
+    #@property
+    #def one(self):
+    #    return Vector2f(1,1)
+#__zero = Vector2f(0,0)
 
 
   

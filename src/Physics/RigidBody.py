@@ -23,7 +23,11 @@ class RigidBody(Component):
         return self._velocity
     @velocity.setter
     def velocity(self, v):
-        if v != Vector2f.zero and self.owner.WORLD:
-            self.owner.WORLD.addDynamicEntity(self.owner)
+        if self.owner.WORLD:
+            if v.x==0 and v.y==0:
+                self.owner.WORLD.removeDynamicEntity(self.owner)
+            else:
+                self.owner.WORLD.addDynamicEntity(self.owner)
         self._velocity = v
+        #print(self)
     

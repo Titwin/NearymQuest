@@ -1,6 +1,6 @@
 from Box import *
 from Component import *
-import copy
+
 
 # All object in the world are entities, or heritate from it (so they are in a way)
 # each instance contains :
@@ -44,11 +44,6 @@ class Entity(Box):
     def removeComponent(self, componentType):
         self.components.pop(component, None)
 
-    ## CONTAINER RELATED
-    # necessary to have Entity set
-    def __hash__(self):
-        return id(self)
-
     ## OVERLOAD OF BOX ATTRIBUTES
     @property
     def position(self):
@@ -67,8 +62,10 @@ class Entity(Box):
     # return a copy
     def Copy(self):
         other = Entity()
-        for name in self.components.keys():
-            other.addComponent(name, copy.copy(self.components[name]))
+        other.size = self.size
+        other.position = self.position
+        #for name in self.components.keys():
+        #    other.addComponent(name, copy.deepcopy(self.components[name]))
         return other
 
     #DEBUG
@@ -78,6 +75,6 @@ class Entity(Box):
     def __str__(self):
         msg = 'entity, position : ' + str(self.position) + ', size : ' + str(self.size)
         for c in self.components.keys():
-            msg += '\n   ' + str(c)
+            msg += '\n   ' + str(c) + ' ' + str(self.components[c])
         return msg
 

@@ -10,7 +10,7 @@ class WolfBehaviour(Script):
         self.walkingSpeed = 1
         self.runningSpeed = 3
         self.speedMag = 0
-        self.defaultAnimation = "idle2" # "idle", "dig", "idle2", "sleep", "howling"
+        self.defaultAnimation = "idle" # "idle", "dig", "idle2", "sleep", "howling"
 
     def update(self):
         rigidbody = self.owner.getComponent('RigidBody')
@@ -24,7 +24,7 @@ class WolfBehaviour(Script):
 
             # not moving
             if self.speedMag == 0:
-                if d != Vector2f(0,0) and d.magnitude > 64:
+                if d != Vector2f(0,0) and d.magnitude > 150:
                     s = self.runningSpeed * u
                     self.speedMag = self.runningSpeed
                 elif d != Vector2f(0,0) and d.magnitude > 32:
@@ -33,17 +33,17 @@ class WolfBehaviour(Script):
 
             # already moving to target
             else:
-                if d != Vector2f(0,0) and d.magnitude > 100:
+                if d != Vector2f(0,0) and d.magnitude > 150:
                     s = self.runningSpeed * u
                     self.speedMag = self.runningSpeed
-                elif d != Vector2f(0,0) and d.magnitude > 16:
+                elif d != Vector2f(0,0) and d.magnitude > 32:
                     s = self.speedMag * u
                 else:
                     self.speedMag = 0
 
             rigidbody.velocity =  s
         else:
-            pass
+            rigidbody.velocity = Vector2f(0,0)
 
     def onPreRender(self):
         self.updateAnimation()
@@ -87,6 +87,8 @@ class WolfBehaviour(Script):
             animator.play(self.defaultAnimation, self.flip)
 
     def getPrincipalDirection(self, v):
+        if v.x==0 and v.y==0:
+            return Vector2f(0,0)
         u = v.normalize()
         if u.x > 0.92:
             return Vector2f(1,0)

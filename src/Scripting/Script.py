@@ -5,7 +5,11 @@ class Script(Component):
         super(Script, self).__init__()
 
     def __del__(self):
-        self.owner.WORLD.removeScriptedEntity(self.owner)
+        pass
+        #self.owner.WORLD.removeScriptedEntity(self.owner)
+
+    def _type(self):
+        return self.__class__.__name__
 
     def update(self):
         pass
@@ -15,4 +19,4 @@ class Script(Component):
 
     #DEBUG
     def __str__(self):
-        return "Script : " + self.__class__.__name__
+        return "Script : " + self._type

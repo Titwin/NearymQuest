@@ -24,6 +24,8 @@ class Physics:
         self.avgIslandSolveur = 0
         self.avgIterations = 0
         deadEntities = []
+        if self.renderer:
+            self.renderer.gizmos.clear()
 
         # predict transforms and creating bounding swept volume
         for entity in world.dynamicEntities:
@@ -31,11 +33,10 @@ class Physics:
                 deadEntities.append(entity)
                 continue
 
-
             rb = entity.getComponent('RigidBody')
             if rb:
                 c = entity.getComponent('ColliderList')[0]
-                collider = Box.fromBox(entity.position - c.position, Vector2f(abs(c.size.x), abs(c.size.y)))
+                collider = Box.fromBox(entity._position - c.position, Vector2f(abs(c.size.x), abs(c.size.y)))
                 swept = PhysicsSweptBox(collider, speed * rb.velocity, entity)
                 self.sweptBoxList.append(swept)
                 world.removeEntity(entity)
@@ -61,7 +62,7 @@ class Physics:
                     for c in colliders:
                         collider = None
                         if isinstance(neigh, PhysicsSweptBox):
-                            collider = Collider.fromBox(neigh.entity.position - c.position, Vector2f(abs(c.size.x), abs(c.size.y)), c.type)
+                            collider = neigh #Collider.fromBox(neigh.entity.position - c.position, Vector2f(abs(c.size.x), abs(c.size.y)), c.type)
                         else:
                             collider = Collider.fromBox(neigh.position - c.position, Vector2f(abs(c.size.x), abs(c.size.y)), c.type)
 
@@ -78,21 +79,37 @@ class Physics:
 
             # integrate simple case
             if(not collided):
-                swept.entity.position += swept.delta
+                swept.entity._position += swept.delta
 
         if len(self.sweptBoxList):
             self.avgBroadPhase /= len(self.sweptBoxList)
+        dummy = len(self.islandList)
+
+
+
+
 
         # simplify islands (merge all non disjoint)
         if len(self.islandList):
             temp = []
             while len(self.islandList):
                 current = self.islandList.pop(0)
+                intersect = False
                 for island in self.islandList:
-                    if not island.isdisjoint(current):
+                    if not current.isdisjoint(island):
                         current = current | island
-                temp.append(current)
+                        self.islandList.append(current)
+                        self.islandList.remove(island)
+                        intersect = True
+                        break
+                if not intersect:
+                    temp.append(current)
             self.islandList , temp = temp , self.islandList
+        print(str(dummy) + " >> " + str(len(self.islandList)))
+
+
+
+
 
         # per island continuous collision detection and intergration
         for island in self.islandList:
@@ -105,7 +122,7 @@ class Physics:
                     moving.append(box)
                     if box.delta.magnitudeSqr > maxdelta.magnitudeSqr:
                         maxdelta = box.delta
-            iterations = math.floor(maxdelta.magnitude)+1
+            iterations = math.floor(maxdelta.magnitude)
             self.avgIterations += iterations
             if self.renderer:
                 for swept in moving:
@@ -137,7 +154,7 @@ class Physics:
                                 break
 
             for swept in moving:
-                swept.entity.position += swept.finalDelta
+                swept.entity._position += swept.finalDelta
 
         if len(self.islandList):
             self.avgIslandSolveur /= len(self.islandList)
@@ -159,13 +176,16 @@ class Physics:
         if isinstance(box2, PhysicsSweptBox) or box2.type == Collider.BOUNDINGBOX:
             swept.initial.position -= dp
             swept.finalDelta -= dp
-            rb = swept.entity.getComponent('RigidBody')
-            if dp.x != 0:
-                swept.delta.x = 0
-                rb.velocity.x = 0
+            if swept.entity:
+                rb = swept.entity.getComponent('RigidBody')
+                if dp.x != 0:
+                    swept.delta.x = 0
+                    rb.velocity.x = 0
+                else:
+                    swept.delta.y = 0
+                    rb.velocity.y = 0
             else:
-                swept.delta.y = 0
-                rb.velocity.y = 0
+                print("ERROR")
         else:
             if dp.x != 0:
                 print("enter TRIGGER by x")
