@@ -145,7 +145,7 @@ class App:
                 if i==0 and j==0:
                     continue
                 dog = self.world.factory.instanciate("wolf")
-                dog.position = self.player.position + Vector2f(64*i, 64*j)
+                dog.position = self.player.position + Vector2f(16*i, 16*j)
                 dog.getComponent('Scripts')[0].target = self.player
 
 
