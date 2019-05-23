@@ -38,7 +38,7 @@ class Region(Box):
     # if the current quadtree depth is less than specify, split the tree to reach the target
     # if the current quadtree depth is more than specify, merge the tree to reach the target
     # parameter : depth : the target depth of the tree
-    def setDepth(self, depth):
+    def setDepth2(self, depth):
         if not self.quadtree:
             self.quadtree = TreeNode()
             self.quadtree.setTransform(self.position, self.size)
@@ -52,6 +52,11 @@ class Region(Box):
         elif d > depth:
             for i in range(1, d - depth):
                 self.quadtree.merge()
+
+    def clearTree(self):
+        if self.quadtree:
+            self.quadtree.merge()
+            self.quadtree = None
 
     # initialize the tilemap
     # generate a random background in the tilemap and after, load the tilemap depending on file (if specified)

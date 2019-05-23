@@ -1,6 +1,7 @@
 from Box import *
 from Entity import *
 
+import pyxel
 
 # Base class for constructing a Tree (quad, oct, ...)
 # contain :
@@ -10,6 +11,7 @@ from Entity import *
 #     - physicsEntities : a list of fake entities attached to the node. Only used in physics process. please don't touch it
 class TreeNode(Box):
     DIVISION = 2    # number of division in one axis, defined on 2 for quadtree (2 child on x, 2 child on y)
+    MAX_ENTITIES = 5
 
     # constructor
     def __init__ (self):
@@ -52,7 +54,7 @@ class TreeNode(Box):
     # ex : if node is leaf, return 1 (for the actual node level), if node is root return the entire tree depth
     # return local depth
     def getDepth(self):
-        if not self.isLeaf():
+        if not (len(self.children) is 0):
             return self.children[0].getDepth() + 1
         else:
             return 1
@@ -72,7 +74,7 @@ class TreeNode(Box):
     # if the node is a leaf, it instanciate children based on TreeNode.DIVISION, and adjust them after
     # if the node is not a leaf it call the same function on each child
     def split(self):
-        if(self.isLeaf()):
+        if len(self.children) is 0 :
             for i in range(TreeNode.DIVISION):
                 for j in range(TreeNode.DIVISION):
                     self.children.append(TreeNode())
@@ -87,11 +89,12 @@ class TreeNode(Box):
     # if its children are not leaves it call the same function for each
     # if node is currentlly leaf, nothing happen
     def merge(self):
-        if(not self.isLeaf() and self.children[0].isLeaf()):
-            self.children.clear()
-        elif(not self.isLeaf()):
-            for c in self.children:
-                c.merge()
+        if not self.isLeaf():
+            if self.children[0].isLeaf():
+                self.children.clear()
+            else:
+                for c in self.children:
+                    c.merge()
 
 
 
@@ -101,7 +104,17 @@ class TreeNode(Box):
     # if node is a leaf it add this entity to its entity list
     def addEntity(self, entity):
         if self.isLeaf():
-            self.entities.add(entity)
+            if len(self.entities) < TreeNode.MAX_ENTITIES:
+                self.entities.add(entity)
+            else:
+                self.entities.add(entity)
+                self.split()
+                for e in self.entities:
+                    for c in self.children:
+                        if c.overlapPoint(e.position):
+                            c.addEntity(e)
+                            break
+                self.entities.clear()
         else:
             for c in self.children:
                 if c.overlapPoint(entity.position):
@@ -122,6 +135,15 @@ class TreeNode(Box):
             for c in self.children:
                 if c.overlap(entity):
                     c.removeEntity(entity)
+                    break
+            preLeaf = True
+            ecount = 0
+            for c in self.children:
+                preLeaf = preLeaf and c.isLeaf()
+                ecount += len(c.entities)
+            if preLeaf and ecount == 0:
+                self.children.clear()
+
 
     # return all entitities that potentially overlap a box
     # if node is a leaf it return its entity list
@@ -129,7 +151,7 @@ class TreeNode(Box):
     # parameter : box : the box to check the local tree against
     # return a list of entities that potentially overlap
     def querryEntities(self, box):
-        if self.isLeaf():
+        if len(self.children) is 0:
             return self.entities.copy()
         else:
             result = set()
@@ -152,7 +174,7 @@ class TreeNode(Box):
     # parameter : entity ; the physics entity to add
     # return the node possesing the entity added
     def addPhysicsEntity(self, entity):
-        if self.isLeaf():
+        if len(self.children) is 0:
             self.physicsEntities.add(entity)
             return self
         else:
@@ -162,7 +184,7 @@ class TreeNode(Box):
 
     # same as 'querryEntities', but return in addition all physicsEntities
     def querryPhysicsEntities(self, box):
-        if self.isLeaf():
+        if len(self.children) is 0:
             return (self.entities.copy() | self.physicsEntities.copy())
         else:
             result = set()
@@ -178,6 +200,15 @@ class TreeNode(Box):
         print(self)
         for c in self.children:
             c.print()
+
+    def draw(self, camera, color):
+        if len(self.children) is 0:
+            p1 = self.position - camera.position
+            p2 = self.position - camera.position + self.size
+            pyxel.rectb(p1.x, p1.y, p2.x, p2.y, color)
+        else:
+            for c in self.children:
+                c.draw(camera, color)
 
     def __str__(self):
         msg = ''

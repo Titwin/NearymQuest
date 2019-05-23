@@ -5,9 +5,9 @@ from Vector2 import *
 #   . a Vector2f size : the size of the rectangle : (width, height)
 # all of these values are in pixels
 class Box:
-    def __init__(self):
-        self._position = Vector2f(0,0)  # top left corner position in pixel
-        self.size = Vector2f(16,16)       # size in pixel
+    def __init__(self, p=Vector2f(0,0), s=Vector2f(0,0)):
+        self.position = p  # top left corner position in pixel
+        self.size = s      # size in pixel
 
     # test if an other box is overlapping the actual box
     # parameter : b : the box to check overlapping with
@@ -33,12 +33,12 @@ class Box:
         return b
         
 
-    @property
-    def position(self):
-        return self._position
-    @position.setter
-    def position(self, new_position):
-        self._position = new_position
+    #@property
+    #def position(self):
+    #    return self._position
+    #@position.setter
+    #def position(self, new_position):
+    #    self._position = new_position
 
     # return the box center position, or ajust the box position for a desired box center position
     @property
@@ -48,21 +48,6 @@ class Box:
     def center(self, new_center):
         self.position = new_center - 0.5*self.size
     
-    # return a box of size (0,0) at desired position (aka a simple point packed into a Box structure)
-    @staticmethod
-    def fromPoint(position):
-        b = Box()
-        b.position = position
-        b.size = Vector2f(0,0)
-        return b
-
-    @staticmethod
-    def fromBox(position, size):
-        b = Box()
-        b.position = position
-        b.size = size
-        return b
-
     # return a box inflated by a vector s in any direction
     def inflate(self, s):
         b = Box()

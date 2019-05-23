@@ -36,7 +36,7 @@ class App:
         application = self
 
         #global initialization
-        pyxel.init(255,255, caption="Nearym Quest", scale=3, fps=30)
+        pyxel.init(255,255, caption="Nearym Quest", scale=3)
         self.debugOverlay = False
         self.camera = Camera()
         self.streamingArea = Box()
@@ -54,6 +54,12 @@ class App:
         self.LoadMap()
 
         self.draw_count = 0
+
+
+        reg = self.world.querryRegions(Box(self.player.position))
+        for r in reg:
+            self.world.regions[r].print()
+
 
         # has to be completely at the end of init
         #pyxel.run(self.update, self.draw)
@@ -117,6 +123,10 @@ class App:
             self.drawDebugHUD()
         self.renderer.gizmos.clear()
 
+        reg = self.world.querryRegions(Box(self.player.position))
+        for r in reg:
+            self.world.regions[r].quadtree.draw(self.camera, Color.Red)
+
 
     def LoadMap(self):
         # load world
@@ -128,6 +138,7 @@ class App:
         self.player = self.world.factory.instanciate("player")
         #self.player.addComponent('Scripts', [PlayerController()])
         self.player.position = self.streamingArea.center
+        self.world.addEntity(self.player)
 
         for i in range(-5,6):
             for j in range(-5,6):

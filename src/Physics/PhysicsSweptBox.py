@@ -17,7 +17,7 @@ class PhysicsSweptBox(Box):
         self.size = Vector2f(abs(delta.x), abs(delta.y)) + collider.size
         self.center = collider.center + 0.5 * delta
         self.delta = delta
-        self.initial = Box.fromBox(collider.position, collider.size)
+        self.initial = Box(collider.position, collider.size)
         self.finalDelta = Vector2f(0,0)
 
     # DEBUG

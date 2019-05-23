@@ -21,11 +21,11 @@ class Entity(Box):
     ## COMPONENT RELATED
     # get the component defined by componentType
     # return the component asked, None otherwise
-    def getComponent(self, componentType):
+    def getComponent(self, componentType, error=None):
         if componentType in self.components.keys():
             return self.components[componentType]
         else:
-            return None
+            return error
 
     # add a component to the component list
     # parameter : componentType : the component type or name
@@ -45,16 +45,16 @@ class Entity(Box):
         self.components.pop(component, None)
 
     ## OVERLOAD OF BOX ATTRIBUTES
-    @property
-    def position(self):
-        return self._position
-    @position.setter
-    def position(self, new_position):
-        if Entity.WORLD:
-            Entity.WORLD.removeEntity(self)
-        self._position = new_position
-        if Entity.WORLD:
-            Entity.WORLD.addEntity(self)
+    #@property
+    #def position(self):
+    #    return self._position
+    #@position.setter
+    #def position(self, new_position):
+    #    if Entity.WORLD:
+    #        Entity.WORLD.removeEntity(self)
+    #    self._position = new_position
+    #    if Entity.WORLD:
+    #        Entity.WORLD.addEntity(self)
 
     ## PREFAB INSTANCING
     # create a copy of entity

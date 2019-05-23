@@ -38,12 +38,14 @@ class World(Box):
             if index in loadIndexList and self.regions[index].tilemap==None:
                 print('load reg ' + str(index))
                 self.regions[index].load(None, self.terrainBank.imageBank, self.terrainTransparency)
-                self.regions[index].setDepth(4)
+                self.regions[index].quadtree = TreeNode()
+                self.regions[index].quadtree.setTransform(self.regions[index].position, self.regions[index].size)
+                #self.regions[index].setDepth(4)
                 #self.regions[index].randomPopulate(self.factory)
 
             elif not(index in loadIndexList) and self.regions[index].tilemap:
                 print('unload reg ' + str(index))
-                self.regions[index].setDepth(0)
+                #self.regions[index].setDepth(0)
                 del self.regions[index].tilemap
                 del self.regions[index].quadtree
                 self.regions[index].tilemap = None
@@ -79,19 +81,19 @@ class World(Box):
 
     # ENTITY RELATED
     def addEntity(self, entity):
-        region = self.querryRegions(Box.fromPoint(entity.position))
+        region = self.querryRegions(Box(entity.position))
         if(region != None):
             self.regions[region[0]].addEntity(entity)
         else:
             print("ERROR : World.addEntity : entity outside world bounds")
 
     def removeEntity(self, entity):
-        region = self.querryRegions(Box.fromPoint(entity.position))
+        region = self.querryRegions(Box(entity.position))
         if(region != None):
             self.regions[region[0]].removeEntity(entity)
 
     def isValidEntity(self, entity):
-        region = self.querryRegions(Box.fromPoint(entity.position))
+        region = self.querryRegions(Box(entity.position))
         if region != None and self.regions[region[0]].quadtree:
             return True
         return False
@@ -130,7 +132,7 @@ class World(Box):
 
     # add a physics entity to the node
     def addPhysicsEntity(self, entity):
-        region = self.querryRegions(Box.fromPoint(entity.position))
+        region = self.querryRegions(Box(entity.position))
         if(region != None):
             tree = self.regions[region[0]].quadtree
             if tree:
