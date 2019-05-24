@@ -34,30 +34,6 @@ class Region(Box):
         if self.quadtree:
             self.quadtree.setTransform(self.position, self.size)
 
-    # initialize the quadtree to be a tree of specified depth
-    # if the current quadtree depth is less than specify, split the tree to reach the target
-    # if the current quadtree depth is more than specify, merge the tree to reach the target
-    # parameter : depth : the target depth of the tree
-    def setDepth2(self, depth):
-        if not self.quadtree:
-            self.quadtree = TreeNode()
-            self.quadtree.setTransform(self.position, self.size)
-            for i in range(1, depth):
-                self.quadtree.split()
-            return
-        d = self.quadtree.getDepth()
-        if d < depth:
-            for i in range(1, depth - d):
-                self.quadtree.split()
-        elif d > depth:
-            for i in range(1, d - depth):
-                self.quadtree.merge()
-
-    def clearTree(self):
-        if self.quadtree:
-            self.quadtree.merge()
-            self.quadtree = None
-
     # initialize the tilemap
     # generate a random background in the tilemap and after, load the tilemap depending on file (if specified)
     # parameter : file : the file to load the tilemap from. default is None (no import)
@@ -75,7 +51,7 @@ class Region(Box):
     # randomly generate entity to populate the region
     # parameter : factory : the entity factory for entities instanciation
     def randomPopulate(self, factory):
-        if factory:
+        if factory and self.quadtree:
             random.seed(self.seed)
             for t in self.tilemap.tiles:
                 if (t.materials[0].index in (50,20)):
@@ -83,46 +59,15 @@ class Region(Box):
                     if dice < 3:
                         tree = factory.instanciate('smallTree')
                         tree.position = self.position + 16*t.position
-                        self.addEntity(tree)
+                        self.quadtree.addEntity(tree)
                     elif dice < 6:
                         rock = factory.instanciate('bigRock')
                         rock.position = self.position + 16*t.position
-                        self.addEntity(rock)
+                        self.quadtree.addEntity(rock)
                     elif dice < 9:
                         rock = factory.instanciate('smallRock')
                         rock.position = self.position + 16*t.position
-                        self.addEntity(rock)
-
-    ## ENTITY RELATED
-    # add en entity in the region
-    # be notice that if the quadtree is not yet initialize, the entity will not be added to the region
-    # parameter : entity : the entity to add
-    # parameter : dynamic : specify if the entity created is dynamic or not
-    def addEntity(self, entity):
-        if self.quadtree and self.quadtree.overlapPoint(entity.position):
-            self.quadtree.addEntity(entity)
-        else:
-            print("ERROR : Region.addEntity : entity outside world bounds")
-
-    # remove an entity from the region
-    # parameter : entity : the entity to remove
-    def removeEntity(self, entity):
-        if self.quadtree and self.quadtree.overlap(entity):
-            try:
-                self.quadtree.removeEntity(entity)
-            except Exception as e:
-                pass
-
-    # return all entitities that potentially overlap a box
-    # it just call the function of the same name on the quadtree root
-    # parameter : box : the box to check the region against
-    # return a list of entities that potentially overlap
-    def querryEntities(self, box):
-        if self.quadtree:
-            return self.quadtree.querryEntities(box)
-        else:
-            return set()
-
+                        self.quadtree.addEntity(rock)
 
     ## TILEMAP RELATED
     # return all tiles indexes of tilemap that overlap a box
@@ -146,20 +91,6 @@ class Region(Box):
             for i in range(ox, fx):
                 result.append(i + j*self.tilemap.size.x)
         return result
-
-    ## PHYSICS RELATED
-    # delete all physics entity in the quadtree
-    def clearPhysicsEntities(self):
-        if self.quadtree:
-            self.quadtree.clearPhysicsEntities()
-
-    # same as querryEntity but add all Physics entity too
-    def querryPhysicsEntities(self, box):
-        if self.quadtree:
-            return self.quadtree.querryPhysicsEntities(box)
-        return set()
-
-
 
     # DEBUG
     def print(self):

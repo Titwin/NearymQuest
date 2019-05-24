@@ -29,5 +29,4 @@ class RigidBody(Component):
             else:
                 self.owner.WORLD.addDynamicEntity(self.owner)
         self._velocity = v
-        #print(self)
     

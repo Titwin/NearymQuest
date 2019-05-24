@@ -41,12 +41,11 @@ class World(Box):
                 self.regions[index].load(None, self.terrainBank.imageBank, self.terrainTransparency)
                 self.regions[index].quadtree = TreeNode()
                 self.regions[index].quadtree.setTransform(self.regions[index].position, self.regions[index].size)
-                #self.regions[index].setDepth(4)
-                #self.regions[index].randomPopulate(self.factory)
+                self.regions[index].randomPopulate(self.factory)
 
             elif not(index in loadIndexList) and self.regions[index].tilemap:
                 print('unload reg ' + str(index))
-                #self.regions[index].setDepth(0)
+                self.regions[index].setDepth(0)
                 del self.regions[index].tilemap
                 del self.regions[index].quadtree
                 self.regions[index].tilemap = None
@@ -76,22 +75,26 @@ class World(Box):
                     regionIndexList.append(index)
         return regionIndexList
 
-    def regionTwoDimensionalIndex(self, index):
-        return Vector2i(math.floor(index/self.regionsArray.y), index%int(self.regionsArray.y))
-
-
     # ENTITY RELATED
     def addEntity(self, entity):
-        region = self.querryRegions(Box(entity.position))
-        if(region != None):
-            self.regions[region[0]].addEntity(entity)
-        else:
-            print("ERROR : World.addEntity : entity outside world bounds")
+        if entity:
+            region = self.querryRegions(Box(entity.position))
+            if(region != None):
+                tree = self.regions[region[0]].quadtree
+                if tree and tree.overlapPoint(entity.position):
+                    tree.addEntity(entity)
+                else:
+                    print("ERROR : World.addEntity : entity outside region bounds")
+            else:
+                print("ERROR : World.addEntity : entity outside world bounds")
 
     def removeEntity(self, entity):
-        region = self.querryRegions(Box(entity.position))
-        if(region != None):
-            self.regions[region[0]].removeEntity(entity)
+        if entity:
+            region = self.querryRegions(Box(entity.position))
+            if(region != None):
+                tree = self.regions[region[0]].quadtree
+                if tree and tree.overlapPoint(entity.position):
+                    tree.removeEntity(entity)
 
     def isValidEntity(self, entity):
         region = self.querryRegions(Box(entity.position))
@@ -103,7 +106,9 @@ class World(Box):
         result = set()
         regionIndexList = self.querryRegions(box)
         for index in regionIndexList:
-            result = result | self.regions[index].querryEntities(box)
+            tree = self.regions[index].quadtree
+            if tree:
+                result = result | tree.querryEntities(box)
         return result
 
     def addDynamicEntity(self, entity):
@@ -125,12 +130,6 @@ class World(Box):
             pass
 
     ## PHYSICS RELATED
-    # remove all fake entities placed during physics update
-    def clearPhysicsEntities(self, box):
-        regionIndexList = self.querryRegions(box)
-        for index in range(len(self.regions)):
-            self.regions[index].clearPhysicsEntities()
-
     # add a physics entity to the node
     def addPhysicsEntity(self, entity):
         region = self.querryRegions(Box(entity.position))
@@ -147,7 +146,8 @@ class World(Box):
         result = set()
         regionIndexList = self.querryRegions(box)
         for index in regionIndexList:
-            result = result | self.regions[index].querryPhysicsEntities(box)
+            if self.regions[index].quadtree:
+                result = result | self.regions[index].quadtree.querryPhysicsEntities(box)
         return result
 
 

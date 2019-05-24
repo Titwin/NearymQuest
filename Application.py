@@ -116,8 +116,8 @@ class App:
         # same for entities
         self.renderer.renderEntities(self.camera, self.world)
 
-        for r in self.world.querryRegions(Box(self.player.position, self.player.size)):
-            self.world.regions[r].quadtree.draw(self.camera, Color.Red)
+        #for r in self.world.querryRegions(Box(self.player.position, self.player.size)):
+        #    self.world.regions[r].quadtree.draw(self.camera, Color.Red)
 
         self.renderer.drawGizmos(self.camera)
         if self.debugOverlay:
@@ -146,12 +146,12 @@ class App:
         
 
         entitiesCount = 0
-        for i in range(-2,3):
-            for j in range(-2,3):
+        for i in range(-3,4):
+            for j in range(-3,4):
                 if i==0 and j==0:
                     continue
                 dog = self.world.factory.instanciate("wolf")
-                dog.position = self.player.position + Vector2f(16*i, 16*j)
+                dog.position = self.player.position + Vector2f(32*i, 32*j)
                 dog.getComponent('Scripts')[0].target = self.player
                 self.world.addEntity(dog)
                 entitiesCount+=1

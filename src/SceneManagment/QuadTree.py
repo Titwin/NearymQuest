@@ -46,7 +46,7 @@ class TreeNode(Box):
     # check if the node is a leaf
     # return True is node is actually a leaf, Fals otherwise
     def isLeaf(self):
-        return len(self.children) == 0
+        return len(self.children) is 0
 
     # get the node level in tree
     # return the node level, 0 if node is the tree root
@@ -68,7 +68,7 @@ class TreeNode(Box):
     # adjust automatically all the children size and position based on the node current position and size
     # please don't use it, prefer setTransform, split, merge or other
     def adjustChild(self):
-        if(not self.isLeaf()):
+        if not len(self.children) is 0:
             s = self.size / TreeNode.DIVISION
             for i in range(TreeNode.DIVISION):
                 for j in range(TreeNode.DIVISION):
@@ -95,7 +95,7 @@ class TreeNode(Box):
     # if its children are not leaves it call the same function for each
     # if node is currentlly leaf, nothing happen
     def merge(self):
-        if not self.isLeaf():
+        if not len(self.children) is 0:
             if self.children[0].isLeaf():
                 self.children.clear()
             else:
@@ -109,7 +109,7 @@ class TreeNode(Box):
     # search the first child that overlap the entity and call this function on it
     # if node is a leaf it add this entity to its entity list
     def addEntity(self, entity):
-        if self.isLeaf():
+        if len(self.children) is 0:
             if len(self.entities) < TreeNode.MAX_ENTITIES:
                 self.entities.add(entity)
             else:
@@ -134,13 +134,12 @@ class TreeNode(Box):
                 if c.overlapPoint(entity.position):
                     c.addEntity(entity)
                     return
-            #print("ERROR : TreeNode.addEntity : entity outside of node bounds")
 
     # remove an entity to the local tree
     # search the first child that overlap the entity and call this function on it
     # if node is a leaf it try to remove this entity from its entity list
     def removeEntity(self, entity):
-        if self.isLeaf():
+        if len(self.children) is 0:
             try:
                 self.entities.remove(entity)
             except Exception as e:
@@ -150,13 +149,16 @@ class TreeNode(Box):
                 if c.overlapPoint(entity.position):
                     c.removeEntity(entity)
                     break
-            preLeaf = True
-            ecount = 0
-            for c in self.children:
-                preLeaf = preLeaf and c.isLeaf()
-                ecount += len(c.entities) + len(c.physicsEntities)
-            if preLeaf and ecount == 0:
-                self.children.clear()
+            self.checkMergeNeeded()
+
+    def checkMergeNeeded(self):
+        preLeaf = True
+        ecount = 0
+        for c in self.children:
+            preLeaf = preLeaf and c.isLeaf()
+            ecount += len(c.entities) + len(c.physicsEntities)
+        if preLeaf and ecount == 0:
+            self.children.clear()        
 
 
     # return all entitities that potentially overlap a box
@@ -177,28 +179,14 @@ class TreeNode(Box):
 
     ## PHYSICS RELATED
     # remove all fake entities placed during physics update
-    def clearPhysicsEntities(self):
-        self.physicsEntities.clear()
-        #for c in self.children:
-        #    c.clearPhysicsEntities()
+    #def clearPhysicsEntities(self):
+    #    self.physicsEntities.clear()
 
     # add a physics entity to the node
     # parameter : entity ; the physics entity to add
     # return the node possesing the entity added
-    def addPhysicsEntity2(self, swept):
-        if len(self.children) is 0:
-            self.physicsEntities.add(swept)
-            return self
-        else:
-            for c in self.children:
-                if c.overlapPoint(swept.position):
-                    return c.addPhysicsEntity(swept)
-        return None
-
-
-
     def addPhysicsEntity(self, swept):
-        if self.isLeaf():
+        if len(self.children) is 0:
             if len(self.physicsEntities) < TreeNode.MAX_ENTITIES:
                 self.physicsEntities.add(swept)
                 TreeNode.physicsContainer.add(self)
@@ -263,7 +251,7 @@ class TreeNode(Box):
 
             pyxel.rectb(p1.x, p1.y, p2.x, p2.y, color)
             c = self.center - camera.position
-            pyxel.text(c.x, c.y, str(len(self.entities)), 0)
+            pyxel.text(c.x, c.y, str(len(self.entities)+len(self.physicsEntities)), 0)
             #print("   " + str(p1) + " " + str(p2))
         else:
             for c in self.children:
