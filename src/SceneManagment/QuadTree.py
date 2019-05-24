@@ -12,6 +12,9 @@ import pyxel
 class TreeNode(Box):
     DIVISION = 2    # number of division in one axis, defined on 2 for quadtree (2 child on x, 2 child on y)
     MAX_ENTITIES = 5
+    MAX_DEPTH = 6
+
+    physicsContainer = set()
 
     # constructor
     def __init__ (self):
@@ -23,9 +26,12 @@ class TreeNode(Box):
 
     # destructor
     def __del__(self):
+        TreeNode.physicsContainer.discard(self)
         for c in self.children:
             del c
         for e in self.entities:
+            del e
+        for e in self.physicsEntities:
             del e
 
     ## TREE RELATED
@@ -108,19 +114,27 @@ class TreeNode(Box):
                 self.entities.add(entity)
             else:
                 self.entities.add(entity)
-                self.split()
-                for e in self.entities:
-                    for c in self.children:
-                        if c.overlapPoint(e.position):
-                            c.addEntity(e)
-                            break
-                self.entities.clear()
+                if self.getDepth() < TreeNode.MAX_DEPTH:
+                    self.split()
+                    for e in self.entities:
+                        for c in self.children:
+                            if c.overlapPoint(e.position):
+                                c.addEntity(e)
+                                break
+                    self.entities.clear()
+
+                    for e in self.physicsEntities:
+                        for c in self.children:
+                            if c.overlapPoint(e.position):
+                                c.addPhysicsEntity(e)
+                                break
+                    self.physicsEntities.clear()
         else:
             for c in self.children:
                 if c.overlapPoint(entity.position):
                     c.addEntity(entity)
                     return
-            print("ERROR : TreeNode.addEntity : entity outside of node bounds")
+            #print("ERROR : TreeNode.addEntity : entity outside of node bounds")
 
     # remove an entity to the local tree
     # search the first child that overlap the entity and call this function on it
@@ -133,14 +147,14 @@ class TreeNode(Box):
                 pass
         else:
             for c in self.children:
-                if c.overlap(entity):
+                if c.overlapPoint(entity.position):
                     c.removeEntity(entity)
                     break
             preLeaf = True
             ecount = 0
             for c in self.children:
                 preLeaf = preLeaf and c.isLeaf()
-                ecount += len(c.entities)
+                ecount += len(c.entities) + len(c.physicsEntities)
             if preLeaf and ecount == 0:
                 self.children.clear()
 
@@ -157,9 +171,7 @@ class TreeNode(Box):
             result = set()
             for c in self.children:
                 if c.overlap(box):
-                    r = c.querryEntities(box)
-                    if r:
-                        result = result | r
+                    result = result | c.querryEntities(box)
             return result
 
 
@@ -167,32 +179,70 @@ class TreeNode(Box):
     # remove all fake entities placed during physics update
     def clearPhysicsEntities(self):
         self.physicsEntities.clear()
-        for c in self.children:
-            c.clearPhysicsEntities()
+        #for c in self.children:
+        #    c.clearPhysicsEntities()
 
     # add a physics entity to the node
     # parameter : entity ; the physics entity to add
     # return the node possesing the entity added
-    def addPhysicsEntity(self, entity):
+    def addPhysicsEntity2(self, swept):
         if len(self.children) is 0:
-            self.physicsEntities.add(entity)
+            self.physicsEntities.add(swept)
             return self
         else:
             for c in self.children:
-                if c.overlap(entity):
-                    return c.addPhysicsEntity(entity)
+                if c.overlapPoint(swept.position):
+                    return c.addPhysicsEntity(swept)
+        return None
+
+
+
+    def addPhysicsEntity(self, swept):
+        if self.isLeaf():
+            if len(self.physicsEntities) < TreeNode.MAX_ENTITIES:
+                self.physicsEntities.add(swept)
+                TreeNode.physicsContainer.add(self)
+            else:
+                if self.getDepth() < TreeNode.MAX_DEPTH:
+                    self.split()
+                    for e in self.entities:
+                        for c in self.children:
+                            if c.overlapPoint(e.position):
+                                c.addEntity(e)
+                                break
+                    self.entities.clear()
+
+                    for e in self.physicsEntities:
+                        for c in self.children:
+                            if c.overlapPoint(e.position):
+                                c.addPhysicsEntity(e)
+                                break
+                    self.physicsEntities.clear()
+                    TreeNode.physicsContainer.discard(self)
+                    
+                    for c in self.children:
+                        if c.overlapPoint(swept.position):
+                            c.addPhysicsEntity(swept)
+                else:
+                    self.physicsEntities.add(swept)
+                    TreeNode.physicsContainer.add(self)
+        else:
+            for c in self.children:
+                if c.overlapPoint(swept.position):
+                    c.addPhysicsEntity(swept)
 
     # same as 'querryEntities', but return in addition all physicsEntities
     def querryPhysicsEntities(self, box):
         if len(self.children) is 0:
+            #print("    " + str(len(self.entities)) + " " + str(len(self.physicsEntities)))
             return (self.entities.copy() | self.physicsEntities.copy())
         else:
+            #print("tata")
             result = set()
             for c in self.children:
                 if c.overlap(box):
-                    r = c.querryPhysicsEntities(box)
-                    if r:
-                        result = result | r
+                    result = result | c.querryPhysicsEntities(box)
+            
             return result
 
     ## DEBUG
@@ -202,10 +252,19 @@ class TreeNode(Box):
             c.print()
 
     def draw(self, camera, color):
-        if len(self.children) is 0:
+        if len(self.children) is 0 and self.overlap(camera):
             p1 = self.position - camera.position
             p2 = self.position - camera.position + self.size
+
+            p1.x = min(max(p1.x, -1), 256)
+            p1.y = min(max(p1.y, -1), 256)
+            p2.x = min(max(p2.x, -1), 256)
+            p2.y = min(max(p2.y, -1), 256)
+
             pyxel.rectb(p1.x, p1.y, p2.x, p2.y, color)
+            c = self.center - camera.position
+            pyxel.text(c.x, c.y, str(len(self.entities)), 0)
+            #print("   " + str(p1) + " " + str(p2))
         else:
             for c in self.children:
                 c.draw(camera, color)
@@ -214,7 +273,7 @@ class TreeNode(Box):
         msg = ''
         for i in range(0, self.getLevel()):
             msg += '   '
-        return msg + 'p: ' + str(self.position) + ' ,s: ' + str(self.size) + ' , obj: ' + str(len(self.entities))
+        return msg + 'p: ' + str(self.position) + ' ,s: ' + str(self.size) + ' , obj: ' + str(len(self.entities)) + ' , tmp: ' + str(len(self.physicsEntities))
 
 
 

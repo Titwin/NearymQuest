@@ -39,7 +39,7 @@ class Renderer:
         self.primitiveDrawn += self.tileDrawn
 
     def renderEntities(self, camera, world):
-        entities = list(world.querryEntities(camera.inflate(Vector2f(48,64))))
+        entities = list(world.querryEntities(camera.inflated(Vector2f(48,64))))
         if entities != None:
             entities.sort(key=Renderer.entityKey)
             for entity in entities:
@@ -126,7 +126,7 @@ class Renderer:
 
     def renderEntitiesPivot(self, camera, world):
         if (math.floor(pyxel.frame_count / 5)%2) == 0:
-            entities = list(world.querryEntities(camera.inflate(Vector2f(48,64))))
+            entities = list(world.querryEntities(camera.inflated(Vector2f(48,64))))
             if entities != None:
                 entities.sort(key=Renderer.entityKey)
                 for entity in entities:
@@ -136,7 +136,7 @@ class Renderer:
 
 
     def renderEntitiesColliders(self, camera, world):
-        entities = list(world.querryEntities(camera.inflate(Vector2f(48,64))))
+        entities = list(world.querryEntities(camera.inflated(Vector2f(48,64))))
         if entities != None:
             entities.sort(key=Renderer.entityKey)
             for entity in entities:

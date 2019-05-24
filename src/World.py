@@ -6,12 +6,13 @@ from TerrainBank import *
 import math
 
 class World(Box):
+    REGION_TILES = 50
     def __init__(self, regionsArray):
         super(World, self).__init__()
         self.regionsArray = regionsArray
         self.position = Vector2f(0,0)
-        self.size = 16 * 50 * Vector2f(regionsArray.x, regionsArray.y)
-        self.regionSize = 16 * Vector2f(50, 50)
+        self.size = 16 * World.REGION_TILES * Vector2f(regionsArray.x, regionsArray.y)
+        self.regionSize = 16 * Vector2f(World.REGION_TILES, World.REGION_TILES)
         self.regions = []
 
         o = Vector2f(-self.size.x / 2, -self.size.y / 2)
@@ -53,10 +54,10 @@ class World(Box):
 
     def querryRegions(self, box):
         # compute corners region location
-        ox = math.floor((box.position.x + 0.5*self.size.x) / (16*50))
-        oy = math.floor((box.position.y + 0.5*self.size.y) / (16*50))
-        fx = math.floor((box.position.x + box.size.x + 0.5*self.size.x) / (16*50)) + 1
-        fy = math.floor((box.position.y + box.size.y + 0.5*self.size.y) / (16*50)) + 1
+        ox = math.floor((box.position.x + 0.5*self.size.x) / (16*World.REGION_TILES))
+        oy = math.floor((box.position.y + 0.5*self.size.y) / (16*World.REGION_TILES))
+        fx = math.floor((box.position.x + box.size.x + 0.5*self.size.x) / (16*World.REGION_TILES)) + 1
+        fy = math.floor((box.position.y + box.size.y + 0.5*self.size.y) / (16*World.REGION_TILES)) + 1
 
         # clamp corners
         ox = min(max(ox, 0), self.regionsArray.x)

@@ -32,14 +32,6 @@ class Box:
         b.center = self.center
         return b
         
-
-    #@property
-    #def position(self):
-    #    return self._position
-    #@position.setter
-    #def position(self, new_position):
-    #    self._position = new_position
-
     # return the box center position, or ajust the box position for a desired box center position
     @property
     def center(self):
@@ -48,13 +40,6 @@ class Box:
     def center(self, new_center):
         self.position = new_center - 0.5*self.size
     
-    # return a box inflated by a vector s in any direction
-    def inflate(self, s):
-        b = Box()
-        b.size = self.size + 2*s
-        b.center = self.center
-        return b
-
     def __hash__(self):
         return id(self)
         

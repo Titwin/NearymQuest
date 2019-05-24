@@ -56,9 +56,9 @@ class App:
         self.draw_count = 0
 
 
-        reg = self.world.querryRegions(Box(self.player.position))
-        for r in reg:
-            self.world.regions[r].print()
+        #reg = self.world.querryRegions(Box(self.player.position))
+        #for r in reg:
+        #    self.world.regions[r].print()
 
 
         # has to be completely at the end of init
@@ -95,6 +95,7 @@ class App:
             self.physics.renderer = self.renderer
         else:
             self.physics.renderer = None
+        self.physics.specialEntity = self.player
         self.physics.update(self.world)
 
 
@@ -114,6 +115,10 @@ class App:
 
         # same for entities
         self.renderer.renderEntities(self.camera, self.world)
+
+        for r in self.world.querryRegions(Box(self.player.position, self.player.size)):
+            self.world.regions[r].quadtree.draw(self.camera, Color.Red)
+
         self.renderer.drawGizmos(self.camera)
         if self.debugOverlay:
             self.renderer.renderEntitiesPivot(self.camera, self.world)
@@ -123,9 +128,9 @@ class App:
             self.drawDebugHUD()
         self.renderer.gizmos.clear()
 
-        reg = self.world.querryRegions(Box(self.player.position))
-        for r in reg:
-            self.world.regions[r].quadtree.draw(self.camera, Color.Red)
+
+
+
 
 
     def LoadMap(self):
@@ -138,15 +143,23 @@ class App:
         self.player = self.world.factory.instanciate("player")
         #self.player.addComponent('Scripts', [PlayerController()])
         self.player.position = self.streamingArea.center
-        self.world.addEntity(self.player)
+        
 
-        for i in range(-5,6):
-            for j in range(-5,6):
+        entitiesCount = 0
+        for i in range(-2,3):
+            for j in range(-2,3):
                 if i==0 and j==0:
                     continue
                 dog = self.world.factory.instanciate("wolf")
                 dog.position = self.player.position + Vector2f(16*i, 16*j)
                 dog.getComponent('Scripts')[0].target = self.player
+                self.world.addEntity(dog)
+                entitiesCount+=1
+
+        self.player.position = self.streamingArea.center - Vector2f(6,2)
+        self.world.addEntity(self.player)
+        print("Entities count " + str(entitiesCount + 1))
+
 
 
     def drawDebugHUD(self):
@@ -167,7 +180,7 @@ class App:
         pyxel.rect(160, 246, 254, 254, 6)
         pyxel.rectb(160, 246, 254, 254, 5)
 
-        region = self.world.querryRegions(Box.fromPoint(self.player.center))[0]
+        region = self.world.querryRegions(Box(self.player.center))[0]
         regionPos = self.world.regionTwoDimensionalIndex(region)
         pyxel.text(164,248, str(region) + ' : ' + str(regionPos), 0)
 

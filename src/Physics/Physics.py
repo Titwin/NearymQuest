@@ -3,19 +3,22 @@ from Box import *
 from Vector2 import Vector2f
 from PhysicsSweptBox import *
 from Collider import *
-
+from QuadTree import *
 from collections import defaultdict
 
 class Physics:
     def __init__(self, renderer = None):
         self.renderer = renderer
         self.sweptBoxList = []
-        self.quadtreeNode = []
+        self.quadtreeNode = set()
         self.islandList = []
-        self.inflationFactor = Vector2f(16,16)
+        self.inflationFactor = Vector2f(5,5)
         self.broadPhase = 0
         self.islandSolveur = 0
         self.avgIterations = 0
+
+        self.specialEntity = None
+        self.specialSwept = None
 
 
     def update2(self, world, speed = 1):
@@ -194,82 +197,146 @@ class Physics:
 
         sweptlist = self._createSweptBoxList(world, speed)
         pairs = self._detectCollidingPairs(world, sweptlist)
+        #world.regions[33024].quadtree.print()
+        print(' ')
         nodes = self._detectNodesFromPairs(pairs)
         graph = Physics.Graph(nodes)
         for p in pairs:
             graph.addLink(p[0], p[1])
             graph.addLink(p[1], p[0])
-        #clusters = graph.getClusters()
+        clusters = graph.getClusters()
 
-        #for c in clusters:
-        #    print('*')
-        #    for e in c:
-        #        print(id(e))
-        #print('')
-        #graph.print()
-        #print(len(clusters))
+        for cluster in clusters:
+            moving = []
+            maxdelta = Vector2f(0,0)
+            for box in cluster:
+                if isinstance(box, PhysicsSweptBox):
+                    moving.append(box)
+                    if box.delta.magnitudeSqr > maxdelta.magnitudeSqr:
+                        maxdelta = box.delta
+            iterations = math.floor(maxdelta.magnitude)
 
+            #self.avgIterations += iterations
+            #if self.renderer:
+            #    for swept in moving:
+            #        self.renderer.gizmos.append((swept.initial, Color.White))
+            #self.avgIslandSolveur += len(cluster)
 
-        for n in self.quadtreeNode:
-            if n:
-                n.clearPhysicsEntities()
+            for x in range(iterations):
+                for swept in moving:
+                    if swept.delta.x == 0 and swept.delta.y == 0:
+                        continue
+
+                    u = swept.delta.x / iterations
+                    swept.initial.position.x += u
+                    swept.finalDelta.x += u
+                    for box in cluster:
+                        if swept != box:
+                            if (isinstance(box, PhysicsSweptBox) and swept.initial.overlap(box.initial)) or swept.initial.overlap(box):
+                                self.collision(swept, box, Vector2f(u,0))
+                                break
+
+                    u = swept.delta.y / iterations
+                    swept.initial.position.y += u
+                    swept.finalDelta.y += u
+                    for box in cluster:
+                        if swept != box:
+                            if (isinstance(box, PhysicsSweptBox) and swept.initial.overlap(box.initial)) or swept.initial.overlap(box):
+                                self.collision(swept, box, Vector2f(0,u))
+                                break
+
+            for swept in moving:
+                swept.entity.position += swept.finalDelta
+
+        #if len(clusters):
+        #    self.avgIslandSolveur /= len(clusters)
+        #    self.avgIterations /= len(clusters)
+
         for swept in sweptlist:
             world.addEntity(swept.entity)
+        for n in TreeNode.physicsContainer:
+            n.clearPhysicsEntities()
+        TreeNode.physicsContainer.clear()     
 
 
 
 
 
     def _createSweptBoxList(self, world, speed):
-        sweptBoxList = []
+        sweptList = []
+        self.specialSwept = None
         for entity in world.dynamicEntities:
             rb = entity.getComponent('RigidBody')
-            if rb:
-                c = entity.getComponent('ColliderList')[0]
+            colliders = entity.getComponent('ColliderList')
+            if rb and colliders:
+                c = colliders[0]
                 collider = Box(entity.position - c.position, Vector2f(abs(c.size.x), abs(c.size.y)))
                 swept = PhysicsSweptBox(collider, speed * rb.velocity, entity)
-                sweptBoxList.append(swept)
+                sweptList.append(swept)
+                self.quadtreeNode.add(world.addPhysicsEntity(swept))
                 world.removeEntity(entity)
-                self.quadtreeNode.append(world.addPhysicsEntity(swept))
-        return sweptBoxList
+                
+                if entity == self.specialEntity:
+                    self.specialSwept = swept
+                    if self.renderer:
+                        self.renderer.gizmos.append((swept, Color.White))
+        #print(len(sweptList))
+        #world.regions[33024].quadtree.print()
+        #print(len(self.quadtreeNode))
+        return sweptList
 
     def _detectCollidingPairs(self, world, sweptList):
         pairs = []
         avgBroadPhase = 0
         for swept in sweptList:
-            #if self.renderer:
-            #    self.renderer.gizmos.append((swept.inflated(self.inflationFactor), Color.LightGrey))
-            #    self.renderer.gizmos.append((swept, Color.Red))
+            debug = ((swept == self.specialSwept) and self.renderer)
+            if debug:
+                self.renderer.gizmos.append((swept.inflated(self.inflationFactor), Color.LightGrey))
+                self.renderer.gizmos.append((swept, Color.Orange))
             neighbours = world.querryPhysicsEntities(swept.inflated(self.inflationFactor))
-            #self.avgBroadPhase += len(neighbours)
+            if debug:
+                print(len(neighbours))
             avgBroadPhase += len(neighbours)
 
             collided = False
             for neigh in neighbours:
+                #if debug:
+                #    self.renderer.gizmos.append((neigh, Color.DarkBlue))
+
                 if id(swept)!=id(neigh) and id(swept.entity)!=id(neigh):
-                    colliders = []
                     if isinstance(neigh, PhysicsSweptBox):
+                        if debug:
+                            self.renderer.gizmos.append((neigh, Color.DarkBlue))
                         if swept.overlap(neigh):
-                            #if self.renderer:
-                            #    self.renderer.gizmos.append((collider, Color.Black))
+                            if debug:
+                                self.renderer.gizmos.append((neigh, Color.Black))
+                                self.renderer.gizmos.append((swept, Color.Black))
                             collided = True
                             pairs.append((swept, neigh))
                     else:
                         for c in neigh.getComponent('ColliderList', []):
                             collider = Collider.fromBox(neigh.position - c.position, Vector2f(abs(c.size.x), abs(c.size.y)), c.type)
-                            #if self.renderer:
-                            #    self.renderer.gizmos.append((collider, Color.Red))
+                            if debug:
+                                self.renderer.gizmos.append((collider, Color.DarkBlue))
                             if swept.overlap(collider):
-                                #if self.renderer:
-                                #    self.renderer.gizmos.append((collider, Color.Black))
+                                if debug:
+                                    self.renderer.gizmos.append((collider, Color.Black))
+                                    self.renderer.gizmos.append((swept, Color.Black))
                                 collided = True
                                 pairs.append((swept, collider))
 
             # integrate simple case
             if(not collided):
                 swept.entity.position += swept.delta
+                #if debug:
+                #    self.renderer.gizmos.append((swept, Color.Green))
+                #print(len(neighbours))
+                pass
+            if not collided and debug:
+                self.renderer.gizmos.append((swept, Color.Green))
+                #swept.entity.position += swept.delta
         if len(sweptList) != 0:
-            print(avgBroadPhase / len(sweptList))
+            print("broadphase result average : " + str(avgBroadPhase / len(sweptList)))
         return pairs
 
     def _detectNodesFromPairs(self, pairs):
@@ -281,12 +348,12 @@ class Physics:
             swept.finalDelta -= dp
             if swept.entity:
                 rb = swept.entity.getComponent('RigidBody')
-                if dp.x != 0:
-                    swept.delta.x = 0
-                    rb.velocity.x = 0
-                else:
-                    swept.delta.y = 0
-                    rb.velocity.y = 0
+                #if dp.x != 0:
+                #    swept.delta.x = 0
+                #    rb.velocity.x = 0
+                #else:
+                #    swept.delta.y = 0
+                #    rb.velocity.y = 0
             else:
                 print("ERROR")
         else:
