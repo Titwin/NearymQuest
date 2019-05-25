@@ -154,10 +154,11 @@ class Physics:
             else:
                 print("Error : Physics : collision : no entity assigned to sweptbox")
         else:
-            if dp.x != 0:
-                print("enter TRIGGER by x")
-            else:
-                print("enter TRIGGER by y")
+            pass
+            #if dp.x != 0:
+            #    print("enter TRIGGER by x")
+            #else:
+            #    print("enter TRIGGER by y")
 
 
 

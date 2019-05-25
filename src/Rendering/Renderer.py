@@ -1,8 +1,8 @@
 import pyxel
 from TileMap import *
 from Vector2 import Vector2f
-
-
+from Color import *
+from Collider import *
 
 class Renderer:
     def __init__(self):
@@ -144,9 +144,14 @@ class Renderer:
                 colliders = entity.getComponent('ColliderList')
                 if colliders:
                     for c in colliders:
-                        pyxel.rectb(entityPosFromCam.x - c.position.x, entityPosFromCam.y - c.position.y, 
-                                    entityPosFromCam.x - c.position.x + c.size.x, entityPosFromCam.y - c.position.y + c.size.y, 
-                                    0)
+                        if c.type == Collider.BOUNDINGBOX:
+                            pyxel.rectb(entityPosFromCam.x - c.position.x, entityPosFromCam.y - c.position.y, 
+                                        entityPosFromCam.x - c.position.x + c.size.x, entityPosFromCam.y - c.position.y + c.size.y, 
+                                        Color.Black)
+                        elif c.type == Collider.TRIGGERBOX:
+                            pyxel.rectb(entityPosFromCam.x - c.position.x, entityPosFromCam.y - c.position.y, 
+                                        entityPosFromCam.x - c.position.x + c.size.x, entityPosFromCam.y - c.position.y + c.size.y, 
+                                        Color.Yellow)
                     self.primitiveDrawn += len(colliders)
 
 

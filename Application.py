@@ -12,6 +12,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/SceneManag
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/Terrain')
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/src/Scripting')
 
+sys.setrecursionlimit(1500)
+
 # import modules
 import random
 import pyxel
@@ -55,15 +57,9 @@ class App:
 
         self.draw_count = 0
 
-
-        #reg = self.world.querryRegions(Box(self.player.position))
-        #for r in reg:
-        #    self.world.regions[r].print()
-
-
         # has to be completely at the end of init
-        #pyxel.run(self.update, self.draw)
-        pyxel.run_with_profiler(self.update, self.draw)
+        pyxel.run(self.update, self.draw)
+        #pyxel.run_with_profiler(self.update, self.draw)
 
 
     def update(self):
