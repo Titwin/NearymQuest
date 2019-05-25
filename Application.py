@@ -116,19 +116,19 @@ class App:
         # same for entities
         self.renderer.renderEntities(self.camera, self.world)
 
-        #for r in self.world.querryRegions(Box(self.player.position, self.player.size)):
-        #    self.world.regions[r].quadtree.draw(self.camera, Color.Red)
-
         self.renderer.drawGizmos(self.camera)
         if self.debugOverlay:
+            for r in self.world.querryRegions(Box(self.player.position, self.player.size)):
+                self.world.regions[r].quadtree.draw(self.camera, Color.Red)
             self.renderer.renderEntitiesPivot(self.camera, self.world)
+            self.renderer.renderEntitiesColliders(self.camera, self.world)
 
         #debug hud overlay
         if self.debugOverlay:
             self.drawDebugHUD()
         self.renderer.gizmos.clear()
 
-
+        print("dynamic : " + str(len(self.world.dynamicEntities)) + " ; scripted : " + str(len(self.world.scriptedEntities)))
 
 
 
@@ -181,7 +181,8 @@ class App:
         pyxel.rectb(160, 246, 254, 254, 5)
 
         region = self.world.querryRegions(Box(self.player.center))[0]
-        regionPos = self.world.regionTwoDimensionalIndex(region)
+
+        regionPos = Vector2i(math.floor(region/self.world.regionsArray.y), region%int(self.world.regionsArray.y))
         pyxel.text(164,248, str(region) + ' : ' + str(regionPos), 0)
 
         # rendering statistics

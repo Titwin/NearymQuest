@@ -18,6 +18,14 @@ class Entity(Box):
         self.size = Vector2f(16,16)
         self.components = {}
 
+    def __del__(self):
+        rb = self.getComponent('RigidBody')
+        if rb:
+            Entity.WORLD.removeDynamicEntity(self)
+        scripts = self.getComponent('Scripts')
+        if scripts:
+            Entity.WORLD.removeScriptedEntity(self)
+
     ## COMPONENT RELATED
     # get the component defined by componentType
     # return the component asked, None otherwise

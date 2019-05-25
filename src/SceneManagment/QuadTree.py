@@ -96,11 +96,18 @@ class TreeNode(Box):
     # if node is currentlly leaf, nothing happen
     def merge(self):
         if not len(self.children) is 0:
-            if self.children[0].isLeaf():
-                self.children.clear()
-            else:
-                for c in self.children:
-                    c.merge()
+            for c in self.children:
+                c.merge()
+                del c
+            self.children.clear()
+
+        #if not len(self.children) is 0:
+        #    if len(self.children[0].children) is 0:
+         #       self.children.clear()
+
+        #    else:
+        #        for c in self.children:
+        #            c.merge()
 
 
 
@@ -158,6 +165,8 @@ class TreeNode(Box):
             preLeaf = preLeaf and c.isLeaf()
             ecount += len(c.entities) + len(c.physicsEntities)
         if preLeaf and ecount == 0:
+            for c in self.children:
+                del c
             self.children.clear()        
 
 

@@ -45,7 +45,7 @@ class World(Box):
 
             elif not(index in loadIndexList) and self.regions[index].tilemap:
                 print('unload reg ' + str(index))
-                self.regions[index].setDepth(0)
+                self.regions[index].quadtree.merge()
                 del self.regions[index].tilemap
                 del self.regions[index].quadtree
                 self.regions[index].tilemap = None
