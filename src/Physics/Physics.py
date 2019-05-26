@@ -124,7 +124,6 @@ class Physics:
                     if swept != box:
                         if (isinstance(box, PhysicsSweptBox) and swept.initial.overlap(box.initial)) or swept.initial.overlap(box):
                             self.collision(swept, box, Vector2f(u,0))
-                            break
 
                 u = swept.delta.y / iterations
                 swept.initial.position.y += u
@@ -133,7 +132,6 @@ class Physics:
                     if swept != box:
                         if (isinstance(box, PhysicsSweptBox) and swept.initial.overlap(box.initial)) or swept.initial.overlap(box):
                             self.collision(swept, box, Vector2f(0,u))
-                            break
 
         for swept in moving:
             swept.entity.position += swept.finalDelta
