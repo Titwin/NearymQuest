@@ -58,11 +58,12 @@ class App:
         self.draw_count = 0
 
         # has to be completely at the end of init
-        pyxel.run(self.update, self.draw)
-        #pyxel.run_with_profiler(self.update, self.draw)
+        #pyxel.run(self.update, self.draw)
+        pyxel.run_with_profiler(self.update, self.draw)
 
 
     def update(self):
+        start = time.time()
         self.inputManager.update()
         self.camera.center = self.player.center
         self.streamingArea.center = self.player.center
@@ -94,7 +95,7 @@ class App:
         self.physics.specialEntity = self.player
         self.physics.update(self.world)
 
-
+        print(math.floor(1000*(time.time() - start)))
 
     def draw(self):
         # clear the scene
@@ -124,7 +125,7 @@ class App:
             self.drawDebugHUD()
         self.renderer.gizmos.clear()
 
-        print("dynamic : " + str(len(self.world.dynamicEntities)) + " ; scripted : " + str(len(self.world.scriptedEntities)))
+        #print("dynamic : " + str(len(self.world.dynamicEntities)) + " ; scripted : " + str(len(self.world.scriptedEntities)))
 
 
 

@@ -65,6 +65,15 @@ class TreeNode(Box):
         else:
             return 1
 
+    def getChild(self, entity):
+        i,j = 0,0
+        c,p = self.center, entity.position
+        if p.x > c.x:
+            i = 2
+        if p.y > c.y:
+            j = 1
+        return self.children[i+j]
+
     # adjust automatically all the children size and position based on the node current position and size
     # please don't use it, prefer setTransform, split, merge or other
     def adjustChild(self):
@@ -101,16 +110,6 @@ class TreeNode(Box):
                 del c
             self.children.clear()
 
-        #if not len(self.children) is 0:
-        #    if len(self.children[0].children) is 0:
-         #       self.children.clear()
-
-        #    else:
-        #        for c in self.children:
-        #            c.merge()
-
-
-
     ## ENTITY RELATED
     # add an entity in the local tree
     # search the first child that overlap the entity and call this function on it
@@ -121,26 +120,17 @@ class TreeNode(Box):
                 self.entities.add(entity)
             else:
                 self.entities.add(entity)
-                if self.getDepth() < TreeNode.MAX_DEPTH:
+                if self.getLevel() < TreeNode.MAX_DEPTH:
                     self.split()
                     for e in self.entities:
-                        for c in self.children:
-                            if c.overlapPoint(e.position):
-                                c.addEntity(e)
-                                break
+                        self.getChild(e).addEntity(e)
                     self.entities.clear()
 
                     for e in self.physicsEntities:
-                        for c in self.children:
-                            if c.overlapPoint(e.position):
-                                c.addPhysicsEntity(e)
-                                break
+                        self.getChild(e).addPhysicsEntity(e)
                     self.physicsEntities.clear()
         else:
-            for c in self.children:
-                if c.overlapPoint(entity.position):
-                    c.addEntity(entity)
-                    return
+            self.getChild(entity).addEntity(entity)
 
     # remove an entity to the local tree
     # search the first child that overlap the entity and call this function on it
@@ -152,10 +142,7 @@ class TreeNode(Box):
             except Exception as e:
                 pass
         else:
-            for c in self.children:
-                if c.overlapPoint(entity.position):
-                    c.removeEntity(entity)
-                    break
+            self.getChild(entity).removeEntity(entity)
             self.checkMergeNeeded()
 
     def checkMergeNeeded(self):
@@ -187,10 +174,6 @@ class TreeNode(Box):
 
 
     ## PHYSICS RELATED
-    # remove all fake entities placed during physics update
-    #def clearPhysicsEntities(self):
-    #    self.physicsEntities.clear()
-
     # add a physics entity to the node
     # parameter : entity ; the physics entity to add
     # return the node possesing the entity added
@@ -200,46 +183,35 @@ class TreeNode(Box):
                 self.physicsEntities.add(swept)
                 TreeNode.physicsContainer.add(self)
             else:
-                if self.getDepth() < TreeNode.MAX_DEPTH:
+                if self.getLevel() < TreeNode.MAX_DEPTH:
                     self.split()
                     for e in self.entities:
-                        for c in self.children:
-                            if c.overlapPoint(e.position):
-                                c.addEntity(e)
-                                break
+                        self.getChild(e).addEntity(e)
                     self.entities.clear()
 
                     for e in self.physicsEntities:
-                        for c in self.children:
-                            if c.overlapPoint(e.position):
-                                c.addPhysicsEntity(e)
-                                break
+                        self.getChild(e).addPhysicsEntity(e)
                     self.physicsEntities.clear()
                     TreeNode.physicsContainer.discard(self)
-                    
-                    for c in self.children:
-                        if c.overlapPoint(swept.position):
-                            c.addPhysicsEntity(swept)
+
+                    self.getChild(swept).addPhysicsEntity(swept)
                 else:
                     self.physicsEntities.add(swept)
                     TreeNode.physicsContainer.add(self)
         else:
-            for c in self.children:
-                if c.overlapPoint(swept.position):
-                    c.addPhysicsEntity(swept)
+            self.getChild(swept).addPhysicsEntity(swept)
+
+
 
     # same as 'querryEntities', but return in addition all physicsEntities
     def querryPhysicsEntities(self, box):
         if len(self.children) is 0:
-            #print("    " + str(len(self.entities)) + " " + str(len(self.physicsEntities)))
             return (self.entities.copy() | self.physicsEntities.copy())
         else:
-            #print("tata")
             result = set()
             for c in self.children:
                 if c.overlap(box):
                     result = result | c.querryPhysicsEntities(box)
-            
             return result
 
     ## DEBUG
