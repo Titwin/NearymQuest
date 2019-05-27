@@ -58,8 +58,8 @@ class App:
         self.draw_count = 0
 
         # has to be completely at the end of init
-        #pyxel.run(self.update, self.draw)
-        pyxel.run_with_profiler(self.update, self.draw)
+        pyxel.run(self.update, self.draw)
+        #pyxel.run_with_profiler(self.update, self.draw)
 
 
     def update(self):
@@ -77,7 +77,6 @@ class App:
             if not self.world.isValidEntity(entity):
                 deadEntities.append(entity)
                 continue
-
             scripts = entity.getComponent('Scripts')
             if scripts:
                 for s in scripts:
@@ -95,7 +94,9 @@ class App:
         self.physics.specialEntity = self.player
         self.physics.update(self.world)
 
-        print(math.floor(1000*(time.time() - start)))
+        self.world.updateLoading()
+
+        #print(math.floor(1000*(time.time() - start)))
 
     def draw(self):
         # clear the scene
@@ -136,6 +137,8 @@ class App:
         Entity.WORLD = self.world
         self.world.loadBanks("ressources/map3tileset.json", 'ressources/animationBank.json', 0, 0)
         self.world.updateRegions(self.streamingArea, self.streamingArea)
+        while len(self.world.loadingJobs):
+            self.world.updateLoading()
 
         self.player = self.world.factory.instanciate("player")
         #self.player.addComponent('Scripts', [PlayerController()])
@@ -145,6 +148,8 @@ class App:
         entitiesCount = 0
         for i in range(-3,4):
             for j in range(-3,4):
+                continue
+
                 if i==0 and j==0:
                     continue
                 dog = self.world.factory.instanciate("wolf")

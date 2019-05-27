@@ -5,4 +5,11 @@ TODO:
 - PAC AI
 - streaming region data (temporary entities pull/push from permanent entities)
 
+- solve physics interpenetration contact
+- all characters : attack animation for up and down
+- player : dig animation
+- create house sprites:
+https://www.google.com/imgres?imgurl=https%3A%2F%2Fgamepedia.cursecdn.com%2Fzelda_gamepedia_en%2Fa%2Faa%2FSahasrahla%2527sHouse.png&imgrefurl=https%3A%2F%2Fzelda.gamepedia.com%2FSahasrahla%2527s_House&docid=8ET6sVo1lZrEWM&tbnid=AIcQZCiPad9QsM%3A&vet=10ahUKEwiervaitrniAhVJSxUIHcAIBZUQMwg9KAAwAA..i&w=256&h=224&bih=977&biw=1920&q=zelda%20nes%20house&ved=0ahUKEwiervaitrniAhVJSxUIHcAIBZUQMwg9KAAwAA&iact=mrc&uact=8#h=224&imgdii=WIVYNwWMTjlKBM:&vet=10ahUKEwiervaitrniAhVJSxUIHcAIBZUQMwg9KAAwAA..i&w=256
+
+
 DONE:

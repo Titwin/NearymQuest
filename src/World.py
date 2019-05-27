@@ -25,6 +25,7 @@ class World(Box):
         self.factory = None
         self.dynamicEntities = set()
         self.scriptedEntities = set()
+        self.loadingJobs = []
 
     def loadBanks(self, terrainFile, entityFile,terrainImageBank = 0, terrainImageTransparency = -1):
         self.terrainBank = TerrainBank(terrainFile, terrainImageBank)
@@ -36,12 +37,17 @@ class World(Box):
         unloadIndexList = self.querryRegions(unloadBox)
         loadIndexList = self.querryRegions(loadBox)
         for index in unloadIndexList:
-            if index in loadIndexList and self.regions[index].tilemap==None:
+            if index in loadIndexList and self.regions[index].loadingSteps==0:
                 print('load reg ' + str(index))
-                self.regions[index].load(None, self.terrainBank.imageBank, self.terrainTransparency)
-                self.regions[index].quadtree = TreeNode()
-                self.regions[index].quadtree.setTransform(self.regions[index].position, self.regions[index].size)
-                self.regions[index].randomPopulate(self.factory)
+                self.regions[index].loadingSteps = 1
+                #self.regions[index].load(None, self.terrainBank.imageBank, self.terrainTransparency)
+                #self.regions[index].quadtree = TreeNode()
+                #self.regions[index].quadtree.setTransform(self.regions[index].position, self.regions[index].size)
+                #self.regions[index].randomPopulate(self.factory)
+                self.loadingJobs.append((self.regions[index], 0))
+                self.loadingJobs.append((self.regions[index], 1))
+                self.loadingJobs.append((self.regions[index], 2))
+                self.loadingJobs.append((self.regions[index], 3))
 
             elif not(index in loadIndexList) and self.regions[index].tilemap:
                 print('unload reg ' + str(index))
@@ -50,6 +56,22 @@ class World(Box):
                 del self.regions[index].quadtree
                 self.regions[index].tilemap = None
                 self.regions[index].quadtree = None
+                self.regions[index].loadingSteps = 0
+
+
+    def updateLoading(self):
+        if not len(self.loadingJobs) is 0:
+            job = self.loadingJobs.pop(0)
+            if job[1] == 0:
+                job[0].generateTilemap()
+            elif job[1] == 1:
+                job[0].generateTilemapBackground()
+            elif job[1] == 2:
+                job[0].generateTilemapFromFile()
+            elif job[1] == 3:
+                job[0].quadtree = TreeNode()
+                job[0].quadtree.setTransform(job[0].position, job[0].size)
+                job[0].randomPopulate(self.factory)
 
     def querryRegions(self, box):
         # compute corners region location

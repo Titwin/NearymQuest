@@ -18,6 +18,7 @@ class Region(Box):
         self.quadtree = None
         self.tilemap = None
         self.seed = seed
+        self.loadingSteps = 0
 
     def __del__(self):
         del self.quadtree
@@ -48,9 +49,23 @@ class Region(Box):
         if file:
             self.tilemap.importFromFile(file, imageBank, transparency)
 
+    def generateTilemap(self):
+        w = math.floor(self.size.x/16)
+        h = math.floor(self.size.y/16)
+        self.tilemap = TileMap(Vector2i(w, h))
+
+    def generateTilemapBackground(self, imageBank = 0, transparency = -1):
+        random.seed(self.seed)
+        self.tilemap.randomBackground([50,50,50,50,50,50, 20,20,20,20,20,20, 66,66, 82], None, imageBank, transparency)
+
+    def generateTilemapFromFile(self, file = None, imageBank = 0, transparency = -1):
+        if file:
+            self.tilemap.importFromFile(file, imageBank, transparency)
+
     # randomly generate entity to populate the region
     # parameter : factory : the entity factory for entities instanciation
     def randomPopulate(self, factory):
+        random.seed(self.seed)
         if factory and self.quadtree:
             random.seed(self.seed)
             for t in self.tilemap.tiles:
